@@ -3,6 +3,9 @@
 
 #include "AssetTypes/GasExEdGraph_AssetTypeActions.h"
 #include "Core/AbilityGraph/GasExGraph.h"
+#include "GasExEditorLog.h"
+
+#include "GraphEditor/GasExEdGraphEditor.h"
 
 #define LOCTEXT_NAMESPACE "FGasExEdGraph_AssetTypeActions"
 
@@ -41,7 +44,7 @@ uint32 FGasExEdGraph_AssetTypeActions::GetCategories()
 }
 //---------------------------------------------------------------------------------------------
 
-/*
+
 //---------------------------------------------------------------------------------------------
 void FGasExEdGraph_AssetTypeActions::OpenAssetEditor(const TArray<UObject*>& InObjects, TSharedPtr<IToolkitHost> EditWithinLevelEditor)
 {
@@ -50,18 +53,18 @@ void FGasExEdGraph_AssetTypeActions::OpenAssetEditor(const TArray<UObject*>& InO
 
 	for( auto ObjIt = InObjects.CreateConstIterator(); ObjIt; ++ObjIt )
 	{
-		UE_LOG( LogEGSGraphEditor , Verbose , TEXT( "Action Graph OpenAssetEditor ... %s" ) , *GetNameSafe( *ObjIt ) );
+		UE_LOG( LogGasExEditor , Verbose , TEXT( "Graph OpenAssetEditor ... %s" ) , *GetNameSafe( *ObjIt ) );
 
-		auto Graph = Cast<UEGSActionGraph>( *ObjIt );
+		auto Graph = Cast<UGasExGraph>( *ObjIt );
 
 		if( Graph != nullptr )
 		{
-			TSharedRef<FEGSActionGraphAssetEditor> AssetEditor	=	MakeShareable( new FEGSActionGraphAssetEditor() );
-			AssetEditor->InitActionGraphEditor( Mode , EditWithinLevelEditor , Graph );
+			TSharedRef<FGasExEdGraphEditor> AssetEditor	=	MakeShareable( new FGasExEdGraphEditor() );
+			AssetEditor->InitGraphEditor( Mode , EditWithinLevelEditor , Graph );
 		}
 	}
 
 }
 //---------------------------------------------------------------------------------------------
-*/
+
 #undef LOCTEXT_NAMESPACE
