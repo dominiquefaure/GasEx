@@ -1,4 +1,4 @@
-//All rights reserved Dominique Faure 2023
+// Copyright 2023-2024 Dominique Faure. All Rights Reserved.
 
 
 #pragma once
@@ -13,7 +13,7 @@ class UGasExAbilitySet;
 /**
  * 
  */
-UCLASS()
+UCLASS( ClassGroup=( GasEx ) , meta=( BlueprintSpawnableComponent ) )
 class GASEX_API UGasExAbilitySystemComponent : public UAbilitySystemComponent
 {
 	GENERATED_BODY()

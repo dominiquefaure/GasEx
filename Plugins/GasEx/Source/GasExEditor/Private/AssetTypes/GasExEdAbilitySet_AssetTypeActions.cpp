@@ -1,4 +1,5 @@
-﻿
+﻿// Copyright 2023-2024 Dominique Faure. All Rights Reserved.
+
 
 #include "AssetTypes/GasExEdAbilitySet_AssetTypeActions.h"
 #include "Core/AbilitySystem/GasExAbilitySet.h"

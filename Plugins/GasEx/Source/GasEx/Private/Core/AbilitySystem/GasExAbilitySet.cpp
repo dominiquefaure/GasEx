@@ -1,4 +1,4 @@
-//All rights reserved Dominique Faure 2023
+// Copyright 2023-2024 Dominique Faure. All Rights Reserved.
 
 
 #include "Core/AbilitySystem/GasExAbilitySet.h"

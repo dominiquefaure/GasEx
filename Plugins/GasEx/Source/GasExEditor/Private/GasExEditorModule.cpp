@@ -1,4 +1,4 @@
-// Copyright 2023 Dominique Faure. All Rights Reserved.
+// Copyright 2023-2024 Dominique Faure. All Rights Reserved.
 
 #include "GasExEditorModule.h"
 
