@@ -4,10 +4,12 @@
 
 #include "AssetToolsModule.h"
 #include "AssetTypes/GasExEdAbilitySet_AssetTypeActions.h"
+#include "AssetTypes/GasExEdGraph_AssetTypeActions.h"
 
 
 #define LOCTEXT_NAMESPACE "FGasExEditorModule"
 
+//---------------------------------------------------------------------------------------------
 void FGasExEditorModule::StartupModule()
 {
 	// This code will execute after your module is loaded into memory; the exact timing is specified in the .uplugin file per-module
@@ -17,9 +19,12 @@ void FGasExEditorModule::StartupModule()
 	EAssetTypeCategories::Type AssetCategory = AssetTools.RegisterAdvancedAssetCategory( FName( TEXT( "GasEx" ) ) , FText::FromName( TEXT( "GasEx" ) ) );
 
 	RegisterAssetTypeAction( AssetTools , MakeShareable( new FGasExEdAbilitySet_AssetTypeActions( AssetCategory ) ) );
+	RegisterAssetTypeAction( AssetTools , MakeShareable( new FGasExEdGraph_AssetTypeActions( AssetCategory ) ) );
 
 }
+//---------------------------------------------------------------------------------------------
 
+//---------------------------------------------------------------------------------------------
 void FGasExEditorModule::ShutdownModule()
 {
 	// This function may be called during shutdown to clean up your module.  For modules that support dynamic reloading,
@@ -41,13 +46,16 @@ void FGasExEditorModule::ShutdownModule()
 
 
 }
+//---------------------------------------------------------------------------------------------
 
 
+//---------------------------------------------------------------------------------------------
 void FGasExEditorModule::RegisterAssetTypeAction( IAssetTools& AssetTools , TSharedRef<IAssetTypeActions> Action )
 {
 	AssetTools.RegisterAssetTypeActions( Action );
 	CreatedAssetTypeActions.Add( Action );
 }
+//---------------------------------------------------------------------------------------------
 
 
 #undef LOCTEXT_NAMESPACE
