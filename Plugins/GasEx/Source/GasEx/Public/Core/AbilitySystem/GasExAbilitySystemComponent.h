@@ -6,9 +6,14 @@
 #include "CoreMinimal.h"
 #include "AbilitySystemComponent.h"
 #include "NativeGameplayTags.h"
+
+#include "Core/AbilityGraph/GasExGraphInstance.h"
+
+
 #include "GasExAbilitySystemComponent.generated.h"
 
 class UGasExAbilitySet;
+class UGasExGraph;
 
 /**
  * 
@@ -22,13 +27,19 @@ public:
 
 	UGasExAbilitySystemComponent( const FObjectInitializer& ObjectInitializer = FObjectInitializer::Get() );
 
-
 	UPROPERTY( EditAnywhere , BlueprintReadOnly , Category = "Ability Sets" )
 	TObjectPtr<UGasExAbilitySet> DefaultAbilitySet;
+
+	UPROPERTY( EditAnywhere , BlueprintReadOnly , Category = "Ability Sets" )
+	TObjectPtr<UGasExGraph> DefaultAbilityGraph;
 
 	// Try Activate an Ability registered from an AbilitySet
 	UFUNCTION( BlueprintCallable)
 	bool TryActivateExAbility( const FGameplayTag& AbilityTag);
+
+	// temp function
+	UFUNCTION( BlueprintCallable )
+	void TryActivateNextGraphNode();
 
 protected:
 	// Called when the game starts
@@ -44,4 +55,7 @@ private:
 
 	// others AbilitySet added at runtime
 	TArray<UGasExAbilitySet*> AdditionalAbilitySets;
+
+
+	TObjectPtr<UGasExGraphInstance> GraphInstance;
 };

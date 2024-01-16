@@ -20,6 +20,10 @@ void UGasExAbilitySystemComponent::BeginPlay()
 	{
 		DefaultAbilitySet->Register( this );
 	}
+
+	GraphInstance	=	NewObject<UGasExGraphInstance>( );
+	GraphInstance->SetGraph( DefaultAbilityGraph );
+	GraphInstance->SetAbilitySystem( this );
 }
 //-----------------------------------------------------------------------------------------
 
@@ -30,7 +34,7 @@ bool UGasExAbilitySystemComponent::TryActivateExAbility( const FGameplayTag& Abi
 
 	if( AbilityDef != nullptr )
 	{
-		TryActivateAbility( AbilityDef->AbilitySpec.Handle );
+		return TryActivateAbility( AbilityDef->AbilitySpec.Handle );
 
 	}
 	return false;
@@ -54,5 +58,13 @@ FGasExAbilitySetRow* UGasExAbilitySystemComponent::GetAbilityDef( const FGamepla
 
 
 	return nullptr;
+}
+//-----------------------------------------------------------------------------------------
+
+
+//-----------------------------------------------------------------------------------------
+void UGasExAbilitySystemComponent::TryActivateNextGraphNode()
+{
+	GraphInstance->TryExecuteNextNode();
 }
 //-----------------------------------------------------------------------------------------
