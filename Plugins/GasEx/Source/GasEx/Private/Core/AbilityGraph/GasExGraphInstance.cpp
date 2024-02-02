@@ -34,11 +34,18 @@ bool UGasExGraphInstance::TryExecuteNextNode()
 	// if no Ability executed yet
 	if( CurrentAbilityNode == nullptr )
 	{
+		UE_LOG( LogTemp , Warning , TEXT( "Current Ability is Null" ) );
 		NextAbilityNode	=	GetNextActivableAbility( Graph->EntryNode );
 	}
 	else
 	{
 		NextAbilityNode	=	GetNextActivableAbility( CurrentAbilityNode );
+
+		if( NextAbilityNode == CurrentAbilityNode )
+		{
+			UE_LOG( LogTemp , Warning , TEXT( "NextAbilityNode is same as Current Ability" ) );
+
+		}
 	}
 
 	if( ExecuteAbilityNode( NextAbilityNode ) )
@@ -86,9 +93,13 @@ bool UGasExGraphInstance::ExecuteAbilityNode( UGasExGraphNodeAbility* Node )
 	// if the Activation succeed, made the node the new active one
 	if( AbilitySystem->TryActivateExAbility( Node->AbilityTag ) )
 	{
+		UE_LOG( LogTemp , Warning , TEXT( "Set the current Ability Node " ) );
+
 		CurrentAbilityNode	=	Node;
 		return true;
 	}
+
+	UE_LOG( LogTemp , Warning , TEXT( "Fail to execute ability : %s" )  );
 
 	return false;
 }

@@ -50,6 +50,7 @@ private:
 	// Get the Ability Row represented by this given Tag 
 	FGasExAbilitySetRow* GetAbilityDef( const FGameplayTag& AbilityTag );
 
+	virtual void NotifyAbilityFailed( const FGameplayAbilitySpecHandle Handle , UGameplayAbility* Ability , const FGameplayTagContainer& FailureReason )override;
 
 private:
 

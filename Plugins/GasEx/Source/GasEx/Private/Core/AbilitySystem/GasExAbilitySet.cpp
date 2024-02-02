@@ -3,6 +3,8 @@
 
 #include "Core/AbilitySystem/GasExAbilitySet.h"
 #include "Core/AbilitySystem/GasExAbilitySystemComponent.h"
+#include "Core/AbilitySystem/GasExGameplayAbility.h"
+
 
 
 //-----------------------------------------------------------------------------------------
@@ -39,3 +41,66 @@ FGasExAbilitySetRow* UGasExAbilitySet::GetAbilityRow( const FGameplayTag& Abilit
 	return nullptr;
 }
 //-----------------------------------------------------------------------------------------
+
+#if WITH_EDITOR
+
+//-----------------------------------------------------------------------------------------
+void UGasExAbilitySet::PostEditChangeProperty( struct FPropertyChangedEvent& PropertyChangedEvent )
+{
+	FString PropertyName	=	PropertyChangedEvent.Property->GetName();
+
+	// if the user changed the Ability class to use
+	if( PropertyName == GET_MEMBER_NAME_CHECKED( FGasExAbilitySetRow , Ability ) )
+	{
+		SetupRequiredParameterClasses();
+	}
+
+	// if the user changed the Custom parameter Flag
+	if( PropertyName == GET_MEMBER_NAME_CHECKED( FGasExAbilitySetRow , UseCustomParameters ) )
+	{
+		SetupRequiredParameterClasses();
+	}
+
+	Super::PostEditChangeProperty( PropertyChangedEvent );
+}
+//-----------------------------------------------------------------------------------------
+
+//-----------------------------------------------------------------------------------------
+void UGasExAbilitySet::SetupRequiredParameterClasses()
+{
+	for( FGasExAbilitySetRow& Row : Abilities )
+	{
+		if( Row.UseCustomParameters )
+		{
+			UGasExGameplayAbility* Ability		=	Cast< UGasExGameplayAbility>( Row.Ability->GetDefaultObject() );
+
+			if( Ability )
+			{
+				if( Ability->ParametersClass != nullptr )
+				{
+					bool NeedCreateParameters		=	false;
+					if( Row.Parameters == nullptr )
+					{
+						NeedCreateParameters		=	true;
+					}
+					else
+					{
+						if( ! Row.Parameters.IsA( Ability->ParametersClass ) )
+						{
+							NeedCreateParameters	=	true;
+						}
+					}
+
+					if( NeedCreateParameters )
+					{
+						Row.Parameters				=	NewObject< UGasExGameplayAbilityParameters>( this , Ability->ParametersClass , NAME_None , RF_Transactional );
+					}
+
+				}
+			}
+		}
+	}
+}
+//-----------------------------------------------------------------------------------------
+
+#endif

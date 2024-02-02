@@ -10,6 +10,7 @@
 
 DECLARE_MULTICAST_DELEGATE_OneParam( FGasExAbilityEnded , bool Canceled );
 
+class UGasExGameplayAbilityParameters;
 
 /**
  * 
@@ -21,5 +22,24 @@ class GASEX_API UGasExGameplayAbility : public UGameplayAbility
 	
 public:
 	UGasExGameplayAbility( const FObjectInitializer& ObjectInitializer = FObjectInitializer::Get() );
+
+
+	UPROPERTY( EditAnywhere , BlueprintReadOnly , Category=Parameters , meta=( DisplayName="Parameters Class" ) )
+	TSubclassOf<class UGasExGameplayAbilityParameters> ParametersClass;
+
+	UPROPERTY( Export , Instanced , EditAnywhere , BlueprintReadOnly , Category=Parameters , meta=( ShowOnlyInnerProperties ) )
+	TObjectPtr< UGasExGameplayAbilityParameters> Parameters;
+
+
+	void SetParametersFromEvent( const FGameplayEventData*  EventData );
+
+
+	virtual void ActivateAbility( const FGameplayAbilitySpecHandle Handle , const FGameplayAbilityActorInfo* OwnerInfo , const FGameplayAbilityActivationInfo ActivationInfo , const FGameplayEventData* TriggerEventData ) override;
+
+
+#if WITH_EDITOR
+	void PostEditChangeProperty( struct FPropertyChangedEvent& PropertyChangedEvent )override;
+#endif
+
 
 };

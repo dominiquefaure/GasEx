@@ -24,6 +24,8 @@ void UGasExAbilitySystemComponent::BeginPlay()
 	GraphInstance	=	NewObject<UGasExGraphInstance>( );
 	GraphInstance->SetGraph( DefaultAbilityGraph );
 	GraphInstance->SetAbilitySystem( this );
+
+//	AbilityFailedCallbacks.AddUObject( this , &UGasExAbilitySystemComponent::ProcessAbilityFail );
 }
 //-----------------------------------------------------------------------------------------
 
@@ -34,8 +36,27 @@ bool UGasExAbilitySystemComponent::TryActivateExAbility( const FGameplayTag& Abi
 
 	if( AbilityDef != nullptr )
 	{
-		return TryActivateAbility( AbilityDef->AbilitySpec.Handle );
+		if( AbilityDef->UseCustomParameters )
+		{
+			FGameplayAbilityActorInfo ActorInfo;
+			FGameplayEventData EventData;
 
+			EventData.OptionalObject	=	AbilityDef->Parameters;
+			return TriggerAbilityFromGameplayEvent( AbilityDef->AbilitySpec.Handle , &ActorInfo , FGameplayTag::EmptyTag , &EventData , *this );
+
+		}
+		else
+		{
+			return TryActivateAbility( AbilityDef->AbilitySpec.Handle );
+		}
+	}
+	else
+	{
+		// use default method as fallback
+		FGameplayTagContainer Container;
+		Container.AddTag( AbilityTag );
+
+		return TryActivateAbilitiesByTag( Container , true );
 	}
 	return false;
 }
@@ -66,5 +87,14 @@ FGasExAbilitySetRow* UGasExAbilitySystemComponent::GetAbilityDef( const FGamepla
 void UGasExAbilitySystemComponent::TryActivateNextGraphNode()
 {
 	GraphInstance->TryExecuteNextNode();
+}
+//-----------------------------------------------------------------------------------------
+
+//-----------------------------------------------------------------------------------------
+void UGasExAbilitySystemComponent::NotifyAbilityFailed( const FGameplayAbilitySpecHandle Handle , UGameplayAbility* Ability , const FGameplayTagContainer& FailureReason )
+{
+	UE_LOG( LogTemp , Warning , TEXT( "Activity failed : %s" ) , *( Ability->GetPathName() ) );
+
+	
 }
 //-----------------------------------------------------------------------------------------

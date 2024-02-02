@@ -11,6 +11,7 @@
 
 class UGasExAbilitySystemComponent;
 class UGasExGameplayAbility;
+class UGasExGameplayAbilityParameters;
 
 
 USTRUCT( BlueprintType )
@@ -24,10 +25,20 @@ struct GASEX_API FGasExAbilitySetRow
 
 	// Gameplay ability to grant.
 	UPROPERTY( EditAnywhere , BlueprintReadOnly )
-	TSubclassOf<UGasExGameplayAbility> Ability = nullptr;
+		TSubclassOf<UGasExGameplayAbility> Ability = nullptr;
+	// Gameplay ability to grant.
+	//UPROPERTY( EditAnywhere , BlueprintReadOnly )
+	//	TSubObjectPtr<UGasExGameplayAbility> Ability2 = nullptr;
 
 	// the Ability spec register to th AbilitySystemComponent
 	FGameplayAbilitySpec AbilitySpec;
+
+	UPROPERTY( EditAnywhere , BlueprintReadOnly , Category=Parameters )
+	bool UseCustomParameters;
+
+	UPROPERTY( Export , Instanced , EditAnywhere , BlueprintReadOnly , Category=Parameters , meta=( ShowOnlyInnerProperties ) )
+	TObjectPtr< UGasExGameplayAbilityParameters> Parameters;
+
 
 };
 
@@ -58,5 +69,13 @@ public:
 
 	// Get the Ability Row represented by this given Tag 
 	FGasExAbilitySetRow* GetAbilityRow( const FGameplayTag& AbilityTag );
+
+#if WITH_EDITOR
+	void PostEditChangeProperty( struct FPropertyChangedEvent& PropertyChangedEvent )override;
+#endif
+
+private:
+
+	void SetupRequiredParameterClasses();
 
 };
