@@ -63,6 +63,18 @@ bool UGasExAbilitySystemComponent::TryActivateExAbility( const FGameplayTag& Abi
 //-----------------------------------------------------------------------------------------
 
 //-----------------------------------------------------------------------------------------
+void UGasExAbilitySystemComponent::CancelExAbility( const FGameplayTag& AbilityTag )
+{
+	FGasExAbilitySetRow* AbilityDef	=	GetAbilityDef( AbilityTag );
+
+	if( AbilityDef != nullptr )
+	{
+		CancelAbilityHandle( AbilityDef->AbilitySpec.Handle );
+	}
+}
+//-----------------------------------------------------------------------------------------
+
+//-----------------------------------------------------------------------------------------
 FGasExAbilitySetRow* UGasExAbilitySystemComponent::GetAbilityDef( const FGameplayTag& AbilityTag )
 {
 	FGasExAbilitySetRow* AbilityDef	=	nullptr;

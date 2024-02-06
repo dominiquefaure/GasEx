@@ -93,13 +93,15 @@ bool UGasExGraphInstance::ExecuteAbilityNode( UGasExGraphNodeAbility* Node )
 	// if the Activation succeed, made the node the new active one
 	if( AbilitySystem->TryActivateExAbility( Node->AbilityTag ) )
 	{
-		UE_LOG( LogTemp , Warning , TEXT( "Set the current Ability Node " ) );
+		// CAncel the current ability
+		if( CurrentAbilityNode != nullptr )
+		{
+			AbilitySystem->CancelExAbility( CurrentAbilityNode->AbilityTag );
+		}
 
 		CurrentAbilityNode	=	Node;
 		return true;
 	}
-
-	UE_LOG( LogTemp , Warning , TEXT( "Fail to execute ability : %s" )  );
 
 	return false;
 }

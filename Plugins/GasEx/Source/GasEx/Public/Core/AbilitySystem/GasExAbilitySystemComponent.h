@@ -37,6 +37,9 @@ public:
 	UFUNCTION( BlueprintCallable)
 	bool TryActivateExAbility( const FGameplayTag& AbilityTag);
 
+	UFUNCTION( BlueprintCallable )
+	void CancelExAbility( const FGameplayTag& AbilityTag );
+
 	// temp function
 	UFUNCTION( BlueprintCallable )
 	void TryActivateNextGraphNode();
