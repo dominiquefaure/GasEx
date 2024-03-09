@@ -1,6 +1,6 @@
 // Copyright 2023-2024 Dominique Faure. All Rights Reserved.
 
-#include "GraphEditor/GasExEdGraphEditor.h"
+#include "ActionGraph/GasExEdActionGraphEditor.h"
 
 
 #include "AnimCustomInstanceHelper.h"
@@ -22,12 +22,13 @@
 
 #include "GasExEditorLog.h"
 
-#include "GraphEditor/Schema/GasExEdGraph_EdGraphSchema.h"
+#include "ActionGraph/GasExEdActionGraph_EdGraph.h"
+#include "ActionGraph/Schema/GasExEdActionGraph_EdGraphSchema.h"
 
 
-#define LOCTEXT_NAMESPACE "FGasExEdGraphEditor"
+#define LOCTEXT_NAMESPACE "FGasExEdActionGraphEditor"
 
-namespace UGasExEdGraphEditorTabs
+namespace UGasExEdActionGraphEditorTabs
 {
 	static const FName AppIdentifier( "UGasExEdGraphEditorApp" );
 	static const FName GraphEditorID( "GraphEditor" );
@@ -35,30 +36,30 @@ namespace UGasExEdGraphEditorTabs
 }
 
 //---------------------------------------------------------------------------------------------
-FGasExEdGraphEditor::FGasExEdGraphEditor()
-	: GraphEdited( nullptr )
+FGasExEdActionGraphEditor::FGasExEdActionGraphEditor()
+	: ActionGraphEdited( nullptr )
 {
 }
 //---------------------------------------------------------------------------------------------
 
 //---------------------------------------------------------------------------------------------
-FGasExEdGraphEditor::~FGasExEdGraphEditor()
+FGasExEdActionGraphEditor::~FGasExEdActionGraphEditor()
 {
 }
 //---------------------------------------------------------------------------------------------
 // 
 //---------------------------------------------------------------------------------------------
-UGasExEdGraph_EdGraph* FGasExEdGraphEditor::GetAbilityEditorGraph()
+UGasExEdActionGraph_EdGraph* FGasExEdActionGraphEditor::GetActionEditorGraph()
 {
-	return Cast< UGasExEdGraph_EdGraph>( GraphEdited->EdGraph );
+	return Cast< UGasExEdActionGraph_EdGraph>(ActionGraphEdited->EdGraph );
 }
 //---------------------------------------------------------------------------------------------
 
 
 //---------------------------------------------------------------------------------------------
-void FGasExEdGraphEditor::CreatePersonaToolkit()
+void FGasExEdActionGraphEditor::CreatePersonaToolkit()
 {
-	check( GraphEdited );
+	check(ActionGraphEdited );
 
 	const FPersonaModule& PersonaModule = FModuleManager::GetModuleChecked<FPersonaModule>( "Persona" );
 
@@ -84,21 +85,21 @@ void FGasExEdGraphEditor::CreatePersonaToolkit()
 //---------------------------------------------------------------------------------------------
 
 //---------------------------------------------------------------------------------------------
-FName FGasExEdGraphEditor::GetToolkitFName() const
+FName FGasExEdActionGraphEditor::GetToolkitFName() const
 {
 	return FName( "GasExEdGraphEditor" );
 }
 //---------------------------------------------------------------------------------------------
 
 //---------------------------------------------------------------------------------------------
-FText FGasExEdGraphEditor::GetBaseToolkitName() const
+FText FGasExEdActionGraphEditor::GetBaseToolkitName() const
 {
 	return LOCTEXT( "GasExEdGraphEditor" , "Ability Graph Editor" );
 }
 //---------------------------------------------------------------------------------------------
 
 //---------------------------------------------------------------------------------------------
-FText FGasExEdGraphEditor::GetToolkitName() const
+FText FGasExEdActionGraphEditor::GetToolkitName() const
 {
 	const TArray<UObject*>& EditingObjs = GetEditingObjects();
 	check( EditingObjs.Num() > 0 );
@@ -114,34 +115,34 @@ FText FGasExEdGraphEditor::GetToolkitName() const
 //---------------------------------------------------------------------------------------------
 
 //---------------------------------------------------------------------------------------------
-FText FGasExEdGraphEditor::GetToolkitToolTipText() const
+FText FGasExEdActionGraphEditor::GetToolkitToolTipText() const
 {
 	return FAssetEditorToolkit::GetToolkitToolTipText();
 }
 //---------------------------------------------------------------------------------------------
 
 //---------------------------------------------------------------------------------------------
-FString FGasExEdGraphEditor::GetWorldCentricTabPrefix() const
+FString FGasExEdActionGraphEditor::GetWorldCentricTabPrefix() const
 {
 	return TEXT( "GasExEdGraphEditor" );
 }
 //---------------------------------------------------------------------------------------------
 
 //---------------------------------------------------------------------------------------------
-FLinearColor FGasExEdGraphEditor::GetWorldCentricTabColorScale() const
+FLinearColor FGasExEdActionGraphEditor::GetWorldCentricTabColorScale() const
 {
 	return FLinearColor::White;
 }
 //---------------------------------------------------------------------------------------------
 
 //---------------------------------------------------------------------------------------------
-void FGasExEdGraphEditor::InitGraphEditor( const EToolkitMode::Type InMode , const TSharedPtr<IToolkitHost>& InInitToolkitHost , UGasExGraph* InActionGraph )
+void FGasExEdActionGraphEditor::InitGraphEditor( const EToolkitMode::Type InMode , const TSharedPtr<IToolkitHost>& InInitToolkitHost , UGasExActionGraph* InActionGraph )
 {
 	UE_LOG( LogGasExEditor , Verbose , TEXT( "FEGSActionGraphAssetEditor::InitActionGraphEditor" ) );
 
 	check( InActionGraph );
 
-	GraphEdited = InActionGraph;
+	ActionGraphEdited = InActionGraph;
 
 	CreateEdGraph();
 
@@ -154,14 +155,14 @@ void FGasExEdGraphEditor::InitGraphEditor( const EToolkitMode::Type InMode , con
 	*/
 	TSharedRef<FTabManager::FLayout> TabLayout	=	CreateTabLayout();
 
-	FAssetEditorToolkit::InitAssetEditor( InMode , InInitToolkitHost , UGasExEdGraphEditorTabs::AppIdentifier , TabLayout , true , true , InActionGraph );
+	FAssetEditorToolkit::InitAssetEditor( InMode , InInitToolkitHost , UGasExEdActionGraphEditorTabs::AppIdentifier , TabLayout , true , true , InActionGraph );
 
 }
 //---------------------------------------------------------------------------------------------
 
 
 //---------------------------------------------------------------------------------------------
-TSharedRef<FTabManager::FLayout> FGasExEdGraphEditor::CreateTabLayout()
+TSharedRef<FTabManager::FLayout> FGasExEdActionGraphEditor::CreateTabLayout()
 {
 	TSharedRef<FTabManager::FLayout> Layout = FTabManager::NewLayout( "Standalone_GasExEdGraphEditor_Layout_v01" )
 		->AddArea
@@ -174,13 +175,13 @@ TSharedRef<FTabManager::FLayout> FGasExEdGraphEditor::CreateTabLayout()
 				(
 					FTabManager::NewStack()
 					->SetSizeCoefficient( 0.75f )
-					->AddTab( UGasExEdGraphEditorTabs::GraphEditorID , ETabState::OpenedTab )->SetHideTabWell( true )
+					->AddTab(UGasExEdActionGraphEditorTabs::GraphEditorID , ETabState::OpenedTab )->SetHideTabWell( true )
 				)
 				->Split
 				(
 					FTabManager::NewStack()
 					->SetHideTabWell( true )
-					->AddTab( UGasExEdGraphEditorTabs::PropertyDetailsID , ETabState::OpenedTab )
+					->AddTab(UGasExEdActionGraphEditorTabs::PropertyDetailsID , ETabState::OpenedTab )
 				)
 			)
 		);
@@ -190,17 +191,17 @@ TSharedRef<FTabManager::FLayout> FGasExEdGraphEditor::CreateTabLayout()
 //---------------------------------------------------------------------------------------------
 
 //---------------------------------------------------------------------------------------------
-void FGasExEdGraphEditor::CreateEdGraph()
+void FGasExEdActionGraphEditor::CreateEdGraph()
 {
-	if( GraphEdited->EdGraph == nullptr )
+	if(ActionGraphEdited->EdGraph == nullptr )
 	{
-		GraphEdited->EdGraph = FBlueprintEditorUtils::CreateNewGraph( GraphEdited , "Graph" , UGasExEdGraph_EdGraph::StaticClass() , UGasExEdGraph_EdGraphSchema::StaticClass() );
+		ActionGraphEdited->EdGraph = FBlueprintEditorUtils::CreateNewGraph(ActionGraphEdited , "Graph" , UGasExEdActionGraph_EdGraph::StaticClass() , UGasExEdActionGraph_EdGraphSchema::StaticClass() );
 
-		GraphEdited->EdGraph->bAllowDeletion	=	false;
+		ActionGraphEdited->EdGraph->bAllowDeletion	=	false;
 
 		// Give the schema a chance to fill out any required nodes (like the results node)
-		const UEdGraphSchema* Schema = GraphEdited->EdGraph->GetSchema();
-		Schema->CreateDefaultNodesForGraph( *GraphEdited->EdGraph );
+		const UEdGraphSchema* Schema = ActionGraphEdited->EdGraph->GetSchema();
+		Schema->CreateDefaultNodesForGraph( *ActionGraphEdited->EdGraph );
 	}
 	else
 	{
@@ -213,18 +214,18 @@ void FGasExEdGraphEditor::CreateEdGraph()
 //////
 
 //---------------------------------------------------------------------------------------------
-void FGasExEdGraphEditor::CreateWidgets()
+void FGasExEdActionGraphEditor::CreateWidgets()
 {
-	GraphEditorWidget = CreateGraphEditorWidget( GraphEdited->EdGraph );
+	GraphEditorWidget = CreateGraphEditorWidget(ActionGraphEdited->EdGraph );
 	CreateDetailWidget();
 }
 //---------------------------------------------------------------------------------------------
 // 
 //---------------------------------------------------------------------------------------------
-TSharedRef<SGraphEditor> FGasExEdGraphEditor::CreateGraphEditorWidget( UEdGraph* InGraph )
+TSharedRef<SGraphEditor> FGasExEdActionGraphEditor::CreateGraphEditorWidget( UEdGraph* InGraph )
 {
 	SGraphEditor::FGraphEditorEvents Events;
-	Events.OnSelectionChanged	=	SGraphEditor::FOnSelectionChanged::CreateSP( this , &FGasExEdGraphEditor::OnSelectedNodesChanged );
+	Events.OnSelectionChanged	=	SGraphEditor::FOnSelectionChanged::CreateSP( this , &FGasExEdActionGraphEditor::OnSelectedNodesChanged );
 
 	return SNew( SGraphEditor )
 		.AdditionalCommands( GraphEditorCommands )
@@ -236,7 +237,7 @@ TSharedRef<SGraphEditor> FGasExEdGraphEditor::CreateGraphEditorWidget( UEdGraph*
 //---------------------------------------------------------------------------------------------
 
 //---------------------------------------------------------------------------------------------
-void FGasExEdGraphEditor::CreateDetailWidget()
+void FGasExEdActionGraphEditor::CreateDetailWidget()
 {
 	FDetailsViewArgs Args;
 	Args.bHideSelectionTip = true;
@@ -244,7 +245,7 @@ void FGasExEdGraphEditor::CreateDetailWidget()
 
 	FPropertyEditorModule& PropertyModule = FModuleManager::LoadModuleChecked<FPropertyEditorModule>( "PropertyEditor" );
 	PropertyDetailsView = PropertyModule.CreateDetailView( Args );
-	PropertyDetailsView->SetObject( GraphEdited );
+	PropertyDetailsView->SetObject(ActionGraphEdited);
 	//	PropertyDetailsWidget->OnFinishedChangingProperties().AddSP( this , &FAssetEditor_GenericGraph::OnFinishedChangingProperties );
 
 }
@@ -256,35 +257,35 @@ void FGasExEdGraphEditor::CreateDetailWidget()
 //////
 
 //---------------------------------------------------------------------------------------------
-void FGasExEdGraphEditor::RegisterTabSpawners( const TSharedRef<FTabManager>& InTabManager )
+void FGasExEdActionGraphEditor::RegisterTabSpawners( const TSharedRef<FTabManager>& InTabManager )
 {
-	WorkspaceMenuCategory = InTabManager->AddLocalWorkspaceMenuCategory( LOCTEXT( "FGasExEdGraphEditorWorkspaceMenu" , "Ability Graph Editor" ) );
+	WorkspaceMenuCategory = InTabManager->AddLocalWorkspaceMenuCategory( LOCTEXT( "FGasExEdActionGraphEditorWorkspaceMenu" , "Action Graph Editor" ) );
 	const TSharedRef<FWorkspaceItem> WorkspaceMenuCategoryRef = WorkspaceMenuCategory.ToSharedRef();
 
 	FAssetEditorToolkit::RegisterTabSpawners( InTabManager );
 
-	InTabManager->RegisterTabSpawner( UGasExEdGraphEditorTabs::GraphEditorID , FOnSpawnTab::CreateSP( this , &FGasExEdGraphEditor::SpawnTab_GraphEditor ) )
+	InTabManager->RegisterTabSpawner(UGasExEdActionGraphEditorTabs::GraphEditorID , FOnSpawnTab::CreateSP( this , &FGasExEdActionGraphEditor::SpawnTab_GraphEditor ) )
 		.SetDisplayName( LOCTEXT( "GraphTab" , "Graph" ) )
 		.SetGroup( WorkspaceMenuCategoryRef );
 
-	InTabManager->RegisterTabSpawner( UGasExEdGraphEditorTabs::PropertyDetailsID , FOnSpawnTab::CreateSP( this , &FGasExEdGraphEditor::SpawnTab_Details ) )
+	InTabManager->RegisterTabSpawner(UGasExEdActionGraphEditorTabs::PropertyDetailsID , FOnSpawnTab::CreateSP( this , &FGasExEdActionGraphEditor::SpawnTab_Details ) )
 		.SetDisplayName( LOCTEXT( "DetailsTab" , "Property" ) )
 		.SetGroup( WorkspaceMenuCategoryRef );
 }
 //---------------------------------------------------------------------------------------------
 
 //---------------------------------------------------------------------------------------------
-void FGasExEdGraphEditor::UnregisterTabSpawners( const TSharedRef<FTabManager>& InTabManager )
+void FGasExEdActionGraphEditor::UnregisterTabSpawners( const TSharedRef<FTabManager>& InTabManager )
 {
 	FAssetEditorToolkit::UnregisterTabSpawners( InTabManager );
 
-	InTabManager->UnregisterTabSpawner( UGasExEdGraphEditorTabs::GraphEditorID );
-	InTabManager->UnregisterTabSpawner( UGasExEdGraphEditorTabs::PropertyDetailsID );
+	InTabManager->UnregisterTabSpawner(UGasExEdActionGraphEditorTabs::GraphEditorID );
+	InTabManager->UnregisterTabSpawner(UGasExEdActionGraphEditorTabs::PropertyDetailsID );
 }
 //---------------------------------------------------------------------------------------------
 
 //---------------------------------------------------------------------------------------------
-TSharedRef<SDockTab> FGasExEdGraphEditor::SpawnTab_GraphEditor( const FSpawnTabArgs& Args )
+TSharedRef<SDockTab> FGasExEdActionGraphEditor::SpawnTab_GraphEditor( const FSpawnTabArgs& Args )
 {
 	return SNew( SDockTab )
 		.Label( LOCTEXT( "GraphTitle" , "Graph" ) )
@@ -296,7 +297,7 @@ TSharedRef<SDockTab> FGasExEdGraphEditor::SpawnTab_GraphEditor( const FSpawnTabA
 //---------------------------------------------------------------------------------------------
 
 //---------------------------------------------------------------------------------------------
-TSharedRef<SDockTab> FGasExEdGraphEditor::SpawnTab_Details( const FSpawnTabArgs& Args )
+TSharedRef<SDockTab> FGasExEdActionGraphEditor::SpawnTab_Details( const FSpawnTabArgs& Args )
 {
 	return SNew( SDockTab )
 		.Label( LOCTEXT( "DetailsTitle" , "Details" ) )
@@ -309,32 +310,32 @@ TSharedRef<SDockTab> FGasExEdGraphEditor::SpawnTab_Details( const FSpawnTabArgs&
 //---------------------------------------------------------------------------------------------
 
 //---------------------------------------------------------------------------------------------
-void FGasExEdGraphEditor::AddReferencedObjects( FReferenceCollector& Collector )
+void FGasExEdActionGraphEditor::AddReferencedObjects( FReferenceCollector& Collector )
 {
-	Collector.AddReferencedObject( GraphEdited );
-	Collector.AddReferencedObject( GraphEdited->EdGraph );
+	Collector.AddReferencedObject(ActionGraphEdited);
+	Collector.AddReferencedObject(ActionGraphEdited->EdGraph );
 }
 //---------------------------------------------------------------------------------------------
 
 //---------------------------------------------------------------------------------------------
-FString FGasExEdGraphEditor::GetReferencerName() const
+FString FGasExEdActionGraphEditor::GetReferencerName() const
 {
-	return TEXT( "FGasExEdGraphEditor" );
+	return TEXT( "FGasExEdActionGraphEditor" );
 }
 //---------------------------------------------------------------------------------------------
 
 //---------------------------------------------------------------------------------------------
-void FGasExEdGraphEditor::OnSelectedNodesChanged( const TSet<UObject*>& Nodes )
+void FGasExEdActionGraphEditor::OnSelectedNodesChanged( const TSet<UObject*>& Nodes )
 {
 	TArray<UObject*> SelectedObjects;
 
-	if( Nodes.Num() > 0 )
+	if (Nodes.Num() > 0)
 	{
 		//		FlowAssetEditor.Pin()->SetUISelectionState( FFlowAssetEditor::GraphTab );
 
 		for( TSet<UObject*>::TConstIterator SetIt( Nodes ); SetIt; ++SetIt )
 		{
-			if( const UGasExEdGraph_EdNodeBase* GraphNode = Cast<UGasExEdGraph_EdNodeBase>( *SetIt ) )
+			if( const UGasExEdActionGraphNodeBase* GraphNode = Cast<UGasExEdActionGraphNodeBase>( *SetIt ) )
 			{
 				SelectedObjects.Add( Cast<UObject>( GraphNode->RuntimeNode ) );
 			}
@@ -347,16 +348,13 @@ void FGasExEdGraphEditor::OnSelectedNodesChanged( const TSet<UObject*>& Nodes )
 	else
 	{
 		//		FlowAssetEditor.Pin()->SetUISelectionState( NAME_None );
-		SelectedObjects.Add( GraphEdited );
+		SelectedObjects.Add(ActionGraphEdited);
 	}
 
 	if( PropertyDetailsView.IsValid() )
 	{
 		PropertyDetailsView->SetObjects( SelectedObjects );
 	}
-
-
-	//	OnSelectionChangedEvent.ExecuteIfBound( Nodes );
 }
 //---------------------------------------------------------------------------------------------
 

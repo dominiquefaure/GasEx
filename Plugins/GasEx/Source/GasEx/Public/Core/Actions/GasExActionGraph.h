@@ -7,6 +7,7 @@
 #include "GasExActionGraph.generated.h"
 
 class UGasExActionNode;
+class UGasExActionNodeStart;
 
 /**
  * 
@@ -35,5 +36,15 @@ public:
 	TObjectPtr<class UEdGraph> EdGraph;
 
 #endif
+
+#if WITH_EDITOR
+
+	UGasExActionNode* CreateNode(const UClass* NodeClass);
+
+	// Add a link between 2 nodes
+	void AddLink(UGasExActionNode* OutputNode , UGasExActionNode* InputNode);
+
+#endif
+
 
 };

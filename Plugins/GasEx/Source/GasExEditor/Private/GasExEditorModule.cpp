@@ -6,6 +6,8 @@
 #include "AssetTypes/GasExEdAbilitySet_AssetTypeActions.h"
 #include "AssetTypes/GasExEdGraph_AssetTypeActions.h"
 
+#include "ActionGraph/AssetTypes/GasExEdActionGraph_AssetTypeActions.h"
+
 
 #define LOCTEXT_NAMESPACE "FGasExEditorModule"
 
@@ -20,6 +22,7 @@ void FGasExEditorModule::StartupModule()
 
 	RegisterAssetTypeAction( AssetTools , MakeShareable( new FGasExEdAbilitySet_AssetTypeActions( AssetCategory ) ) );
 	RegisterAssetTypeAction( AssetTools , MakeShareable( new FGasExEdGraph_AssetTypeActions( AssetCategory ) ) );
+	RegisterAssetTypeAction( AssetTools , MakeShareable( new FGasExEdActionGraph_AssetTypeActions(AssetCategory ) ) );
 
 }
 //---------------------------------------------------------------------------------------------

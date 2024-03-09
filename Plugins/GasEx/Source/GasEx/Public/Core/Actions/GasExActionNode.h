@@ -4,11 +4,15 @@
 
 #include "CoreMinimal.h"
 #include "UObject/NoExportTypes.h"
+
+#include "Abilities/GameplayAbility.h"
+
+
 #include "GasExActionNode.generated.h"
 
 
 class UGasExActionNodeFollowUp;
-class UGasExActionNodeFollowUp;
+class UGasExActionNodeCancel;
 
 /**
  * 
@@ -35,6 +39,6 @@ public:
 		
 	// Actions that can cancel the current one
 	UPROPERTY(EditAnywhere , BlueprintReadOnly)
-	TArray<UGasExActionNodeFollowUp*> CAncelActions;
+	TArray<UGasExActionNodeCancel*> CancelActions;
 
 };
