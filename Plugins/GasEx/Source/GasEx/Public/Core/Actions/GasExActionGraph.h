@@ -19,15 +19,14 @@ class GASEX_API UGasExActionGraph : public UObject
 
 public:
 
-	/** Holds all the Start Action nodes defined for this graph */
-	UPROPERTY(EditAnywhere , BlueprintReadOnly , Category = "Action Graph")
-	TArray<TObjectPtr<UGasExActionNodeStart>> StartNodes;
 
 	/** Holds all nodes defined for this graph */
 	UPROPERTY(EditAnywhere , BlueprintReadOnly , Category = "Action Graph")
 	TArray<TObjectPtr<UGasExActionNode>> AllNodes;
 
-
+	// Get all the Start Actions defined in the Graph
+	UFUNCTION( )
+	TArray<UGasExActionNodeStart*> GetAllStartActions();
 
 #if WITH_EDITORONLY_DATA
 

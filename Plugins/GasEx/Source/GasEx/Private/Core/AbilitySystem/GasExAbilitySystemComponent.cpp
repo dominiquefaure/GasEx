@@ -94,6 +94,40 @@ FGasExAbilitySetRow* UGasExAbilitySystemComponent::GetAbilityDef( const FGamepla
 }
 //-----------------------------------------------------------------------------------------
 
+//-----------------------------------------------------------------------------------------
+FGasExAbilitySetRow* UGasExAbilitySystemComponent::GetAbilityDef( const FGameplayAbilitySpecHandle& Handle )
+{
+	if( DefaultAbilitySet )
+	{
+		for( FGasExAbilitySetRow& Row : DefaultAbilitySet->Abilities )
+		{
+			if( Row.AbilitySpec.Handle == Handle )
+			{
+				return &Row;
+			}
+		}
+	}
+
+
+	return nullptr;
+
+}
+//-----------------------------------------------------------------------------------------
+
+
+//-----------------------------------------------------------------------------------------
+const FGameplayTag& UGasExAbilitySystemComponent::GetExAbilityTagFromHandle( const FGameplayAbilitySpecHandle& Handle )
+{
+	FGasExAbilitySetRow* Row	=	GetAbilityDef( Handle );
+
+	if( Row != nullptr )
+	{
+		return Row->AbilityTag;
+	}
+
+	return FGameplayTag::EmptyTag;
+}
+//-----------------------------------------------------------------------------------------
 
 //-----------------------------------------------------------------------------------------
 void UGasExAbilitySystemComponent::TryActivateNextGraphNode()
@@ -108,5 +142,19 @@ void UGasExAbilitySystemComponent::NotifyAbilityFailed( const FGameplayAbilitySp
 	UE_LOG( LogTemp , Warning , TEXT( "Activity failed : %s" ) , *( Ability->GetPathName() ) );
 
 	
+}
+//-----------------------------------------------------------------------------------------
+
+
+//-----------------------------------------------------------------------------------------
+void UGasExAbilitySystemComponent::NotifyAbilityEnded( FGameplayAbilitySpecHandle Handle , UGameplayAbility* Ability , bool bWasCancelled )
+{
+	Super::NotifyAbilityEnded( Handle , Ability , bWasCancelled );
+
+	FGasExAbilitySetRow* Row	=	GetAbilityDef( Handle );
+
+	if( Row != nullptr )
+	{
+	}
 }
 //-----------------------------------------------------------------------------------------

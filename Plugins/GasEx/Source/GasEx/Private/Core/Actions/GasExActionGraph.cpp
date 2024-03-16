@@ -7,6 +7,28 @@
 #include "Core/Actions/GasExActionNodeFollowUp.h"
 #include "Core/Actions/GasExActionNodeStart.h"
 
+
+//---------------------------------------------------------------------------------------------
+TArray<UGasExActionNodeStart*> UGasExActionGraph::GetAllStartActions()
+{
+	TArray<UGasExActionNodeStart*> StartNodes;
+
+	for( UGasExActionNode* Node : AllNodes )
+	{
+		UGasExActionNodeStart* StartNode	=	Cast< UGasExActionNodeStart>( Node );
+
+		if( StartNode != nullptr )
+		{
+			StartNodes.Add( StartNode );
+		}
+	}
+
+	return StartNodes;
+}
+//---------------------------------------------------------------------------------------------
+
+#if WITH_EDITOR
+
 //---------------------------------------------------------------------------------------------
 UGasExActionNode* UGasExActionGraph::CreateNode(const UClass* NodeClass)
 {
@@ -37,3 +59,5 @@ void UGasExActionGraph::AddLink(UGasExActionNode* OutputNode , UGasExActionNode*
 
 }
 //---------------------------------------------------------------------------------------------
+
+#endif

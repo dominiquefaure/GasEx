@@ -15,6 +15,7 @@
 class UGasExAbilitySet;
 class UGasExGraph;
 
+
 /**
  * 
  */
@@ -44,14 +45,23 @@ public:
 	UFUNCTION( BlueprintCallable )
 	void TryActivateNextGraphNode();
 
+	const FGameplayTag& GetExAbilityTagFromHandle( const FGameplayAbilitySpecHandle& Handle );
+
+
 protected:
 	// Called when the game starts
 	virtual void BeginPlay() override;
+
+
+	virtual void NotifyAbilityEnded( FGameplayAbilitySpecHandle Handle , UGameplayAbility* Ability , bool bWasCancelled ) override;
 
 private:
 
 	// Get the Ability Row represented by this given Tag 
 	FGasExAbilitySetRow* GetAbilityDef( const FGameplayTag& AbilityTag );
+
+	// Get the Ability Row represented by this given Handle 
+	FGasExAbilitySetRow* GetAbilityDef(const FGameplayAbilitySpecHandle& Handle );
 
 	virtual void NotifyAbilityFailed( const FGameplayAbilitySpecHandle Handle , UGameplayAbility* Ability , const FGameplayTagContainer& FailureReason )override;
 
