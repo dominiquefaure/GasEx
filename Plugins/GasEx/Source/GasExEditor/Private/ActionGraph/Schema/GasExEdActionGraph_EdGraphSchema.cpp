@@ -4,8 +4,7 @@
 
 
 #include "ActionGraph/Schema/GasExEdActionGraph_EdGraphSchemaAction_AddStartAction.h"
-#include "ActionGraph/Schema/GasExEdActionGraph_EdGraphSchemaAction_AddFollowUpAction.h"
-#include "ActionGraph/Schema/GasExEdActionGraph_EdGraphSchemaAction_AddCancelAction.h"
+#include "ActionGraph/Schema/GasExEdActionGraph_EdGraphSchemaAction_AddChainAction.h"
 
 
 #define LOCTEXT_NAMESPACE "UGasExEdActionGraph_EdGraphSchema"
@@ -33,11 +32,8 @@ void UGasExEdActionGraph_EdGraphSchema::GetNewNodesActions(FGraphActionMenuBuild
 	TSharedPtr<FGasExEdActionGraph_EdGraphSchemaAction_AddStartAction> AddStartAction(new FGasExEdActionGraph_EdGraphSchemaAction_AddStartAction());
 	ActionMenuBuilder.AddAction(AddStartAction);
 
-	TSharedPtr<FGasExEdActionGraph_EdGraphSchemaAction_AddFollowUpAction> AddFollowUpAction(new FGasExEdActionGraph_EdGraphSchemaAction_AddFollowUpAction());
-	ActionMenuBuilder.AddAction(AddFollowUpAction);
-
-	TSharedPtr<FGasExEdActionGraph_EdGraphSchemaAction_AddCancelAction> AddCancelAction(new FGasExEdActionGraph_EdGraphSchemaAction_AddCancelAction());
-	ActionMenuBuilder.AddAction(AddCancelAction);
+	TSharedPtr<FGasExEdActionGraph_EdGraphSchemaAction_AddChainAction> AddChainAction( new FGasExEdActionGraph_EdGraphSchemaAction_AddChainAction() );
+	ActionMenuBuilder.AddAction( AddChainAction );
 }
 //---------------------------------------------------------------------------------------------
 

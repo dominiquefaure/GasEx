@@ -4,6 +4,7 @@
 
 #include "CoreMinimal.h"
 #include "EdGraph/EdGraph.h"
+#include "Core/Actions/GasExActionNode.h"
 
 
 class FGasExEdActionGraphUtils
@@ -11,6 +12,6 @@ class FGasExEdActionGraphUtils
 
 public:
 
-	static UEdGraphNode* CreateNode( UEdGraph* ParentGraph , UEdGraphPin* FromPin , const FVector2D Location , const bool bSelectNewNode , const UClass* EdNodeClass , const UClass* RuntimeClass );
+	static UEdGraphNode* CreateNode( UEdGraph* ParentGraph , UEdGraphPin* FromPin , const FVector2D Location , const bool bSelectNewNode , const UClass* EdNodeClass , const EGasExActionNodeType RuntimeType );
 
 };

@@ -6,7 +6,7 @@
 
 
 //---------------------------------------------------------------------------------------------
-UEdGraphNode* FGasExEdActionGraphUtils::CreateNode( UEdGraph* ParentGraph , UEdGraphPin* FromPin , const FVector2D Location , const bool bSelectNewNode , const UClass* EdNodeClass , const UClass* RuntimeClass )
+UEdGraphNode* FGasExEdActionGraphUtils::CreateNode( UEdGraph* ParentGraph , UEdGraphPin* FromPin , const FVector2D Location , const bool bSelectNewNode , const UClass* EdNodeClass , const EGasExActionNodeType RuntimeType )
 {
 	UGasExEdActionGraphNodeBase* NewGraphNode	=	NewObject<UGasExEdActionGraphNodeBase>( ParentGraph , EdNodeClass , NAME_None , RF_Transactional );
 
@@ -23,7 +23,7 @@ UEdGraphNode* FGasExEdActionGraphUtils::CreateNode( UEdGraph* ParentGraph , UEdG
 	// Get the ActionGraph
 	UGasExActionGraph* ActionGraph = Cast<UGasExActionGraph>( ParentGraph->GetOuter() );
 
-	NewGraphNode->RuntimeNode	= ActionGraph->CreateNode( RuntimeClass );
+	NewGraphNode->RuntimeNode	= ActionGraph->CreateNode( RuntimeType );
 
 	// create pins and connections
 	NewGraphNode->AllocateDefaultPins();

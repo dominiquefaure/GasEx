@@ -4,10 +4,9 @@
 
 #include "CoreMinimal.h"
 #include "UObject/NoExportTypes.h"
-#include "GasExActionGraph.generated.h"
+#include "Core/Actions/GasExActionNode.h"
 
-class UGasExActionNode;
-class UGasExActionNodeStart;
+#include "GasExActionGraph.generated.h"
 
 /**
  * 
@@ -26,7 +25,7 @@ public:
 
 	// Get all the Start Actions defined in the Graph
 	UFUNCTION( )
-	TArray<UGasExActionNodeStart*> GetAllStartActions();
+	TArray<UGasExActionNode*> GetAllStartActions();
 
 #if WITH_EDITORONLY_DATA
 
@@ -38,10 +37,10 @@ public:
 
 #if WITH_EDITOR
 
-	UGasExActionNode* CreateNode(const UClass* NodeClass);
+	UGasExActionNode* CreateNode( const EGasExActionNodeType ActionType );
 
 	// Add a link between 2 nodes
-	void AddLink(UGasExActionNode* OutputNode , UGasExActionNode* InputNode);
+	UGasExActionNodeLink* AddLink(UGasExActionNode* OutputNode , UGasExActionNode* InputNode);
 
 #endif
 

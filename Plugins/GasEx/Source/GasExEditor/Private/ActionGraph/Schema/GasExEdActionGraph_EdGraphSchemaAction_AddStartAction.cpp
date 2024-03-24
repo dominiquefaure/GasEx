@@ -2,7 +2,7 @@
 
 #include "ActionGraph/Schema/GasExEdActionGraph_EdGraphSchemaAction_AddStartAction.h"
 
-#include "Core/Actions/GasExActionNodeStart.h"
+#include "Core/Actions/GasExActionNode.h"
 #include "ActionGraph/GasExEdActionGraphUtils.h"
 
 #define LOCTEXT_NAMESPACE "FGasExEdActionGraph_EdGraphSchemaAction"
@@ -20,7 +20,7 @@ UEdGraphNode* FGasExEdActionGraph_EdGraphSchemaAction_AddStartAction::PerformAct
 {
 	const FScopedTransaction Transaction(LOCTEXT("AddStartAction" , "Add Start Action"));
 
-	UEdGraphNode* NewGraphNode = FGasExEdActionGraphUtils::CreateNode(ParentGraph , FromPin , Location , bSelectNewNode , UGasExEdActionGraphNodeStart::StaticClass() , UGasExActionNodeStart::StaticClass());
+	UEdGraphNode* NewGraphNode = FGasExEdActionGraphUtils::CreateNode(ParentGraph , FromPin , Location , bSelectNewNode , UGasExEdActionGraphNodeStart::StaticClass() , EGasExActionNodeType::Start );
 
 	return NewGraphNode;
 

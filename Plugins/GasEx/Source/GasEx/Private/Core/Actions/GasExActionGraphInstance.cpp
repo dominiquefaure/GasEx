@@ -4,6 +4,7 @@
 #include "Core/Actions/GasExActionGraphInstance.h"
 #include "Core/Actions/GasExActionGraph.h"
 #include "Core/Actions/GasExActionNode.h"
+#include "Core/Actions/GasExActionNodeLink.h"
 #include "Core/AbilitySystem/GasExAbilitySystemComponent.h"
 
 //---------------------------------------------------------------------------------------------
@@ -28,7 +29,7 @@ bool UGasExActionGraphInstance::LaunchFirstAction()
 {
 	if( CurrentGraphNode == nullptr )
 	{
-		TArray<UGasExActionNodeStart*>	StartActions	=	Graph->GetAllStartActions();
+		TArray<UGasExActionNode*>	StartActions	=	Graph->GetAllStartActions();
 
 		if( StartActions.Num() > 0 )
 		{
@@ -93,10 +94,13 @@ bool UGasExActionGraphInstance::TryExecuteFollowUpAction()
 {
 	check( CurrentGraphNode )
 
-	if( CurrentGraphNode->FollowUpActions.Num() > 0 )
+	for( UGasExActionNodeLink* Link : CurrentGraphNode->Links )
 	{
-		ExecuteAction( CurrentGraphNode->FollowUpActions[0] );
-		return true;
+		if( Link->TargetNode )
+		{
+			ExecuteAction( Link->TargetNode );
+			return true;
+		}
 	}
 
 	return false;

@@ -3,23 +3,17 @@
 
 #include "Core/Actions/GasExActionGraph.h"
 
-#include "Core/Actions/GasExActionNodeCancel.h"
-#include "Core/Actions/GasExActionNodeFollowUp.h"
-#include "Core/Actions/GasExActionNodeStart.h"
-
 
 //---------------------------------------------------------------------------------------------
-TArray<UGasExActionNodeStart*> UGasExActionGraph::GetAllStartActions()
+TArray<UGasExActionNode*> UGasExActionGraph::GetAllStartActions()
 {
-	TArray<UGasExActionNodeStart*> StartNodes;
+	TArray<UGasExActionNode*> StartNodes;
 
 	for( UGasExActionNode* Node : AllNodes )
 	{
-		UGasExActionNodeStart* StartNode	=	Cast< UGasExActionNodeStart>( Node );
-
-		if( StartNode != nullptr )
+		if( Node->ActionType == EGasExActionNodeType::Start )
 		{
-			StartNodes.Add( StartNode );
+			StartNodes.Add( Node );
 		}
 	}
 
@@ -29,34 +23,40 @@ TArray<UGasExActionNodeStart*> UGasExActionGraph::GetAllStartActions()
 
 #if WITH_EDITOR
 
-//---------------------------------------------------------------------------------------------
-UGasExActionNode* UGasExActionGraph::CreateNode(const UClass* NodeClass)
-{
-	UGasExActionNode* NewNode = NewObject<UGasExActionNode>(this , NodeClass , NAME_None , RF_Transactional);
 
-	AllNodes.Add(NewNode);
+//---------------------------------------------------------------------------------------------
+UGasExActionNode* UGasExActionGraph::CreateNode( const EGasExActionNodeType ActionType )
+{
+
+	UGasExActionNode* NewNode	=	NewObject<UGasExActionNode>( this , UGasExActionNode::StaticClass() , NAME_None , RF_Transactional);
+	NewNode->ActionType			=	ActionType;
+
+	AllNodes.Add( NewNode );
 
 	return NewNode;
-
 }
 //---------------------------------------------------------------------------------------------
 
 //---------------------------------------------------------------------------------------------
-void UGasExActionGraph::AddLink(UGasExActionNode* OutputNode , UGasExActionNode* InputNode)
+UGasExActionNodeLink* UGasExActionGraph::AddLink(UGasExActionNode* SourceNode , UGasExActionNode* TargetNode)
 {
-	UGasExActionNodeFollowUp* FollowUp = Cast<UGasExActionNodeFollowUp>(InputNode );
-
-	if( FollowUp )
+	// check link doesn't exist
+	for( auto Link : SourceNode->Links )
 	{
-		OutputNode->FollowUpActions.Add( FollowUp );
-	}
-	else 
-	{
-		UGasExActionNodeCancel* Cancel = Cast<UGasExActionNodeCancel>(InputNode);
-		OutputNode->CancelActions.Add( Cancel );
-
+		if( Link->TargetNode == TargetNode )
+		{
+			return nullptr;
+		}
 	}
 
+	// create a new Link
+	UGasExActionNodeLink* NewLink	=	NewObject<UGasExActionNodeLink>( this , UGasExActionNodeLink::StaticClass() , NAME_None , RF_Transactional );
+	NewLink->SourceNode		=	SourceNode;
+	NewLink->TargetNode		=	TargetNode;
+
+	SourceNode->Links.Add( NewLink );
+
+	return NewLink;
 }
 //---------------------------------------------------------------------------------------------
 

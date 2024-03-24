@@ -11,8 +11,16 @@
 #include "GasExActionNode.generated.h"
 
 
-class UGasExActionNodeFollowUp;
-class UGasExActionNodeCancel;
+class UGasExActionNodeLink;
+
+
+UENUM()
+enum class EGasExActionNodeType : uint8
+{
+	Start	= 0,	// First action of a chain
+	Chained	= 1,	// any node of the Chain
+};
+
 
 /**
  * 
@@ -24,6 +32,10 @@ class GASEX_API UGasExActionNode : public UObject
 
 public:
 
+	// Type of Action
+	UPROPERTY( EditAnywhere , BlueprintReadOnly )
+	EGasExActionNodeType ActionType;
+
 	// The Gameplay tag that identify The required input
 	UPROPERTY(EditAnywhere , BlueprintReadOnly)
 	FGameplayTag InputTag;
@@ -33,12 +45,8 @@ public:
 	UPROPERTY(EditAnywhere , BlueprintReadOnly)
 	FGameplayTag AbilityTag;
 
-	// Actions that can be launched once this one is finished
-	UPROPERTY(EditAnywhere , BlueprintReadOnly)
-	TArray<UGasExActionNodeFollowUp*> FollowUpActions;
-		
-	// Actions that can cancel the current one
-	UPROPERTY(EditAnywhere , BlueprintReadOnly)
-	TArray<UGasExActionNodeCancel*> CancelActions;
+	// Actions that can Launch from the current one
+	UPROPERTY( EditAnywhere , BlueprintReadOnly )
+	TArray<UGasExActionNodeLink*> Links;
 
 };

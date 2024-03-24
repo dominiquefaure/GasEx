@@ -6,14 +6,14 @@
 #include "UObject/ObjectMacros.h"
 #include "EdGraph/EdGraphNode.h"
 #include "ActionGraph/Nodes/GasExEdActionGraphNodeBase.h"
-#include "GasExEdActionGraphNodeFollowUp.generated.h"
+#include "GasExEdActionGraphNodeChain.generated.h"
 
 class UEdGraph;
 class UEdGraphPin;
 class UEdGraphSchema;
 
 UCLASS()
-class GASEXEDITOR_API UGasExEdActionGraphNodeFollowUp : public UGasExEdActionGraphNodeBase
+class GASEXEDITOR_API UGasExEdActionGraphNodeChain : public UGasExEdActionGraphNodeBase
 {
 	GENERATED_BODY()
 
