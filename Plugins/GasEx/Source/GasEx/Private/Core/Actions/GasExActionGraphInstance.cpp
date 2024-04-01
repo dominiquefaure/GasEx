@@ -43,6 +43,33 @@ bool UGasExActionGraphInstance::LaunchFirstAction()
 }
 //---------------------------------------------------------------------------------------------
 
+//---------------------------------------------------------------------------------------------
+void UGasExActionGraphInstance::ProcessInputTriggered( FGameplayTag InputTag )
+{
+	UE_LOG( LogTemp , Warning , TEXT( "Start ProcessInputTriggered" ) );
+
+	if( CurrentGraphNode == nullptr )
+	{
+		TArray<UGasExActionNode*>	StartActions	=	Graph->GetAllStartActions();
+
+		for( UGasExActionNode* StartNode : StartActions )
+		{
+			if( canExecuteAction( StartNode , InputTag ) )
+			{
+				ExecuteAction( StartNode );
+			}
+		}
+	}
+	else
+	{
+		FScopeLock ScopeLock( &ProcessCritialSection );
+		UE_LOG( LogTemp , Warning , TEXT( "Start TryCancelAction , instance=%d" ), &ProcessCritialSection );
+		TryCancelAction( InputTag );
+		UE_LOG( LogTemp , Warning , TEXT( "End TryCancelAction" ) );
+	}
+	UE_LOG( LogTemp , Warning , TEXT( "End ProcessInputTriggered" ) );
+}
+//---------------------------------------------------------------------------------------------
 
 //---------------------------------------------------------------------------------------------
 bool UGasExActionGraphInstance::ExecuteAction( UGasExActionNode*  NewActionNode )
@@ -54,13 +81,26 @@ bool UGasExActionGraphInstance::ExecuteAction( UGasExActionNode*  NewActionNode 
 		return false;
 	}
 
+	if( CurrentGraphNode != nullptr )
+	{
+		if( NewActionNode->AbilityTag == CurrentGraphNode->AbilityTag )
+		{
+			UE_LOG( LogTemp , Warning , TEXT( "Error try to cancel an acton by itself!!!!!!!!" ) );
+
+			return false;
+		}
+	}
+
+
 	// if the Activation succeed, made the node the new active one
 	if( AbilitySystemComponent->TryActivateExAbility( NewActionNode->AbilityTag ) )
 	{
 		// Cancel the current Node
 		if( CurrentGraphNode != nullptr )
 		{
-			AbilitySystemComponent->CancelExAbility( CurrentGraphNode->AbilityTag );
+			FGameplayTag PreviousAbilityTag	=	CurrentGraphNode->AbilityTag;
+			CurrentGraphNode	=	nullptr;
+			AbilitySystemComponent->CancelExAbility( PreviousAbilityTag );
 		}
 
 		CurrentGraphNode	=	NewActionNode;
@@ -77,6 +117,9 @@ void UGasExActionGraphInstance::OnAbilityEnded( const FAbilityEndedData& EndedDa
 {
 	if( CurrentGraphNode != nullptr )
 	{
+		FScopeLock ScopeLock( &ProcessCritialSection );
+
+		UE_LOG( LogTemp , Warning , TEXT( "Start OnAbilityEnded with currentNode, instanxe = %d" ), &ProcessCritialSection );
 		// if the Ability ended is the one associated to the current Action node
 		if( CurrentGraphNode->AbilityTag == AbilitySystemComponent->GetExAbilityTagFromHandle( EndedData.AbilitySpecHandle ) )
 		{
@@ -84,7 +127,17 @@ void UGasExActionGraphInstance::OnAbilityEnded( const FAbilityEndedData& EndedDa
 			{
 				CurrentGraphNode	=	nullptr;
 			}
+			else
+			{
+				UE_LOG( LogTemp , Warning , TEXT( "next action have beeen found" ) );
+			}
 		}
+		else
+		{
+			UE_LOG( LogTemp , Warning , TEXT( "Ability ened but not same Node !!!!!!" ) );
+
+		}
+		UE_LOG( LogTemp , Warning , TEXT( "Finish OnAbilityEnded with currentNode" ) );
 	}
 }
 //-----------------------------------------------------------------------------------------
@@ -101,6 +154,55 @@ bool UGasExActionGraphInstance::TryExecuteFollowUpAction()
 			ExecuteAction( Link->TargetNode );
 			return true;
 		}
+	}
+
+	return false;
+}
+//-----------------------------------------------------------------------------------------
+
+//-----------------------------------------------------------------------------------------
+bool UGasExActionGraphInstance::TryCancelAction( FGameplayTag InputTag )
+{
+	if( CurrentGraphNode != nullptr )
+	{
+		for( UGasExActionNodeLink* Link : CurrentGraphNode->Links )
+		{
+			if( TryExecuteLinkedAction( InputTag , Link ) )
+			{
+				return true;
+			}
+		}
+
+	}
+
+	return false;
+
+}
+//-----------------------------------------------------------------------------------------
+
+//-----------------------------------------------------------------------------------------
+bool UGasExActionGraphInstance::TryExecuteLinkedAction( FGameplayTag InputTag , UGasExActionNodeLink* Link )
+{
+
+	if( Link->TargetNode != nullptr )
+	{
+		if( canExecuteAction( Link->TargetNode , InputTag ) )
+		{
+			ExecuteAction( Link->TargetNode );
+			return true;
+		}
+	}
+
+	return false;
+}
+//-----------------------------------------------------------------------------------------
+
+//-----------------------------------------------------------------------------------------
+bool UGasExActionGraphInstance::canExecuteAction( UGasExActionNode* Node , FGameplayTag InputTag )
+{
+	if( Node->InputTag.MatchesTagExact( InputTag ) )
+	{
+		return true;
 	}
 
 	return false;

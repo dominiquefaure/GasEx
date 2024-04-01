@@ -8,6 +8,7 @@
 #include "Core/Actions/GasExActionGraph.h"
 #include "Core/Actions/GasExActionGraphInstance.h"
 
+#include "Core/Actions/GasExActionInputConfig.h"
 
 #include "GasExActionSystemComponent.generated.h"
 
@@ -21,12 +22,24 @@ public:
 	// Sets default values for this component's properties
 	UGasExActionSystemComponent();
 
+	UPROPERTY( EditAnywhere , BlueprintReadOnly , Category = "Action Graph" )
+	TObjectPtr<UGasExInputConfig> InputConfig;
+
 	UPROPERTY(EditAnywhere , BlueprintReadOnly , Category = "Action Graph")
 	TObjectPtr<UGasExActionGraph> ActionGraph;
 
 
 	UFUNCTION( BlueprintCallable )
 	void TestFirstAction();
+
+
+	UFUNCTION( BlueprintCallable )
+	void RegisterInputs( UInputComponent* PlayerInputComponent );
+
+
+private:
+
+	void OnInputTriggered( FGameplayTag InputTag );
 
 protected:
 	// Called when the game starts

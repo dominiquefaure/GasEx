@@ -2,6 +2,10 @@
 
 
 #include "Components/GasExActionSystemComponent.h"
+#include "EnhancedInputComponent.h"
+#include "EnhancedInputSubsystems.h"
+
+
 
 //---------------------------------------------------------------------------------------------
 // Sets default values for this component's properties
@@ -29,6 +33,12 @@ void UGasExActionSystemComponent::BeginPlay()
 	GraphInstance->SetGraph(ActionGraph);
 	GraphInstance->SetAbilitySystem(AbilitySystem);
 
+	UInputComponent* InputComponent	=	GetOwner()->GetComponentByClass<UInputComponent>();
+	if( InputComponent != nullptr )
+	{
+		RegisterInputs( InputComponent );
+	}
+
 }
 //---------------------------------------------------------------------------------------------
 
@@ -47,5 +57,37 @@ void UGasExActionSystemComponent::TickComponent(float DeltaTime, ELevelTick Tick
 void UGasExActionSystemComponent::TestFirstAction()
 {
 	GraphInstance->LaunchFirstAction();
+}
+//---------------------------------------------------------------------------------------------
+
+//---------------------------------------------------------------------------------------------
+void UGasExActionSystemComponent::RegisterInputs( UInputComponent* PlayerInputComponent )
+{
+	check( InputConfig )
+
+	// Set up action bindings
+	if( UEnhancedInputComponent* EnhancedInputComponent = Cast<UEnhancedInputComponent>( PlayerInputComponent ) ) 
+	{
+		for( FGasExInputAction& InputAction : InputConfig->InputActions )
+		{
+//			EnhancedInputComponent->BindAction( InputAction.InputAction , ETriggerEvent::Triggered , this , &UGasExActionSystemComponent::OnInputTriggered , InputAction.InputTag );
+			EnhancedInputComponent->BindAction( InputAction.InputAction , ETriggerEvent::Started , this , &UGasExActionSystemComponent::OnInputTriggered , InputAction.InputTag );
+
+		}
+
+	}
+	else
+	{
+	}
+
+}
+//---------------------------------------------------------------------------------------------
+
+//---------------------------------------------------------------------------------------------
+void UGasExActionSystemComponent::OnInputTriggered( FGameplayTag InputTag )
+{
+	check( GraphInstance );
+
+	GraphInstance->ProcessInputTriggered( InputTag );
 }
 //---------------------------------------------------------------------------------------------

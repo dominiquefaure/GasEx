@@ -28,6 +28,9 @@ public:
 
 	bool LaunchFirstAction();
 
+	// do necessary actions when an input is Triggered
+	void ProcessInputTriggered( FGameplayTag InputTag );
+
 // Methods
 private:
 
@@ -38,6 +41,13 @@ private:
 	// try to execute one of the follow up actions of the current one
 	bool TryExecuteFollowUpAction();
 
+	// try cancel the current action according to the given input
+	bool TryCancelAction( FGameplayTag InputTag );
+
+	bool TryExecuteLinkedAction( FGameplayTag InputTag , UGasExActionNodeLink* Link );
+
+	bool canExecuteAction( UGasExActionNode* Node ,FGameplayTag InputTag );
+
 private:
 
 	TObjectPtr<UGasExAbilitySystemComponent> AbilitySystemComponent;
@@ -46,4 +56,6 @@ private:
 	TObjectPtr<UGasExActionGraph>	Graph;
 	TObjectPtr<UGasExActionNode> CurrentGraphNode;
 
+	// Critical Section between process input and Ability Ended
+	mutable FCriticalSection ProcessCritialSection;
 };
