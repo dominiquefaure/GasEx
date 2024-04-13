@@ -52,7 +52,6 @@ protected:
 	// Called when the game starts
 	virtual void BeginPlay() override;
 
-
 	virtual void NotifyAbilityEnded( FGameplayAbilitySpecHandle Handle , UGameplayAbility* Ability , bool bWasCancelled ) override;
 
 private:

@@ -50,13 +50,10 @@ void UGasExActionSystemComponent::TickComponent(float DeltaTime, ELevelTick Tick
 	Super::TickComponent(DeltaTime, TickType, ThisTickFunction);
 
 	// ...
-}
-//---------------------------------------------------------------------------------------------
-
-//---------------------------------------------------------------------------------------------
-void UGasExActionSystemComponent::TestFirstAction()
-{
-	GraphInstance->LaunchFirstAction();
+	if( GraphInstance != nullptr )
+	{
+		GraphInstance->Tick();
+	}
 }
 //---------------------------------------------------------------------------------------------
 
@@ -88,6 +85,6 @@ void UGasExActionSystemComponent::OnInputTriggered( FGameplayTag InputTag )
 {
 	check( GraphInstance );
 
-	GraphInstance->ProcessInputTriggered( InputTag );
+	GraphInstance->OnInputTriggered( InputTag );
 }
 //---------------------------------------------------------------------------------------------

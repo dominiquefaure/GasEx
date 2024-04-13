@@ -28,11 +28,6 @@ public:
 	UPROPERTY(EditAnywhere , BlueprintReadOnly , Category = "Action Graph")
 	TObjectPtr<UGasExActionGraph> ActionGraph;
 
-
-	UFUNCTION( BlueprintCallable )
-	void TestFirstAction();
-
-
 	UFUNCTION( BlueprintCallable )
 	void RegisterInputs( UInputComponent* PlayerInputComponent );
 

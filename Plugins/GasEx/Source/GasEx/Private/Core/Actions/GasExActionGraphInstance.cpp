@@ -13,6 +13,7 @@ void UGasExActionGraphInstance::SetAbilitySystem(UGasExAbilitySystemComponent* I
 	AbilitySystemComponent = InAbilitySystem;
 	AbilitySystemComponent->OnAbilityEnded.AddUObject( this , &UGasExActionGraphInstance::OnAbilityEnded );
 
+	CurrentState	=	EGasExActionGraphState::NoAction;
 }
 //---------------------------------------------------------------------------------------------
 
@@ -25,49 +26,60 @@ void UGasExActionGraphInstance::SetGraph(UGasExActionGraph* InGraph)
 //---------------------------------------------------------------------------------------------
 
 //---------------------------------------------------------------------------------------------
-bool UGasExActionGraphInstance::LaunchFirstAction()
+void UGasExActionGraphInstance::Tick()
 {
-	if( CurrentGraphNode == nullptr )
+	ProcessInputs();
+
+	if( CurrentState == EGasExActionGraphState::ActionFinished )
 	{
-		TArray<UGasExActionNode*>	StartActions	=	Graph->GetAllStartActions();
-
-		if( StartActions.Num() > 0 )
+		if( !TryExecuteFollowUpAction() )
 		{
-			ExecuteAction( StartActions[0] );
-
-			return true;
+			CurrentGraphNode	=	nullptr;
+			CurrentState		=	EGasExActionGraphState::NoAction;
+		}
+		else
+		{
+			UE_LOG( LogTemp , Warning , TEXT( "next action have beeen found" ) );
 		}
 	}
-
-	return false;
 }
 //---------------------------------------------------------------------------------------------
 
 //---------------------------------------------------------------------------------------------
-void UGasExActionGraphInstance::ProcessInputTriggered( FGameplayTag InputTag )
+void UGasExActionGraphInstance::OnInputTriggered( FGameplayTag InputTag )
 {
-	UE_LOG( LogTemp , Warning , TEXT( "Start ProcessInputTriggered" ) );
+	InputQueue.Enqueue( InputTag );
 
-	if( CurrentGraphNode == nullptr )
+}
+//---------------------------------------------------------------------------------------------
+
+//---------------------------------------------------------------------------------------------
+void UGasExActionGraphInstance::ProcessInputs()
+{
+	UE_LOG( LogTemp , Warning , TEXT( "Start ProcessInputs" ) );
+
+	FGameplayTag InputTag;
+
+	if( InputQueue.Dequeue( InputTag ) )
 	{
-		TArray<UGasExActionNode*>	StartActions	=	Graph->GetAllStartActions();
-
-		for( UGasExActionNode* StartNode : StartActions )
+		if( CurrentGraphNode == nullptr )
 		{
-			if( canExecuteAction( StartNode , InputTag ) )
+			TArray<UGasExActionNode*>	StartActions	=	Graph->GetAllStartActions();
+
+			for( UGasExActionNode* StartNode : StartActions )
 			{
-				ExecuteAction( StartNode );
+				if( canExecuteAction( StartNode , InputTag ) )
+				{
+					ExecuteAction( StartNode );
+				}
 			}
 		}
+		else
+		{
+			TryCancelAction( InputTag );
+		}
+		UE_LOG( LogTemp , Warning , TEXT( "End ProcessInputs" ) );
 	}
-	else
-	{
-		FScopeLock ScopeLock( &ProcessCritialSection );
-		UE_LOG( LogTemp , Warning , TEXT( "Start TryCancelAction , instance=%d" ), &ProcessCritialSection );
-		TryCancelAction( InputTag );
-		UE_LOG( LogTemp , Warning , TEXT( "End TryCancelAction" ) );
-	}
-	UE_LOG( LogTemp , Warning , TEXT( "End ProcessInputTriggered" ) );
 }
 //---------------------------------------------------------------------------------------------
 
@@ -104,6 +116,8 @@ bool UGasExActionGraphInstance::ExecuteAction( UGasExActionNode*  NewActionNode 
 		}
 
 		CurrentGraphNode	=	NewActionNode;
+		CurrentState		=	EGasExActionGraphState::ActionInProgres;
+
 		return true;
 	}
 
@@ -117,27 +131,16 @@ void UGasExActionGraphInstance::OnAbilityEnded( const FAbilityEndedData& EndedDa
 {
 	if( CurrentGraphNode != nullptr )
 	{
-		FScopeLock ScopeLock( &ProcessCritialSection );
-
-		UE_LOG( LogTemp , Warning , TEXT( "Start OnAbilityEnded with currentNode, instanxe = %d" ), &ProcessCritialSection );
 		// if the Ability ended is the one associated to the current Action node
 		if( CurrentGraphNode->AbilityTag == AbilitySystemComponent->GetExAbilityTagFromHandle( EndedData.AbilitySpecHandle ) )
 		{
-			if( !TryExecuteFollowUpAction() )
-			{
-				CurrentGraphNode	=	nullptr;
-			}
-			else
-			{
-				UE_LOG( LogTemp , Warning , TEXT( "next action have beeen found" ) );
-			}
+			CurrentState	=	EGasExActionGraphState::ActionFinished;
+
 		}
 		else
 		{
 			UE_LOG( LogTemp , Warning , TEXT( "Ability ened but not same Node !!!!!!" ) );
-
 		}
-		UE_LOG( LogTemp , Warning , TEXT( "Finish OnAbilityEnded with currentNode" ) );
 	}
 }
 //-----------------------------------------------------------------------------------------
@@ -172,9 +175,7 @@ bool UGasExActionGraphInstance::TryCancelAction( FGameplayTag InputTag )
 				return true;
 			}
 		}
-
 	}
-
 	return false;
 
 }

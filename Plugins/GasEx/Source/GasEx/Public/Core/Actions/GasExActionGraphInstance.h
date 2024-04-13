@@ -13,6 +13,15 @@ class UGasExAbilitySystemComponent;
 class UGasExActionGraph;
 class UGasExActionNode;
 
+
+UENUM()
+enum class EGasExActionGraphState : uint8
+{
+	NoAction		=	0 ,	// No action currently playing, graph is in waiting state
+	ActionInProgres	=	1,	// an Action is currently in Progress
+	ActionFinished	=	9, // the Current Action just finished will go back to NoAction if no follow up action can be launched
+};
+
 /**
  *
  */
@@ -26,10 +35,10 @@ public:
 	void SetAbilitySystem(UGasExAbilitySystemComponent* AbilitySystem);
 	void SetGraph(UGasExActionGraph* Graph);
 
-	bool LaunchFirstAction();
-
 	// do necessary actions when an input is Triggered
-	void ProcessInputTriggered( FGameplayTag InputTag );
+	void OnInputTriggered( FGameplayTag InputTag );
+
+	virtual void Tick();
 
 // Methods
 private:
@@ -48,14 +57,20 @@ private:
 
 	bool canExecuteAction( UGasExActionNode* Node ,FGameplayTag InputTag );
 
+
+	void ProcessInputs( );
+
+
 private:
+	// State of the Instance
+	EGasExActionGraphState					CurrentState;
 
 	TObjectPtr<UGasExAbilitySystemComponent> AbilitySystemComponent;
 
 	// the Graph instanciated
-	TObjectPtr<UGasExActionGraph>	Graph;
-	TObjectPtr<UGasExActionNode> CurrentGraphNode;
+	TObjectPtr<UGasExActionGraph>			Graph;
+	TObjectPtr<UGasExActionNode>			CurrentGraphNode;
 
-	// Critical Section between process input and Ability Ended
-	mutable FCriticalSection ProcessCritialSection;
+
+	TQueue<FGameplayTag>					InputQueue;
 };
