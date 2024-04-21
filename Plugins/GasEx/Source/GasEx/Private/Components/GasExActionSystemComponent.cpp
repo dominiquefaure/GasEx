@@ -42,6 +42,13 @@ void UGasExActionSystemComponent::BeginPlay()
 }
 //---------------------------------------------------------------------------------------------
 
+//---------------------------------------------------------------------------------------------
+void UGasExActionSystemComponent::OnUnregister()
+{
+	Super::OnUnregister();
+	GraphInstance	=	nullptr;
+}
+//---------------------------------------------------------------------------------------------
 
 //---------------------------------------------------------------------------------------------
 // Called every frame
@@ -67,11 +74,8 @@ void UGasExActionSystemComponent::RegisterInputs( UInputComponent* PlayerInputCo
 	{
 		for( FGasExInputAction& InputAction : InputConfig->InputActions )
 		{
-//			EnhancedInputComponent->BindAction( InputAction.InputAction , ETriggerEvent::Triggered , this , &UGasExActionSystemComponent::OnInputTriggered , InputAction.InputTag );
 			EnhancedInputComponent->BindAction( InputAction.InputAction , ETriggerEvent::Started , this , &UGasExActionSystemComponent::OnInputTriggered , InputAction.InputTag );
-
 		}
-
 	}
 	else
 	{
@@ -83,8 +87,30 @@ void UGasExActionSystemComponent::RegisterInputs( UInputComponent* PlayerInputCo
 //---------------------------------------------------------------------------------------------
 void UGasExActionSystemComponent::OnInputTriggered( FGameplayTag InputTag )
 {
-	check( GraphInstance );
+	if( GraphInstance != nullptr )
+	{
+		GraphInstance->OnInputTriggered( InputTag );
+	}
+}
+//---------------------------------------------------------------------------------------------
 
-	GraphInstance->OnInputTriggered( InputTag );
+
+//---------------------------------------------------------------------------------------------
+void UGasExActionSystemComponent::OnCancelWindowStart( FString WindowName )
+{
+	if( GraphInstance != nullptr )
+	{
+		GraphInstance->OnCancelWindowStart( WindowName );
+	}
+}
+//---------------------------------------------------------------------------------------------
+
+//---------------------------------------------------------------------------------------------
+void UGasExActionSystemComponent::OnCancelWindowEnd( FString WindowName )
+{
+	if( GraphInstance != nullptr )
+	{
+		GraphInstance->OnCancelWindowEnd( WindowName );
+	}
 }
 //---------------------------------------------------------------------------------------------

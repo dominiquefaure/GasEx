@@ -31,6 +31,9 @@ public:
 	UFUNCTION( BlueprintCallable )
 	void RegisterInputs( UInputComponent* PlayerInputComponent );
 
+	// function for activation of the Cancel window
+	void OnCancelWindowStart( FString WindowName );
+	void OnCancelWindowEnd( FString WindowName );
 
 private:
 
@@ -40,6 +43,7 @@ protected:
 	// Called when the game starts
 	virtual void BeginPlay() override;
 
+	virtual void OnUnregister() override;
 public:	
 	// Called every frame
 	virtual void TickComponent(float DeltaTime, ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction) override;

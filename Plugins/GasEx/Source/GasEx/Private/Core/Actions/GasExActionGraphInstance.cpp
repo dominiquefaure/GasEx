@@ -28,19 +28,19 @@ void UGasExActionGraphInstance::SetGraph(UGasExActionGraph* InGraph)
 //---------------------------------------------------------------------------------------------
 void UGasExActionGraphInstance::Tick()
 {
-	ProcessInputs();
-
-	if( CurrentState == EGasExActionGraphState::ActionFinished )
+	switch( CurrentState )
 	{
-		if( !TryExecuteFollowUpAction() )
-		{
-			CurrentGraphNode	=	nullptr;
-			CurrentState		=	EGasExActionGraphState::NoAction;
-		}
-		else
-		{
-			UE_LOG( LogTemp , Warning , TEXT( "next action have beeen found" ) );
-		}
+		case EGasExActionGraphState::NoAction:
+			ProcessWaitingState();
+		break;
+
+		case EGasExActionGraphState::ActionInProgres:
+			ProcessActionInProgressState();
+		break;
+
+		case EGasExActionGraphState::ActionFinished:
+			ProcessActionFinishedState();
+		break;
 	}
 }
 //---------------------------------------------------------------------------------------------
@@ -49,42 +49,195 @@ void UGasExActionGraphInstance::Tick()
 void UGasExActionGraphInstance::OnInputTriggered( FGameplayTag InputTag )
 {
 	InputQueue.Enqueue( InputTag );
-
 }
 //---------------------------------------------------------------------------------------------
 
 //---------------------------------------------------------------------------------------------
-void UGasExActionGraphInstance::ProcessInputs()
+void UGasExActionGraphInstance::OnCancelWindowStart( FString WindowName )
 {
-	UE_LOG( LogTemp , Warning , TEXT( "Start ProcessInputs" ) );
+	IsCancelWindowsActive	=	true;
+	CancelWindows.Add( WindowName );
+}
+//---------------------------------------------------------------------------------------------
 
-	FGameplayTag InputTag;
-
-	if( InputQueue.Dequeue( InputTag ) )
+//---------------------------------------------------------------------------------------------
+void UGasExActionGraphInstance::OnCancelWindowEnd( FString WindowName )
+{
+	int32 Index	=	-1;
+	for( int32 i = 0; i < CancelWindows.Num(); i++ )
 	{
-		if( CurrentGraphNode == nullptr )
+		if( CancelWindows[i] == WindowName )
 		{
-			TArray<UGasExActionNode*>	StartActions	=	Graph->GetAllStartActions();
+			Index	=	i;
+			break;
+		}
+	}
 
-			for( UGasExActionNode* StartNode : StartActions )
-			{
-				if( canExecuteAction( StartNode , InputTag ) )
-				{
-					ExecuteAction( StartNode );
-				}
-			}
-		}
-		else
-		{
-			TryCancelAction( InputTag );
-		}
-		UE_LOG( LogTemp , Warning , TEXT( "End ProcessInputs" ) );
+	if( Index != -1 )
+	{
+		CancelWindows.RemoveAt( Index );
+
+		IsCancelWindowsActive	=	CancelWindows.Num() > 0;
+
 	}
 }
 //---------------------------------------------------------------------------------------------
 
 //---------------------------------------------------------------------------------------------
-bool UGasExActionGraphInstance::ExecuteAction( UGasExActionNode*  NewActionNode )
+void UGasExActionGraphInstance::OnAbilityEnded( const FAbilityEndedData& EndedData )
+{
+	if( CurrentGraphNode != nullptr )
+	{
+		// if the Ability ended is the one associated to the current Action node
+		if( CurrentGraphNode->AbilityTag == AbilitySystemComponent->GetExAbilityTagFromHandle( EndedData.AbilitySpecHandle ) )
+		{
+			CurrentState	=	EGasExActionGraphState::ActionFinished;
+
+		}
+		else
+		{
+			UE_LOG( LogTemp , Warning , TEXT( "Ability ened but not same Node !!!!!!" ) );
+		}
+	}
+}
+//---------------------------------------------------------------------------------------------
+
+
+//////
+// Graph states process functions
+/////
+
+//---------------------------------------------------------------------------------------------
+void UGasExActionGraphInstance::ProcessWaitingState()
+{
+	FGameplayTag InputTag;
+	if( InputQueue.Dequeue( InputTag ) )
+	{
+		TArray<UGasExActionNode*>	StartActions	=	Graph->GetAllStartActions();
+
+		for( UGasExActionNode* StartNode : StartActions )
+		{
+			if( canExecuteAction( StartNode , InputTag ) )
+			{
+				ExecuteAction( StartNode );
+			}
+		}
+	}
+}
+//---------------------------------------------------------------------------------------------
+
+//---------------------------------------------------------------------------------------------
+void UGasExActionGraphInstance::ProcessActionInProgressState()
+{
+	if( CurrentGraphNode != nullptr )
+	{
+		FGameplayTag InputTag;
+		if( InputQueue.Dequeue( InputTag ) )
+		{
+			for( UGasExActionNodeLink* Link : CurrentGraphNode->Links )
+			{
+				if( CanExecuteLinkedAction( InputTag , Link ) )
+				{
+					ExecuteAction( Link->TargetNode );
+					break;
+				}
+			}
+		}
+	}
+}
+//---------------------------------------------------------------------------------------------
+
+//---------------------------------------------------------------------------------------------
+void UGasExActionGraphInstance::ProcessActionFinishedState()
+{
+	UGasExActionNodeLink* FollowUpLink	=	nullptr;
+	for( UGasExActionNodeLink* Link : CurrentGraphNode->Links )
+	{
+		if( ( Link->TargetNode != nullptr ) && ( Link->LinkType == EGasExActionLinkType::Finished ) )
+		{
+			// todo : evaluate conditions of execution
+			FollowUpLink	=	Link;
+			break;
+		}
+	}
+
+	if( FollowUpLink )
+	{
+		UE_LOG( LogTemp , Warning , TEXT( "next action have beeen found" ) );
+		ExecuteAction( FollowUpLink->TargetNode );
+	}
+	else
+	{
+		// reset the Graph in waiting state
+		CurrentGraphNode	=	nullptr;
+		CurrentState		=	EGasExActionGraphState::NoAction;
+	}
+}
+//---------------------------------------------------------------------------------------------
+
+
+//////
+// Action evaluations methods
+/////
+
+//---------------------------------------------------------------------------------------------
+bool UGasExActionGraphInstance::CanExecuteLinkedAction( FGameplayTag InputTag , UGasExActionNodeLink* Link )
+{
+	if( ( Link->TargetNode != nullptr ) && ( Link->LinkType != EGasExActionLinkType::Finished ) )
+	{
+		// if the Link require a Cancel window
+		if( Link->LinkType == EGasExActionLinkType::InputWindow )
+		{
+			if( !IsCancelWindowActive( Link->CancelWindow ) )
+			{
+				return false;
+			}
+		}
+
+		if( canExecuteAction( Link->TargetNode , InputTag ) )
+		{
+			return true;
+		}
+	}
+
+	return false;
+}
+//---------------------------------------------------------------------------------------------
+
+//---------------------------------------------------------------------------------------------
+bool UGasExActionGraphInstance::canExecuteAction( UGasExActionNode* Node , FGameplayTag InputTag )
+{
+	if( Node->InputTag.MatchesTagExact( InputTag ) )
+	{
+		return true;
+	}
+
+	return false;
+}
+//---------------------------------------------------------------------------------------------
+
+
+//---------------------------------------------------------------------------------------------
+bool UGasExActionGraphInstance::IsCancelWindowActive( FString InWindowName )
+{
+	for( FString WindowName : CancelWindows )
+	{
+		if( WindowName == InWindowName )
+		{
+			return true;
+		}
+	}
+	return false;
+}
+//---------------------------------------------------------------------------------------------
+
+
+//////
+// Action execution
+/////
+
+//---------------------------------------------------------------------------------------------
+bool UGasExActionGraphInstance::ExecuteAction( UGasExActionNode* NewActionNode )
 {
 	check( AbilitySystemComponent );
 
@@ -102,7 +255,6 @@ bool UGasExActionGraphInstance::ExecuteAction( UGasExActionNode*  NewActionNode 
 			return false;
 		}
 	}
-
 
 	// if the Activation succeed, made the node the new active one
 	if( AbilitySystemComponent->TryActivateExAbility( NewActionNode->AbilityTag ) )
@@ -125,87 +277,3 @@ bool UGasExActionGraphInstance::ExecuteAction( UGasExActionNode*  NewActionNode 
 
 }
 //---------------------------------------------------------------------------------------------
-
-//-----------------------------------------------------------------------------------------
-void UGasExActionGraphInstance::OnAbilityEnded( const FAbilityEndedData& EndedData )
-{
-	if( CurrentGraphNode != nullptr )
-	{
-		// if the Ability ended is the one associated to the current Action node
-		if( CurrentGraphNode->AbilityTag == AbilitySystemComponent->GetExAbilityTagFromHandle( EndedData.AbilitySpecHandle ) )
-		{
-			CurrentState	=	EGasExActionGraphState::ActionFinished;
-
-		}
-		else
-		{
-			UE_LOG( LogTemp , Warning , TEXT( "Ability ened but not same Node !!!!!!" ) );
-		}
-	}
-}
-//-----------------------------------------------------------------------------------------
-
-//-----------------------------------------------------------------------------------------
-bool UGasExActionGraphInstance::TryExecuteFollowUpAction()
-{
-	check( CurrentGraphNode )
-
-	for( UGasExActionNodeLink* Link : CurrentGraphNode->Links )
-	{
-		if( Link->TargetNode )
-		{
-			ExecuteAction( Link->TargetNode );
-			return true;
-		}
-	}
-
-	return false;
-}
-//-----------------------------------------------------------------------------------------
-
-//-----------------------------------------------------------------------------------------
-bool UGasExActionGraphInstance::TryCancelAction( FGameplayTag InputTag )
-{
-	if( CurrentGraphNode != nullptr )
-	{
-		for( UGasExActionNodeLink* Link : CurrentGraphNode->Links )
-		{
-			if( TryExecuteLinkedAction( InputTag , Link ) )
-			{
-				return true;
-			}
-		}
-	}
-	return false;
-
-}
-//-----------------------------------------------------------------------------------------
-
-//-----------------------------------------------------------------------------------------
-bool UGasExActionGraphInstance::TryExecuteLinkedAction( FGameplayTag InputTag , UGasExActionNodeLink* Link )
-{
-
-	if( Link->TargetNode != nullptr )
-	{
-		if( canExecuteAction( Link->TargetNode , InputTag ) )
-		{
-			ExecuteAction( Link->TargetNode );
-			return true;
-		}
-	}
-
-	return false;
-}
-//-----------------------------------------------------------------------------------------
-
-//-----------------------------------------------------------------------------------------
-bool UGasExActionGraphInstance::canExecuteAction( UGasExActionNode* Node , FGameplayTag InputTag )
-{
-	if( Node->InputTag.MatchesTagExact( InputTag ) )
-	{
-		return true;
-	}
-
-	return false;
-}
-//-----------------------------------------------------------------------------------------

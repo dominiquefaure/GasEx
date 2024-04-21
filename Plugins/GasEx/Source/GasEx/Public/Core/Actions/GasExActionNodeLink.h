@@ -11,16 +11,9 @@ class UGasExActionNode;
 UENUM()
 enum class EGasExActionLinkType : uint8
 {
-	Finished , // The next action will try to trigger when the current action finished
-	CancelWindow , // The next action will try to trigger during defined cancel windows
-};
-
-
-UENUM()
-enum class EGasExActionCancelWindowType
-{
-	Immediate ,
-	End
+	Finished				=	0, // The next action will try to trigger when the current action finished
+	Input					=	1, // The Link required an Input, can be triggered at any moment during the Current Action. will cancel it immediately
+	InputWindow				=	2, // The Link required an input, can only be triggered during a cancel window. 
 };
 
 
@@ -43,6 +36,11 @@ public:
 	TObjectPtr<UGasExActionNode> TargetNode;
 
 
-	UPROPERTY( VisibleAnywhere , BlueprintReadOnly )
+	//UPROPERTY( VisibleAnywhere , BlueprintReadOnly )
+	UPROPERTY( EditAnywhere , BlueprintReadOnly )
 	EGasExActionLinkType LinkType;
+
+	UPROPERTY( EditAnywhere , BlueprintReadOnly )
+	FString CancelWindow;
+
 };

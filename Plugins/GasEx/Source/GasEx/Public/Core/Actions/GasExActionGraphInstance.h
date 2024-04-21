@@ -40,26 +40,28 @@ public:
 
 	virtual void Tick();
 
+
+	// function for activation of the Cancel window
+	void OnCancelWindowStart( FString WindowName );
+	void OnCancelWindowEnd( FString WindowName );
+
 // Methods
 private:
+
+	// process the different States of the Graph instance, called from Tick function
+	void ProcessWaitingState();
+	void ProcessActionInProgressState();
+	void ProcessActionFinishedState();
 
 	bool ExecuteAction( UGasExActionNode*  NewActionNode );
 
 	void OnAbilityEnded( const FAbilityEndedData& EndedData );
 
-	// try to execute one of the follow up actions of the current one
-	bool TryExecuteFollowUpAction();
-
-	// try cancel the current action according to the given input
-	bool TryCancelAction( FGameplayTag InputTag );
-
-	bool TryExecuteLinkedAction( FGameplayTag InputTag , UGasExActionNodeLink* Link );
+	bool CanExecuteLinkedAction( FGameplayTag InputTag , UGasExActionNodeLink* Link );
 
 	bool canExecuteAction( UGasExActionNode* Node ,FGameplayTag InputTag );
 
-
-	void ProcessInputs( );
-
+	bool IsCancelWindowActive( FString WindowName );
 
 private:
 	// State of the Instance
@@ -73,4 +75,8 @@ private:
 
 
 	TQueue<FGameplayTag>					InputQueue;
+
+	bool									IsCancelWindowsActive;
+	TArray<FString>							CancelWindows;
+
 };
