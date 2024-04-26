@@ -312,8 +312,8 @@ TSharedRef<SDockTab> FGasExEdActionGraphEditor::SpawnTab_Details( const FSpawnTa
 //---------------------------------------------------------------------------------------------
 void FGasExEdActionGraphEditor::AddReferencedObjects( FReferenceCollector& Collector )
 {
-	Collector.AddReferencedObject(ActionGraphEdited);
-	Collector.AddReferencedObject(ActionGraphEdited->EdGraph );
+//	Collector.AddReferencedObject(ActionGraphEdited);
+//	Collector.AddReferencedObject(ActionGraphEdited->EdGraph );
 }
 //---------------------------------------------------------------------------------------------
 

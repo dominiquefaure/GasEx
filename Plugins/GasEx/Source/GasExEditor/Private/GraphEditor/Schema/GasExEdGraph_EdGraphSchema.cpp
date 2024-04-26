@@ -8,6 +8,7 @@
 
 #include "Core/AbilityGraph/GasExGraph.h"
 #include "Core/AbilityGraph/GasExGraphNodeBase.h"
+#include "Core/AbilityGraph/GasExGraphNodeEntry.h"
 
 #define LOCTEXT_NAMESPACE "UGasExEdGraph_EdGraphSchema"
 

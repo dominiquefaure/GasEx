@@ -58,7 +58,7 @@ bool UGasExAbilitySystemComponent::TryActivateExAbility( const FGameplayTag& Abi
 
 		return TryActivateAbilitiesByTag( Container , true );
 	}
-	return false;
+//	return false;
 }
 //-----------------------------------------------------------------------------------------
 
