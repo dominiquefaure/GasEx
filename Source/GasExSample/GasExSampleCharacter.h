@@ -13,6 +13,8 @@ class UInputMappingContext;
 class UInputAction;
 struct FInputActionValue;
 
+class UEquipmentManagerComponent;
+
 DECLARE_LOG_CATEGORY_EXTERN(LogTemplateCharacter, Log, All);
 
 UCLASS(config=Game)
@@ -43,6 +45,10 @@ class AGasExSampleCharacter : public ACharacter
 	/** Look Input Action */
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Input, meta = (AllowPrivateAccess = "true"))
 	UInputAction* LookAction;
+
+
+	UPROPERTY( EditAnywhere , BlueprintReadOnly , Category = Equipment , meta = ( AllowPrivateAccess = "true" ) )
+	UEquipmentManagerComponent* EquipmentManager;
 
 public:
 	AGasExSampleCharacter();
