@@ -1,13 +1,13 @@
 // Copyright 2023-2024 Dominique Faure. All Rights Reserved.
 
 
-#include "WeaponBase.h"
+#include "WeaponActor.h"
 #include "GameFramework/Character.h"
 
 
 
 // Sets default values
-AWeaponBase::AWeaponBase()
+AWeaponActor::AWeaponActor()
 {
  	// Set this actor to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
 	PrimaryActorTick.bCanEverTick = false;
@@ -22,7 +22,7 @@ AWeaponBase::AWeaponBase()
 
 //-----------------------------------------------------------------------------------------
 // Called when the game starts or when spawned
-void AWeaponBase::BeginPlay()
+void AWeaponActor::BeginPlay()
 {
 	Super::BeginPlay();
 	
@@ -31,7 +31,7 @@ void AWeaponBase::BeginPlay()
 
 //-----------------------------------------------------------------------------------------
 // Called every frame
-void AWeaponBase::Tick(float DeltaTime)
+void AWeaponActor::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
 
@@ -39,7 +39,7 @@ void AWeaponBase::Tick(float DeltaTime)
 //-----------------------------------------------------------------------------------------
 
 //-----------------------------------------------------------------------------------------
-void AWeaponBase::Equip( ACharacter* TargetCharacter )
+void AWeaponActor::Equip( ACharacter* TargetCharacter )
 {
 	Super::Equip( TargetCharacter );
 
@@ -56,7 +56,7 @@ void AWeaponBase::Equip( ACharacter* TargetCharacter )
 //-----------------------------------------------------------------------------------------
 
 //-----------------------------------------------------------------------------------------
-void AWeaponBase::UnEquip( ACharacter* TargetCharacter )
+void AWeaponActor::UnEquip( ACharacter* TargetCharacter )
 {
 	if( WeaponMesh != nullptr )
 	{
@@ -73,7 +73,7 @@ void AWeaponBase::UnEquip( ACharacter* TargetCharacter )
 //-----------------------------------------------------------------------------------------
 
 //-----------------------------------------------------------------------------------------
-void AWeaponBase::SetDrawnState( bool InDrawn )
+void AWeaponActor::SetDrawnState( bool InDrawn )
 {
 	if( InDrawn != IsDrawn )
 	{
@@ -95,7 +95,7 @@ void AWeaponBase::SetDrawnState( bool InDrawn )
 //-----------------------------------------------------------------------------------------
 
 //-----------------------------------------------------------------------------------------
-bool AWeaponBase::GetDrawnState()
+bool AWeaponActor::GetDrawnState()
 {
 	return IsDrawn;
 }

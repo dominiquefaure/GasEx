@@ -8,8 +8,8 @@
 
 
 class ACharacter;
-class AEquipmentBase;
-class AWeaponBase;
+class AEquipmentActor;
+class AWeaponActor;
 
 USTRUCT()
 struct FEquipmentSlot
@@ -46,11 +46,11 @@ public:
 
 	// Try to equip a new Item
 	UFUNCTION(BlueprintCallable)
-	bool EquipItem( FString TargetSlot , AEquipmentBase* NewEquipment );
+	bool EquipItem( FString TargetSlot , AEquipmentActor* NewEquipment );
 
 	// Get the Weapon present at the given Slot
 	UFUNCTION( BlueprintCallable )
-	AWeaponBase* GetWeapon( FString WeaponSlot );
+	AWeaponActor* GetWeapon( FString WeaponSlot );
 
 protected:
 	// Called when the game starts
@@ -65,7 +65,7 @@ private:
 
 	ACharacter* OwnerCharacter;
 
-	TMap<FString,AEquipmentBase*> EquipedItems;
+	TMap<FString,AEquipmentActor*> EquipedItems;
 
 
 };

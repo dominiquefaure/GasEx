@@ -2,8 +2,8 @@
 
 
 #include "EquipmentManagerComponent.h"
-#include "EquipmentBase.h"
-#include "WeaponBase.h"
+#include "EquipmentActor.h"
+#include "WeaponActor.h"
 #include "GameFramework/Character.h"
 
 // Sets default values for this component's properties
@@ -36,7 +36,7 @@ void UEquipmentManagerComponent::TickComponent(float DeltaTime, ELevelTick TickT
 }
 
 //-----------------------------------------------------------------------------------------
-bool UEquipmentManagerComponent::EquipItem( FString TargetSlot , AEquipmentBase* NewEquipment )
+bool UEquipmentManagerComponent::EquipItem( FString TargetSlot , AEquipmentActor* NewEquipment )
 {
 	if( EquipedItems.Contains( TargetSlot ) )
 	{
@@ -54,8 +54,8 @@ bool UEquipmentManagerComponent::EquipItem( FString TargetSlot , AEquipmentBase*
 //-----------------------------------------------------------------------------------------
 
 //-----------------------------------------------------------------------------------------
-AWeaponBase* UEquipmentManagerComponent::GetWeapon( FString WeaponSlot )
+AWeaponActor* UEquipmentManagerComponent::GetWeapon( FString WeaponSlot )
 {
-	return Cast<AWeaponBase>( EquipedItems[WeaponSlot] );
+	return Cast<AWeaponActor>( EquipedItems[WeaponSlot] );
 }
 //-----------------------------------------------------------------------------------------

@@ -4,17 +4,17 @@
 
 #include "CoreMinimal.h"
 #include "GameFramework/Actor.h"
-#include "EquipmentBase.h"
-#include "WeaponBase.generated.h"
+#include "EquipmentActor.h"
+#include "WeaponActor.generated.h"
 
 UCLASS()
-class GASEXSAMPLE_API AWeaponBase : public AEquipmentBase
+class GASEXSAMPLE_API AWeaponActor : public AEquipmentActor
 {
 	GENERATED_BODY()
 
 public:
 	// Sets default values for this actor's properties
-	AWeaponBase();
+	AWeaponActor();
 
 
 	UPROPERTY( EditAnywhere )
