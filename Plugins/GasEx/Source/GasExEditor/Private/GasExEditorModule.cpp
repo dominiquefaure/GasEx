@@ -4,7 +4,7 @@
 
 #include "AssetToolsModule.h"
 #include "AssetTypes/GasExEdAbilitySet_AssetTypeActions.h"
-#include "AssetTypes/GasExEdGraph_AssetTypeActions.h"
+#include "AssetTypes/GasExEdActionSequence_AssetTypeActions.h"
 
 #include "ActionGraph/AssetTypes/GasExEdActionGraph_AssetTypeActions.h"
 
@@ -21,8 +21,9 @@ void FGasExEditorModule::StartupModule()
 	EAssetTypeCategories::Type AssetCategory = AssetTools.RegisterAdvancedAssetCategory( FName( TEXT( "GasEx" ) ) , FText::FromName( TEXT( "GasEx" ) ) );
 
 	RegisterAssetTypeAction( AssetTools , MakeShareable( new FGasExEdAbilitySet_AssetTypeActions( AssetCategory ) ) );
-	RegisterAssetTypeAction( AssetTools , MakeShareable( new FGasExEdGraph_AssetTypeActions( AssetCategory ) ) );
 	RegisterAssetTypeAction( AssetTools , MakeShareable( new FGasExEdActionGraph_AssetTypeActions(AssetCategory ) ) );
+
+	RegisterAssetTypeAction( AssetTools , MakeShareable( new FGasExEdActionSequence_AssetTypeActions( AssetCategory ) ) );
 
 }
 //---------------------------------------------------------------------------------------------

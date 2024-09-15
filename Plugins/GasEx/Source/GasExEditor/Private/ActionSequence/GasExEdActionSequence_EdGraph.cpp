@@ -1,31 +1,36 @@
 // Copyright 2023-2024 Dominique Faure. All Rights Reserved.
 
-#include "ActionGraph/GasExEdActionGraph_EdGraph.h"
+#include "ActionSequence/GasExEdActionSequence_EdGraph.h"
+#include "ActionSequence/Nodes/GasExEdActionSequence_EdNodeBase.h"
+#include "ActionSequence/Schema/GasExEdActionSequence_EdGraphSchema.h"
+
+#include "Actions/GasExActionSequence.h"
+//#include "Core/AbilityGraph/GasExGraphLink.h"
 
 
 //---------------------------------------------------------------------------------------------
-UGasExEdActionGraph_EdGraph::UGasExEdActionGraph_EdGraph()
+UGasExEdActionSequence_EdGraph::UGasExEdActionSequence_EdGraph()
 {
-//	Schema = UGasExEdGraph_EdGraphSchema::StaticClass();
+	Schema = UGasExEdActionSequence_EdGraphSchema::StaticClass();
 }
 //---------------------------------------------------------------------------------------------
 
 //---------------------------------------------------------------------------------------------
-UGasExEdActionGraph_EdGraph::~UGasExEdActionGraph_EdGraph()
+UGasExEdActionSequence_EdGraph::~UGasExEdActionSequence_EdGraph()
 {
 }
 //---------------------------------------------------------------------------------------------
 
 //---------------------------------------------------------------------------------------------
-UGasExActionGraph* UGasExEdActionGraph_EdGraph::GetOwnerGraph() const
+UGasExActionSequence* UGasExEdActionSequence_EdGraph::GetOwnerGraph() const
 {
-	return GetTypedOuter<UGasExActionGraph>();
+	return GetTypedOuter<UGasExActionSequence>();
 
 }
 //---------------------------------------------------------------------------------------------
 
 //---------------------------------------------------------------------------------------------
-void UGasExEdActionGraph_EdGraph::NotifyGraphChanged()
+void UGasExEdActionSequence_EdGraph::NotifyGraphChanged()
 {
 	GetOwnerGraph()->MarkPackageDirty();
 
@@ -35,13 +40,13 @@ void UGasExEdActionGraph_EdGraph::NotifyGraphChanged()
 //---------------------------------------------------------------------------------------------
 
 //---------------------------------------------------------------------------------------------
-void UGasExEdActionGraph_EdGraph::OnConnectionAdded(UEdGraphPin* PinA , UEdGraphPin* PinB)
+void UGasExEdActionSequence_EdGraph::OnConnectionAdded( UEdGraphPin* PinA , UEdGraphPin* PinB )
 {
-	UGasExEdActionGraphNodeBase* EdNode_Out = Cast<UGasExEdActionGraphNodeBase>(PinA->GetOwningNode());
-	UGasExEdActionGraphNodeBase* EdNode_In = Cast<UGasExEdActionGraphNodeBase>(PinB->GetOwningNode());
+	UGasExEdActionSequence_EdNodeBase* EdNode_Out	=	Cast<UGasExEdActionSequence_EdNodeBase>(PinA->GetOwningNode());
+	UGasExEdActionSequence_EdNodeBase* EdNode_In	=	Cast<UGasExEdActionSequence_EdNodeBase>( PinB->GetOwningNode() );
 
-	UGasExActionGraph* AbilityGraph = GetOwnerGraph();
-	AbilityGraph->AddLink(EdNode_Out->RuntimeNode , EdNode_In->RuntimeNode);
+	UGasExActionSequence* ActionSequence			=	GetOwnerGraph();
+	ActionSequence->AddLink( EdNode_Out->RuntimeNode , EdNode_In->RuntimeNode );
 
 	NotifyGraphChanged();
 }

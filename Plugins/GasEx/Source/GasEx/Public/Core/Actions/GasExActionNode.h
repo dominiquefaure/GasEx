@@ -13,14 +13,12 @@
 
 class UGasExActionNodeLink;
 
-
 UENUM()
 enum class EGasExActionNodeType : uint8
 {
-	Start	= 0,	// First action of a chain
-	Chained	= 1,	// any node of the Chain
+	Start	= 0 ,	// First action of a chain
+	Chained	= 1 ,	// any node of the Chain
 };
-
 
 /**
  * 

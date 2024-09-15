@@ -21,10 +21,6 @@ void UGasExAbilitySystemComponent::BeginPlay()
 		DefaultAbilitySet->Register( this );
 	}
 
-	GraphInstance	=	NewObject<UGasExGraphInstance>( );
-	GraphInstance->SetGraph( DefaultAbilityGraph );
-	GraphInstance->SetAbilitySystem( this );
-
 //	AbilityFailedCallbacks.AddUObject( this , &UGasExAbilitySystemComponent::ProcessAbilityFail );
 }
 //-----------------------------------------------------------------------------------------
@@ -126,13 +122,6 @@ const FGameplayTag& UGasExAbilitySystemComponent::GetExAbilityTagFromHandle( con
 	}
 
 	return FGameplayTag::EmptyTag;
-}
-//-----------------------------------------------------------------------------------------
-
-//-----------------------------------------------------------------------------------------
-void UGasExAbilitySystemComponent::TryActivateNextGraphNode()
-{
-	GraphInstance->TryExecuteNextNode();
 }
 //-----------------------------------------------------------------------------------------
 
