@@ -5,8 +5,8 @@
 #include "CoreMinimal.h"
 #include "UObject/NoExportTypes.h"
 #include "Abilities/GameplayAbility.h"
-#include "Actions/GasExActionNodeBase.h"
-#include "GasExActionNodeEntry.generated.h"
+#include "GasExActionNodeBase.h"
+#include "GasExActionNodeStart.generated.h"
 
 
 class UGasExActionNodeLink;
@@ -16,7 +16,7 @@ class UGasExActionNodeLink;
  * 
  */
 UCLASS()
-class GASEX_API UGasExActionNodeEntry : public UGasExActionNodeBase
+class GASEX_API UGasExActionNodeStart : public UGasExActionNodeBase
 {
 	GENERATED_BODY()
 

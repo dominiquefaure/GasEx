@@ -4,8 +4,8 @@
 
 #include "CoreMinimal.h"
 #include "UObject/NoExportTypes.h"
-#include "Actions/GasExActionNodeBase.h"
-#include "Actions/GasExActionNodeEntry.h"
+#include "GasExActionNodeBase.h"
+#include "GasExActionNodeStart.h"
 
 #include "GasExActionSequence.generated.h"
 
@@ -22,7 +22,7 @@ public:
 
 	/** Entry node of the Sequence execution flow. */
 	UPROPERTY( EditAnywhere , BlueprintReadOnly , Category = "Actions" )
-	TObjectPtr<UGasExActionNodeEntry> EntryNode;
+	TObjectPtr<UGasExActionNodeStart> StartNode;
 
 	/** Holds all nodes defined for this graph */
 	UPROPERTY(EditAnywhere , BlueprintReadOnly , Category = "Actions")
@@ -39,9 +39,8 @@ public:
 
 #if WITH_EDITOR
 
-	UGasExActionNodeEntry* CreateDefaultEntryNode();
+	UGasExActionNodeStart* CreateStartNode();
 
-//	UGasExActionNodeBase* CreateNode( const EGasExActionNodeType ActionType );
 	UGasExActionNodeBase* CreateNode( const UClass* NodeClass );
 
 	// Add a link between 2 nodes

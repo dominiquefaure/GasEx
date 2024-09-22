@@ -24,6 +24,13 @@ class GASEX_API UGasExActionNodeBase : public UObject
 
 public:
 
+	// The Gameplay tag that identify The required input
+	UPROPERTY( EditAnywhere , BlueprintReadOnly )
+	FGameplayTag InputTag;
+
+	// The Gameplay tag that identify this Ability to play
+	UPROPERTY( EditAnywhere , BlueprintReadOnly )
+	FGameplayTag AbilityTag;
 
 	// Actions that can Launch from the current one
 	UPROPERTY( EditAnywhere , BlueprintReadOnly )

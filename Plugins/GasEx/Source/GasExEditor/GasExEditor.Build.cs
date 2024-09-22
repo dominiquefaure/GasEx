@@ -56,8 +56,13 @@ public class GasExEditor : ModuleRules
 				"ApplicationCore",
 			}
 			);
-		
-		
+
+		PrivateIncludePathModuleNames.AddRange(
+			new string[] {
+				"DataTableEditor",
+			}
+		);
+
 		DynamicallyLoadedModuleNames.AddRange(
 			new string[]
 			{

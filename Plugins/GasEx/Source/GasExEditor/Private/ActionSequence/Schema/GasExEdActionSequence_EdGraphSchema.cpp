@@ -9,7 +9,7 @@
 
 #include "Actions/GasExActionSequence.h"
 #include "Actions/GasExActionNodeBase.h"
-#include "Actions/GasExActionNodeEntry.h"
+#include "Actions/GasExActionNodeStart.h"
 
 #define LOCTEXT_NAMESPACE "UGasExEdGraph_EdGraphSchema"
 
@@ -25,8 +25,8 @@ void UGasExEdActionSequence_EdGraphSchema::CreateDefaultNodesForGraph( UEdGraph&
 	SetNodeMetaData( EntryEdNode , FNodeMetadata::DefaultGraphNode );
 
 	// Create runtime node for the ActionGraph
-	AbilityGraph->CreateDefaultEntryNode();
-	EntryEdNode->RuntimeNode	=	Cast<UGasExActionNodeBase>( AbilityGraph->EntryNode );
+	AbilityGraph->CreateStartNode();
+	EntryEdNode->RuntimeNode	=	Cast<UGasExActionNodeBase>( AbilityGraph->StartNode );
 
 }
 //---------------------------------------------------------------------------------------------

@@ -1,7 +1,7 @@
 ﻿// Copyright 2023-2024 Dominique Faure. All Rights Reserved.
 
 
-#include "AssetTypes/GasExEdActionSequence_AssetTypeActions.h"
+#include "Actions/AssetTypes/GasExEdActionSequence_AssetTypeActions.h"
 #include "Actions/GasExActionSequence.h"
 #include "ActionSequence/GasExEdActionSequenceEditor.h"
 #include "GasExEditorLog.h"

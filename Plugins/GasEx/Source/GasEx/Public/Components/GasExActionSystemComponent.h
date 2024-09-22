@@ -9,6 +9,8 @@
 #include "Core/Actions/GasExActionGraphInstance.h"
 
 #include "Core/Actions/GasExActionInputConfig.h"
+#include "Actions/GasExActionSequence.h"
+#include "Actions/GasExActionSequenceInstance.h"
 
 #include "GasExActionSystemComponent.generated.h"
 
@@ -27,6 +29,9 @@ public:
 
 	UPROPERTY(EditAnywhere , BlueprintReadOnly , Category = "Action Graph")
 	TObjectPtr<UGasExActionGraph> ActionGraph;
+
+	UPROPERTY( EditAnywhere , BlueprintReadOnly , Category = "Sequences" )
+	TObjectPtr<UGasExActionSequence> ActionSequence;
 
 	UFUNCTION( BlueprintCallable )
 	void RegisterInputs( UInputComponent* PlayerInputComponent );
@@ -52,6 +57,7 @@ private:
 
 	TObjectPtr<UGasExAbilitySystemComponent> AbilitySystem;
 
-	TObjectPtr<UGasExActionGraphInstance> GraphInstance;
+//	TObjectPtr<UGasExActionGraphInstance> GraphInstance;
 
+	TObjectPtr<UGasExActionSequenceInstance> SequenceInstance;
 };

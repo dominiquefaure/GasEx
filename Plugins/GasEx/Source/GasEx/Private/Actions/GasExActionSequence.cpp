@@ -32,13 +32,13 @@ UGasExActionNodeBase* UGasExActionSequence::CreateNode( const UClass* NodeClass 
 //---------------------------------------------------------------------------------------------
 
 //---------------------------------------------------------------------------------------------
-UGasExActionNodeEntry* UGasExActionSequence::CreateDefaultEntryNode()
+UGasExActionNodeStart* UGasExActionSequence::CreateStartNode()
 {
-	UGasExActionNodeEntry* Entry = NewObject<UGasExActionNodeEntry>( this , UGasExActionNodeEntry::StaticClass() , NAME_None , RF_Transactional );
+	UGasExActionNodeStart* Entry = NewObject<UGasExActionNodeStart>( this , UGasExActionNodeStart::StaticClass() , NAME_None , RF_Transactional );
 
 	AllNodes.Add( Entry );
 
-	EntryNode	=	Entry;
+	StartNode	=	Entry;
 
 	return Entry;
 }

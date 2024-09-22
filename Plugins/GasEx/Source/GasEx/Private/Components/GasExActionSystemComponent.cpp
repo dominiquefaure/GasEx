@@ -28,10 +28,14 @@ void UGasExActionSystemComponent::BeginPlay()
 
 	AbilitySystem	=	GetOwner()->GetComponentByClass<UGasExAbilitySystemComponent>();
 
-
+/*
 	GraphInstance = NewObject<UGasExActionGraphInstance>();
 	GraphInstance->SetGraph(ActionGraph);
 	GraphInstance->SetAbilitySystem(AbilitySystem);
+*/
+	SequenceInstance = NewObject<UGasExActionSequenceInstance>();
+	SequenceInstance->SetSequence( ActionSequence );
+	SequenceInstance->SetAbilitySystem( AbilitySystem );
 
 	UInputComponent* InputComponent	=	GetOwner()->GetComponentByClass<UInputComponent>();
 	if( InputComponent != nullptr )
@@ -46,7 +50,8 @@ void UGasExActionSystemComponent::BeginPlay()
 void UGasExActionSystemComponent::OnUnregister()
 {
 	Super::OnUnregister();
-	GraphInstance	=	nullptr;
+	//	GraphInstance	=	nullptr;
+	SequenceInstance	=	nullptr;
 }
 //---------------------------------------------------------------------------------------------
 
@@ -57,9 +62,9 @@ void UGasExActionSystemComponent::TickComponent(float DeltaTime, ELevelTick Tick
 	Super::TickComponent(DeltaTime, TickType, ThisTickFunction);
 
 	// ...
-	if( GraphInstance != nullptr )
+	if( SequenceInstance != nullptr )
 	{
-		GraphInstance->Tick();
+		SequenceInstance->Tick();
 	}
 }
 //---------------------------------------------------------------------------------------------
@@ -87,9 +92,9 @@ void UGasExActionSystemComponent::RegisterInputs( UInputComponent* PlayerInputCo
 //---------------------------------------------------------------------------------------------
 void UGasExActionSystemComponent::OnInputTriggered( FGameplayTag InputTag )
 {
-	if( GraphInstance != nullptr )
+	if( SequenceInstance != nullptr )
 	{
-		GraphInstance->OnInputTriggered( InputTag );
+		SequenceInstance->OnInputTriggered( InputTag );
 	}
 }
 //---------------------------------------------------------------------------------------------
@@ -98,9 +103,9 @@ void UGasExActionSystemComponent::OnInputTriggered( FGameplayTag InputTag )
 //---------------------------------------------------------------------------------------------
 void UGasExActionSystemComponent::OnCancelWindowStart( FString WindowName )
 {
-	if( GraphInstance != nullptr )
+	if( SequenceInstance != nullptr )
 	{
-		GraphInstance->OnCancelWindowStart( WindowName );
+		SequenceInstance->OnCancelWindowStart( WindowName );
 	}
 }
 //---------------------------------------------------------------------------------------------
@@ -108,9 +113,9 @@ void UGasExActionSystemComponent::OnCancelWindowStart( FString WindowName )
 //---------------------------------------------------------------------------------------------
 void UGasExActionSystemComponent::OnCancelWindowEnd( FString WindowName )
 {
-	if( GraphInstance != nullptr )
+	if( SequenceInstance != nullptr )
 	{
-		GraphInstance->OnCancelWindowEnd( WindowName );
+		SequenceInstance->OnCancelWindowEnd( WindowName );
 	}
 }
 //---------------------------------------------------------------------------------------------

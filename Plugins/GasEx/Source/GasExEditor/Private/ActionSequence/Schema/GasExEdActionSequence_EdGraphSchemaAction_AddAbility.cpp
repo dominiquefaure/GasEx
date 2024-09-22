@@ -4,7 +4,7 @@
 
 #include "ActionSequence/GasExEdActionSequenceUtils.h"
 
-#include "Actions/GasExActionNodeAbility.h"
+#include "Actions/GasExActionNodeChained.h"
 #include "ActionSequence/Nodes/GasExEdActionSequence_EdNodeAbility.h"
 
 
@@ -24,7 +24,7 @@ UEdGraphNode* FGasExEdActionSequence_EdGraphSchemaAction_AddAbility::PerformActi
 {
 	const FScopedTransaction Transaction( LOCTEXT( "AddAbility" , "Add Ability" ) );
 
-	UEdGraphNode* NewGraphNode =	FGasExEdActionSequenceUtils::CreateNode( ParentGraph , FromPin , Location , bSelectNewNode , UGasExEdActionSequence_EdNodeAbility::StaticClass() , UGasExActionNodeAbility::StaticClass() );
+	UEdGraphNode* NewGraphNode =	FGasExEdActionSequenceUtils::CreateNode( ParentGraph , FromPin , Location , bSelectNewNode , UGasExEdActionSequence_EdNodeAbility::StaticClass() , UGasExActionNodeChained::StaticClass() );
 
 	return NewGraphNode;
 }
