@@ -13,7 +13,7 @@ class UGasExAbilitySystemComponent;
 class UGasExActionSequence;
 class UGasExActionNodeBase;
 class UGasExActionNodeChained;
-
+class UGasExActionSet;
 
 UENUM()
 enum class EGasExActionSequenceState : uint8
@@ -35,7 +35,9 @@ public:
 
 	void SetAbilitySystem(UGasExAbilitySystemComponent* AbilitySystem);
 	
-	void SetSequence( UGasExActionSequence* Sequence);
+//	void SetSequence( UGasExActionSequence* Sequence);
+
+	void AddActionSet( UGasExActionSet* Set );
 
 	// do necessary actions when an input is Triggered
 	void OnInputTriggered( FGameplayTag InputTag );
@@ -47,6 +49,9 @@ public:
 	void OnCancelWindowStart( FString WindowName );
 	void OnCancelWindowEnd( FString WindowName );
 
+
+	bool IsSequenceInProgress()const;
+
 // Methods
 private:
 
@@ -54,6 +59,9 @@ private:
 	void ProcessWaitingState();
 	void ProcessActionInProgressState();
 	void ProcessActionFinishedState();
+
+	bool TryStartSequence( UGasExActionSet* Set , FGameplayTag InputTag );
+	bool TryStartSequence( UGasExActionSequence* Sequence , FGameplayTag InputTag );
 
 	bool ExecuteAction( UGasExActionNodeBase*  NewActionNode );
 
@@ -73,8 +81,11 @@ private:
 
 	TObjectPtr<UGasExAbilitySystemComponent> AbilitySystemComponent;
 
+	// the different action set possible to use
+	TArray<TObjectPtr<UGasExActionSet>>		ActionSets;
+
 	// the Graph instanciated
-	TObjectPtr<UGasExActionSequence>		Sequence;
+	TObjectPtr<UGasExActionSequence>		CurrntSequence;
 	TObjectPtr<UGasExActionNodeBase>		CurrentNode;
 
 
@@ -82,5 +93,7 @@ private:
 
 	bool									IsCancelWindowsActive;
 	TArray<FString>							CancelWindows;
+
+
 
 };

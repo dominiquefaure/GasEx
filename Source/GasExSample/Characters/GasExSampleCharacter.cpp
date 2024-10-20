@@ -11,7 +11,7 @@
 #include "EnhancedInputSubsystems.h"
 #include "InputActionValue.h"
 
-#include "Equipment/EquipmentManagerComponent.h"
+#include "../Equipment/EquipmentManagerComponent.h"
 
 DEFINE_LOG_CATEGORY(LogTemplateCharacter);
 

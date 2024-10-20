@@ -1,7 +1,7 @@
 // Copyright Epic Games, Inc. All Rights Reserved.
 
 #include "GasExSampleGameMode.h"
-#include "GasExSampleCharacter.h"
+#include "Characters/GasExSampleCharacter.h"
 #include "UObject/ConstructorHelpers.h"
 
 AGasExSampleGameMode::AGasExSampleGameMode()

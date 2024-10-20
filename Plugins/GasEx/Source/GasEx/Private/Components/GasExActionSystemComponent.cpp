@@ -28,21 +28,23 @@ void UGasExActionSystemComponent::BeginPlay()
 
 	AbilitySystem	=	GetOwner()->GetComponentByClass<UGasExAbilitySystemComponent>();
 
-/*
-	GraphInstance = NewObject<UGasExActionGraphInstance>();
-	GraphInstance->SetGraph(ActionGraph);
-	GraphInstance->SetAbilitySystem(AbilitySystem);
-*/
-	SequenceInstance = NewObject<UGasExActionSequenceInstance>();
-	SequenceInstance->SetSequence( ActionSequence );
-	SequenceInstance->SetAbilitySystem( AbilitySystem );
-
 	UInputComponent* InputComponent	=	GetOwner()->GetComponentByClass<UInputComponent>();
 	if( InputComponent != nullptr )
 	{
 		RegisterInputs( InputComponent );
 	}
 
+	ActionSets.Add( DefaultActionSet );
+
+	/*
+		GraphInstance = NewObject<UGasExActionGraphInstance>();
+		GraphInstance->SetGraph(ActionGraph);
+		GraphInstance->SetAbilitySystem(AbilitySystem);
+	*/
+	SequenceInstance = NewObject<UGasExActionSequenceInstance>();
+	SequenceInstance->SetAbilitySystem( AbilitySystem );
+//	SequenceInstance->SetSequence( ActionSequence );
+	SequenceInstance->AddActionSet( DefaultActionSet );
 }
 //---------------------------------------------------------------------------------------------
 

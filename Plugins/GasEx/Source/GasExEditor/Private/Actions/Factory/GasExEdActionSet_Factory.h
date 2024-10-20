@@ -4,19 +4,19 @@
 
 #include "CoreMinimal.h"
 #include "Factories/Factory.h"
-#include "GasExEdActionDataTable_Factory.generated.h"
+#include "GasExEdActionSet_Factory.generated.h"
 
 /**
  * 
  */
 UCLASS( )
-class GASEXEDITOR_API UGasExEdActionDataTable_Factory : public UFactory
+class GASEXEDITOR_API UGasExEdActionSet_Factory : public UFactory
 {
 	GENERATED_BODY()
 	
 public:
 
-	UGasExEdActionDataTable_Factory();
+	UGasExEdActionSet_Factory();
 
 	// The type of blueprint that will be created
 	UPROPERTY( EditAnywhere , Category=GasEx )

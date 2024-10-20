@@ -6,6 +6,7 @@
 #include "Actions/GasExActionNodeBase.h"
 #include "Actions/GasExActionNodeStart.h"
 #include "Actions/GasExActionNodeChained.h"
+#include "Actions/GasExActionSet.h"
 #include "Core/AbilitySystem/GasExAbilitySystemComponent.h"
 
 //---------------------------------------------------------------------------------------------
@@ -17,7 +18,7 @@ void UGasExActionSequenceInstance::SetAbilitySystem(UGasExAbilitySystemComponent
 	CurrentState	=	EGasExActionSequenceState::NoAction;
 }
 //---------------------------------------------------------------------------------------------
-
+/*
 //---------------------------------------------------------------------------------------------
 void UGasExActionSequenceInstance::SetSequence(UGasExActionSequence* InSequence)
 {
@@ -25,15 +26,30 @@ void UGasExActionSequenceInstance::SetSequence(UGasExActionSequence* InSequence)
 	CurrentNode =	nullptr;
 }
 //---------------------------------------------------------------------------------------------
+*/
+//---------------------------------------------------------------------------------------------
+void UGasExActionSequenceInstance::AddActionSet( UGasExActionSet* Set )
+{
+	ActionSets.Add( Set );
+}
+//---------------------------------------------------------------------------------------------
+
+
+//---------------------------------------------------------------------------------------------
+bool UGasExActionSequenceInstance::IsSequenceInProgress()const
+{
+	return ( CurrentState != EGasExActionSequenceState::NoAction );
+}
+//---------------------------------------------------------------------------------------------
 
 //---------------------------------------------------------------------------------------------
 void UGasExActionSequenceInstance::Tick()
 {
-	if( Sequence == nullptr )
+/*	if( Sequence == nullptr )
 	{
 		return;
 	}
-
+*/
 	switch( CurrentState )
 	{
 		case EGasExActionSequenceState::NoAction:
@@ -118,10 +134,19 @@ void UGasExActionSequenceInstance::ProcessWaitingState()
 	FGameplayTag InputTag;
 	if( InputQueue.Dequeue( InputTag ) )
 	{
-		if( CanExecuteAction( Sequence->StartNode , InputTag ) )
+/*		if( CanExecuteAction(Sequence->StartNode , InputTag) )
 		{
 			ExecuteAction( Sequence->StartNode );
 		}
+*/
+		for( UGasExActionSet* Set : ActionSets )
+		{
+			if( TryStartSequence( Set , InputTag ) )
+			{
+				break;
+			}
+		}
+
 	}
 	
 }
@@ -181,6 +206,43 @@ void UGasExActionSequenceInstance::ProcessActionFinishedState()
 //////
 // Action evaluations methods
 /////
+
+//---------------------------------------------------------------------------------------------
+bool UGasExActionSequenceInstance::TryStartSequence( UGasExActionSet* Set , FGameplayTag InputTag )
+{
+	if( Set == nullptr )
+	{
+		return false;
+	}
+
+	for( FGasExActionSequenceDesc SequenceDesc : Set->Sequences)
+	{
+		if( TryStartSequence( SequenceDesc.Sequence , InputTag ) )
+		{
+			return true;
+		}
+	}
+
+	return false;
+}
+//---------------------------------------------------------------------------------------------
+
+//---------------------------------------------------------------------------------------------
+bool UGasExActionSequenceInstance::TryStartSequence( UGasExActionSequence* Sequence , FGameplayTag InputTag )
+{
+	if( CanExecuteAction( Sequence->StartNode , InputTag ) )
+	{
+		ExecuteAction( Sequence->StartNode );
+
+		CurrntSequence	=	Sequence;
+		return true;
+	}
+
+	return false;
+}
+//---------------------------------------------------------------------------------------------
+
+
 
 //---------------------------------------------------------------------------------------------
 bool UGasExActionSequenceInstance::CanExecuteAction( UGasExActionNodeBase* Node , FGameplayTag InputTag )

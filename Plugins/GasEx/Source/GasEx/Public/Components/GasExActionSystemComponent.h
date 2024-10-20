@@ -14,6 +14,7 @@
 
 #include "GasExActionSystemComponent.generated.h"
 
+class UGasExActionSet;
 
 UCLASS( ClassGroup=( GasEx ) , meta=( BlueprintSpawnableComponent ) )
 class GASEX_API UGasExActionSystemComponent : public UActorComponent
@@ -32,6 +33,9 @@ public:
 
 	UPROPERTY( EditAnywhere , BlueprintReadOnly , Category = "Sequences" )
 	TObjectPtr<UGasExActionSequence> ActionSequence;
+
+	UPROPERTY( EditAnywhere , BlueprintReadOnly , Category = "Sequences" )
+	TObjectPtr<UGasExActionSet> DefaultActionSet;
 
 	UFUNCTION( BlueprintCallable )
 	void RegisterInputs( UInputComponent* PlayerInputComponent );
@@ -60,4 +64,8 @@ private:
 //	TObjectPtr<UGasExActionGraphInstance> GraphInstance;
 
 	TObjectPtr<UGasExActionSequenceInstance> SequenceInstance;
+
+
+	TArray<TObjectPtr<UGasExActionSet>> ActionSets;
+
 };

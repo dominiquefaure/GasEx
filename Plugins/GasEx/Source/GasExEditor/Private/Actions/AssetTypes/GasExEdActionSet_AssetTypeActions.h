@@ -5,17 +5,17 @@
 #include "CoreMinimal.h"
 #include "AssetTypeActions_Base.h"
 
-class GASEXEDITOR_API FGasExEdActionDataTable_AssetTypeActions : public FAssetTypeActions_Base
+class GASEXEDITOR_API FGasExEdActionSet_AssetTypeActions : public FAssetTypeActions_Base
 {
 public:
-	FGasExEdActionDataTable_AssetTypeActions(EAssetTypeCategories::Type InAssetCategory);
+	FGasExEdActionSet_AssetTypeActions(EAssetTypeCategories::Type InAssetCategory);
 
 	//~ IAssetTypeActions interface
 	virtual FText GetName() const override;
 	virtual UClass* GetSupportedClass() const override;
 	virtual FColor GetTypeColor() const override;
 	virtual uint32 GetCategories() override;
-	virtual void OpenAssetEditor(const TArray<UObject*>& InObjects, TSharedPtr<IToolkitHost> EditWithinLevelEditor) override;
+	//virtual void OpenAssetEditor(const TArray<UObject*>& InObjects, TSharedPtr<IToolkitHost> EditWithinLevelEditor) override;
 
 private:
 	EAssetTypeCategories::Type AssetCategory;

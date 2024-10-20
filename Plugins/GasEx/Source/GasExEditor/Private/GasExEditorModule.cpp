@@ -5,7 +5,7 @@
 #include "AssetToolsModule.h"
 #include "AssetTypes/GasExEdAbilitySet_AssetTypeActions.h"
 #include "Actions/AssetTypes/GasExEdActionSequence_AssetTypeActions.h"
-#include "Actions/AssetTypes/GasExEdActionDataTable_AssetTypeActions.h"
+#include "Actions/AssetTypes/GasExEdActionSet_AssetTypeActions.h"
 
 #include "ActionGraph/AssetTypes/GasExEdActionGraph_AssetTypeActions.h"
 
@@ -25,7 +25,7 @@ void FGasExEditorModule::StartupModule()
 	RegisterAssetTypeAction( AssetTools , MakeShareable( new FGasExEdActionGraph_AssetTypeActions(AssetCategory ) ) );
 
 	RegisterAssetTypeAction( AssetTools , MakeShareable( new FGasExEdActionSequence_AssetTypeActions( AssetCategory ) ) );
-	RegisterAssetTypeAction( AssetTools , MakeShareable( new FGasExEdActionDataTable_AssetTypeActions( AssetCategory ) ) );
+	RegisterAssetTypeAction( AssetTools , MakeShareable( new FGasExEdActionSet_AssetTypeActions( AssetCategory ) ) );
 
 }
 //---------------------------------------------------------------------------------------------
