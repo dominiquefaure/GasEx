@@ -16,6 +16,7 @@ UGasExActionSystemComponent::UGasExActionSystemComponent()
 	PrimaryComponentTick.bCanEverTick = true;
 
 	// ...
+	SequenceInstance	=	nullptr;
 }
 //---------------------------------------------------------------------------------------------
 
@@ -41,7 +42,7 @@ void UGasExActionSystemComponent::BeginPlay()
 		GraphInstance->SetGraph(ActionGraph);
 		GraphInstance->SetAbilitySystem(AbilitySystem);
 	*/
-	SequenceInstance = NewObject<UGasExActionSequenceInstance>();
+	SequenceInstance = NewObject<UGasExActionSequenceInstance>(this);
 	SequenceInstance->SetAbilitySystem( AbilitySystem );
 //	SequenceInstance->SetSequence( ActionSequence );
 	SequenceInstance->AddActionSet( DefaultActionSet );

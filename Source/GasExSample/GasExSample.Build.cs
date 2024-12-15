@@ -22,7 +22,8 @@ public class GasExSample : ModuleRules
 		PrivateDependencyModuleNames.AddRange(
 			new string[]
 			{
-				"GasEx"
+				"GasEx",
+				"GxCombat"
 			}
 		);
 
