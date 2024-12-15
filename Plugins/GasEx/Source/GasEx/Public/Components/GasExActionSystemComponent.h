@@ -63,9 +63,11 @@ private:
 
 //	TObjectPtr<UGasExActionGraphInstance> GraphInstance;
 
+	UPROPERTY()// declare uproperty to avoid the object beeing GC
 	TObjectPtr<UGasExActionSequenceInstance> SequenceInstance;
 
 
+	UPROPERTY()// declare uproperty to avoid the object beeing GC
 	TArray<TObjectPtr<UGasExActionSet>> ActionSets;
 
 };
