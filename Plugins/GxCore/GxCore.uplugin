@@ -2,10 +2,10 @@
 	"FileVersion": 3,
 	"Version": 1,
 	"VersionName": "1.0",
-	"FriendlyName": "GxCombat",
+	"FriendlyName": "GxCore",
 	"Description": "",
 	"Category": "Other",
-	"CreatedBy": "Dominique Faure",
+	"CreatedBy": "",
 	"CreatedByURL": "",
 	"DocsURL": "",
 	"MarketplaceURL": "",
@@ -16,21 +16,9 @@
 	"Installed": false,
 	"Modules": [
 		{
-			"Name": "GxCombat",
+			"Name": "GxCore",
 			"Type": "Runtime",
-			"LoadingPhase": "PreDefault"
-		},
-		{
-			"Name": "GxCombatEditor",
-			"Type": "Editor",
-			"LoadingPhase": "PostEngineInit"
+			"LoadingPhase": "Default"
 		}
-	],
-	"Plugins": [
-		{
-			"Name": "GameplayAbilities",
-			"Enabled": true
-		},
 	]
-
 }

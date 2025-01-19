@@ -2,7 +2,7 @@
 
 
 #include "GxHitDetectionDebugDraw.h"
-#include "GxHitDetectionSettings.h"
+#include "HitDetection/GxHitDetectionSettings.h"
 
 //-----------------------------------------------------------------------------------------
 void FGxHitDetectionDebugDraw::DebugDrawBoxSweep( const UWorld* World , const FVector& StartPosition , const FVector& EndPosition , const FQuat& Rotation , const FVector& BoxExtends, bool Hit )
@@ -19,11 +19,12 @@ void FGxHitDetectionDebugDraw::DebugDrawBoxSweep( const UWorld* World , const FV
 		FVector direction = Rotation.Vector();
 
 		float LineThickness		=	DebugDrawConfig->CollisionShapeThickness;
-		float DebugDrawDuration	=	DebugDrawConfig->DebugDrawDuration;
+		float DebugDrawDuration	=	DebugDrawConfig->DefaultDebugDrawDuration;
 		FColor BoxColor			=	DebugDrawConfig->CollisionShapeDefaultColor;
 		if( Hit )
 		{
 			BoxColor			=	DebugDrawConfig->CollisionShapeHitColor;
+			DebugDrawDuration	=	DebugDrawConfig->HitDebugDrawDuration;
 		}
 
 		DrawDebugBox( World , StartBox.GetCenter() , StartBox.GetExtent() , Rotation , BoxColor , false , DebugDrawDuration , 0 , LineThickness );
@@ -84,12 +85,12 @@ void FGxHitDetectionDebugDraw::DebugDrawHitResults( const UWorld* World , const 
 
 			FVector NormalStart = Hit.Location;
 			FVector NormalEnd = NormalStart + ( Hit.Normal * DebugDrawConfig->HitMarkerLength );
-			DrawDebugDirectionalArrow( World , NormalStart , NormalEnd , DebugDrawConfig->HitMarkerSize , Color , false , DebugDrawConfig->HitMarkerDuration );
+			DrawDebugDirectionalArrow( World , NormalStart , NormalEnd , DebugDrawConfig->HitMarkerSize , Color , false , DebugDrawConfig->HitDebugDrawDuration );
 
 
 			FVector ImpactStart = Hit.ImpactPoint;
 			FVector ImpactEnd = ImpactStart + ( Hit.ImpactNormal * DebugDrawConfig->HitMarkerLength );
-			DrawDebugDirectionalArrow( World , ImpactStart , ImpactEnd , DebugDrawConfig->HitMarkerSize , Color , false , DebugDrawConfig->HitMarkerDuration );
+			DrawDebugDirectionalArrow( World , ImpactStart , ImpactEnd , DebugDrawConfig->HitMarkerSize , Color , false , DebugDrawConfig->HitDebugDrawDuration );
 		}
 	}
 #endif

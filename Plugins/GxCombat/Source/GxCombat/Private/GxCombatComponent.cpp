@@ -45,11 +45,11 @@ void UGxCombatComponent::TickComponent(float DeltaTime, ELevelTick TickType, FAc
 	Super::TickComponent(DeltaTime, TickType, ThisTickFunction);
 
 	// ...
-	for( FGxCombatCollision& Shape : CollisionShapes )
+/*	for( FGxCombatCollision& Shape : CollisionShapes )
 	{
 		EvaluateCollisions( Shape );
 	}
-
+*/
 }
 
 //-----------------------------------------------------------------------------------------
@@ -62,12 +62,13 @@ void UGxCombatComponent::AddCollisionShapeComponent( UShapeComponent* Shape , EG
 
 	NewShape.SyncComponent	=	Shape;
 
-
+/*
 	Shape->OnComponentBeginOverlap.AddDynamic( this , &UGxCombatComponent::CollisionOverlap );
 	//	Shape->SetCollisionEnabled( ECollisionEnabled::NoCollision );
 		Shape->SetCollisionEnabled( ECollisionEnabled::QueryOnly );
 
 	CollisionShapes.Add( NewShape );
+*/
 }
 //-----------------------------------------------------------------------------------------
 
@@ -121,7 +122,7 @@ void UGxCombatComponent::EvaluateCollisions( FGxCombatCollision& CollisionElemen
 	}
 */
 	Start	=	CollisionElement.SyncComponent->GetComponentLocation();
-	End		=	Start + FVector( 10 , 0 , 0 );
+	End		=	Start + FVector( 100 , 0 , 0 );
 
 
 
@@ -130,7 +131,7 @@ void UGxCombatComponent::EvaluateCollisions( FGxCombatCollision& CollisionElemen
 //-----------------------------------------------------------------------------------------
 
 //-----------------------------------------------------------------------------------------
-void UGxCombatComponent::EvaluateCollisions( const FVector& Start , const FVector& End , const FGxCombatCollisionShape& CollisionShape )
+void UGxCombatComponent::EvaluateCollisions( const FVector& Start , const FVector& End , const FGxHitDetectionShape& CollisionShape )
 {
 	FCollisionQueryParams Params;
 	TArray<FHitResult> HitResults;
@@ -138,15 +139,15 @@ void UGxCombatComponent::EvaluateCollisions( const FVector& Start , const FVecto
 
 	// Create shape
 	FCollisionShape shape;
-	if( CollisionShape.ShapeType == EGxCollisionShapeType::BOX )
+	if( CollisionShape.ShapeType == EGxHitShapeType::BOX )
 	{
 		shape = FCollisionShape::MakeBox( CollisionShape.BoxHalfExtend );
 	}
-	else if( CollisionShape.ShapeType == EGxCollisionShapeType::CAPSULE )
+	else if( CollisionShape.ShapeType == EGxHitShapeType::CAPSULE )
 	{
 		shape = FCollisionShape::MakeCapsule( CollisionShape.CapsuleRadius , CollisionShape.CapsuleHalfHeight );
 	}
-	else if( CollisionShape.ShapeType == EGxCollisionShapeType::SPHERE )
+	else if( CollisionShape.ShapeType == EGxHitShapeType::SPHERE )
 	{
 		shape = FCollisionShape::MakeSphere( CollisionShape.SphereRadius );
 	}
@@ -160,15 +161,21 @@ void UGxCombatComponent::EvaluateCollisions( const FVector& Start , const FVecto
 	params.bIgnoreTouches = false;
 	params.bSkipNarrowPhase = false;
 
+	params.AddIgnoredActor( GetOwner() );
+
 
 	UWorld* World	=	GetWorld();
 	FQuat Rotation( FVector::ForwardVector , 0.0f );
 	World->SweepMultiByChannel( HitResults , Start , End , Rotation , ECC_WorldDynamic , shape , params );
 
+	if( HitResults.Num() > 0 )
+	{
 
+	}
 #if !UE_BUILD_SHIPPING
 	FGxHitDetectionDebugDraw::DebugDrawBoxSweep( World , Start , End , Rotation , CollisionShape.BoxHalfExtend , HitResults.Num() > 0 );
 	FGxHitDetectionDebugDraw::DebugDrawHitResults( World , HitResults );
 #endif
+
 }
 //-----------------------------------------------------------------------------------------

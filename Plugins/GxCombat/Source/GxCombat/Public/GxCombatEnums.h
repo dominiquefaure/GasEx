@@ -22,10 +22,3 @@ enum class EGxCombatCollisionType : uint8
 	Counter
 };
 
-UENUM( BlueprintType )
-enum class EGxCollisionShapeType: uint8
-{
-	BOX = 0 UMETA( DisplayName = "Box" ) ,
-	CAPSULE UMETA( DisplayName = "Capsule" ) ,
-	SPHERE UMETA( DisplayName = "Sphere" )
-};

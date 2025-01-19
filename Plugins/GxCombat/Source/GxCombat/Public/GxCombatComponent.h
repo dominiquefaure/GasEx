@@ -6,35 +6,13 @@
 #include "Components/ActorComponent.h"
 #include "GxCombatEnums.h"
 #include "NativeGameplayTags.h"
+#include "HitDetection/GxHitDetectionStructs.h"
 #include "Abilities/GameplayAbilityTargetTypes.h"
 
 #include "GxCombatComponent.generated.h"
 
 UE_DECLARE_GAMEPLAY_TAG_EXTERN( TAG_Event_Combat_Hit )
 
-
-USTRUCT( BlueprintType )
-struct FGxCombatCollisionShape
-{
-	GENERATED_BODY()
-
-	UPROPERTY( BlueprintReadOnly , Category = "Shape" , meta = ( DisplayName = "Type of Shape to use for Collision" ) )
-	EGxCollisionShapeType ShapeType;
-
-	UPROPERTY( EditAnywhere , BlueprintReadOnly , Category = "Shape" , meta = ( DisplayName = "Box Half Extent" , EditCondition = "ShapeType == EGxCollisionShapeType::BOX" , EditConditionHides ) )
-	FVector BoxHalfExtend	=	FVector( 50 , 50 , 50 );
-
-	// Capsule shape values
-	UPROPERTY( EditAnywhere , BlueprintReadOnly , Category = "Shape" , meta = ( DisplayName = "Capsule Half Height" , EditCondition = "ShapeType == EGxCollisionShapeType::CAPSULE" , EditConditionHides ) )
-	float CapsuleHalfHeight	=	50;
-
-	UPROPERTY( EditAnywhere , BlueprintReadOnly , Category = "Shape" , meta = ( DisplayName = "Capsule Radius" , EditCondition = "ShapeType == EGxCollisionShapeType::CAPSULE" , EditConditionHides ) )
-	float CapsuleRadius	=	10;
-
-	// Sphere values
-	UPROPERTY( EditAnywhere , BlueprintReadOnly , Category = "Shape" , meta = ( DisplayName = "Sphere Radius" , EditCondition = "ShapeType == EGxCollisionShapeType::SPHERE" , EditConditionHides ) )
-	float SphereRadius	=	10;
-};
 
 
 USTRUCT( BlueprintType )
@@ -55,7 +33,7 @@ struct FGxCombatCollision
 
 
 	UPROPERTY( BlueprintReadOnly , Category = "Shape" , meta = ( DisplayName = "The Shape to use for Collision" ) )
-	FGxCombatCollisionShape Shape;
+	FGxHitDetectionShape Shape;
 
 	FTransform PreviousTransform;
 };
@@ -103,7 +81,7 @@ private:
 
 	void EvaluateCollisions( FGxCombatCollision& CollisionShape );
 
-	void EvaluateCollisions( const FVector& Start , const FVector& End , const FGxCombatCollisionShape& CollisionShape );
+	void EvaluateCollisions( const FVector& Start , const FVector& End , const FGxHitDetectionShape& CollisionShape );
 
 
 };

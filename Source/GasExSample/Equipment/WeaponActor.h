@@ -17,10 +17,10 @@ public:
 	AWeaponActor();
 
 
-	UPROPERTY( EditAnywhere )
+	UPROPERTY( EditAnywhere , BlueprintReadOnly )
 	USkeletalMeshComponent* WeaponMesh;
 
-	UPROPERTY( EditAnywhere )
+	UPROPERTY( EditAnywhere , BlueprintReadOnly )
 	USkeletalMeshComponent* ScabbardMesh;
 
 

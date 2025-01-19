@@ -4,7 +4,27 @@
 
 #include "Engine/DeveloperSettingsBackedByCVars.h"
 #include "Math/Color.h"
+#include "Kismet/KismetSystemLibrary.h"
+
 #include "GxHitDetectionSettings.generated.h"
+
+USTRUCT( BlueprintType)
+struct FGxHitDetectionKismetDebugDrawSettings
+{
+	GENERATED_BODY()
+
+	UPROPERTY( EditAnywhere , BlueprintReadWrite , Category = KismetTraceSettings , meta = ( Tooltip = "draw Debug duration." ) )
+	float DrawDebugTime = 0.2;
+
+	UPROPERTY( EditAnywhere , BlueprintReadWrite , Category = KismetTraceSettings , meta = ( Tooltip = "Color when tracing but not hitting." ) )
+	FLinearColor DrawDebugDefaultColor = FLinearColor::Red;
+
+	UPROPERTY( EditAnywhere , BlueprintReadWrite , Category = KismetTraceSettings , meta = ( Tooltip = "Color when hitting." ) )
+	FLinearColor DrawDebugHitHitColor = FLinearColor::Green;
+
+	UPROPERTY( EditAnywhere , BlueprintReadWrite , Category = KismetTraceSettings , meta = ( Tooltip = "How you want to debug the trace if at all." ) )
+	TEnumAsByte<EDrawDebugTrace::Type> DrawDebugType = EDrawDebugTrace::Type::ForDuration;
+};
 
 
 UCLASS( config=EditorPerProjectUserSettings , MinimalAPI )
@@ -22,7 +42,11 @@ public:
 public:
 
 	UPROPERTY( BlueprintReadOnly )
-	float DebugDrawDuration	=	0.2f;
+	float DefaultDebugDrawDuration		=	0.1f;
+
+	/*Debug draw duration when hit something*/
+	UPROPERTY( BlueprintReadOnly )
+	float HitDebugDrawDuration			=	0.5f;
 
 	/*Color of the Hit Detection shape when not colliding*/
 	UPROPERTY( BlueprintReadOnly )
@@ -45,12 +69,13 @@ public:
 	FColor TouchHitMarkerColor			=	FColor::Orange;
 
 	UPROPERTY( BlueprintReadOnly )
-	float HitMarkerSize	=	5.0f;
+	float HitMarkerSize	=	15.0f;
 
 	UPROPERTY( BlueprintReadOnly )
-	float HitMarkerLength	=	2.0f;
+	float HitMarkerLength	=	12.0f;
 
-	UPROPERTY( BlueprintReadOnly )
-	float HitMarkerDuration;
+
+
+
 };
 
