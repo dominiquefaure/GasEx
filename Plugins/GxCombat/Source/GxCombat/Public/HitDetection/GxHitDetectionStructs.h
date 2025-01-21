@@ -64,7 +64,10 @@ struct FGxHitDetectionSocketInstance
 	GENERATED_BODY()
 
 	UPROPERTY()
-	FName Socket;
+	TObjectPtr<UPrimitiveComponent> Component;
+
+	UPROPERTY()
+	FName SocketName;
 
 	// position of the Socket relative to the Actor
 	UPROPERTY()

@@ -37,23 +37,64 @@ bool UGxHitDetectionTrace::PerformAbsoluteHitDetection( const FVector& InActorLo
 //-----------------------------------------------------------------------------------------
 bool UGxHitDetectionTrace::PerformSocketsHitDetection( const FVector& InActorLocation , TArray<FHitResult>& OutHits , FGxHitDetectionKismetDebugDrawSettings& InDebugDrawSettings )
 {
-	FVector Location	=	InActorLocation + Anchor.Position;
+	bool Result	=	false;
+	FVector Location	=	InActorLocation;
 
-//	return PerformHitDetection( Location , OutHits , InDebugDrawSettings );
-
+	// temp, generate the sockets the 1st time
 	if( Sockets.Num() == 0 )
 	{
 		GenerateSocketInstances();
 	}
 
 
-	return false;
+	for( FGxHitDetectionSocketInstance& SocketInstance : Sockets )
+	{
+		TArray<FHitResult> HitResults;
+
+		if( SocketInstance.Component != nullptr )
+		{
+			Location	=	SocketInstance.Component->GetSocketLocation( SocketInstance.SocketName );
+
+			if( PerformHitDetection( Location , OutHits , InDebugDrawSettings ) )
+			{
+				Result	=	true;
+			}
+		}
+	}
+
+	return Result;
 }
 //-----------------------------------------------------------------------------------------
 
 //-----------------------------------------------------------------------------------------
 void UGxHitDetectionTrace::GenerateSocketInstances()
 {
+	if( OwnerActor == nullptr )
+	{
+		return;
+	}
+
+	// search for all the sockets in all the PrimitiveComponents of the owning actor
+	FString StartSocketName=	Anchor.Socket.ToString();
+	for( UActorComponent* ActorComponent : OwnerActor->GetComponents() )
+	{
+		UPrimitiveComponent* PrimitiveComponent	=	Cast< UPrimitiveComponent>( ActorComponent );
+
+		if( PrimitiveComponent != nullptr )
+		{
+			for( FName& Name : PrimitiveComponent->GetAllSocketNames() )
+			{
+				if( Name.ToString().StartsWith( StartSocketName ) )
+				{
+					FGxHitDetectionSocketInstance SocketInstance;
+					SocketInstance.Component	=	PrimitiveComponent;
+					SocketInstance.SocketName	=	Name;
+
+					Sockets.Add( SocketInstance );
+				}
+			}
+		}
+	}
 
 }
 //-----------------------------------------------------------------------------------------
