@@ -1,4 +1,4 @@
-// Copyright 2023-2024 Dominique Faure. All Rights Reserved.
+// Copyright 2023-2025 Dominique Faure. All Rights Reserved.
 
 #pragma once
 
@@ -16,10 +16,10 @@ public:
 	AEquipmentActor();
 
 	UFUNCTION()
-		virtual void Equip( ACharacter* TargetCharacter );
+	virtual void Equip( ACharacter* TargetCharacter );
 
 	UFUNCTION()
-		virtual void UnEquip( ACharacter* TargetCharacter );
+	virtual void UnEquip( ACharacter* TargetCharacter );
 
 protected:
 	// Called when the game starts or when spawned

@@ -2,6 +2,17 @@
 
 #pragma once
 
+
+UENUM( BlueprintType )
+enum class EGxCollisionSource : uint8
+{
+	Pawn	=	0,
+	MainWeapon,
+	SubWeapon,
+
+};
+
+
 UENUM( BlueprintType )
 enum class EGxCombatCollisionSlot : uint8
 {

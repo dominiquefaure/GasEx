@@ -5,24 +5,29 @@
 #include "CoreMinimal.h"
 #include "Components/ActorComponent.h"
 #include "HitDetection/GxHitDetectionBase.h"
-#include "GxWeaponHitComponent.generated.h"
+#include "GxHitComponent.generated.h"
 
 
 
 UCLASS( ClassGroup=(Custom), meta=(BlueprintSpawnableComponent) )
-class GXCOMBAT_API UGxWeaponHitComponent : public UActorComponent
+class GXCOMBAT_API UGxHitComponent : public UActorComponent
 {
 	GENERATED_BODY()
 
 public:	
 	// Sets default values for this component's properties
-	UGxWeaponHitComponent();
+	UGxHitComponent();
 
 	UPROPERTY( EditAnywhere , Instanced ,BlueprintReadWrite )
 	TArray<UGxHitDetectionBase*> HitCollisionElements;
 
 	UPROPERTY( EditAnywhere , BlueprintReadOnly )
 	FGxHitDetectionKismetDebugDrawSettings DebugSettings;
+
+
+public:
+
+	void SetHitDetectionEnable( bool InEnable );
 
 protected:
 	// Called when the game starts
@@ -32,5 +37,7 @@ public:
 	// Called every frame
 	virtual void TickComponent(float DeltaTime, ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction) override;
 
-		
+
+private:
+
 };

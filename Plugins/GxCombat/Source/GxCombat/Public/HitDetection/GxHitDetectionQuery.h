@@ -6,8 +6,15 @@
 #include "UObject/NoExportTypes.h"
 #include "GxHitDetectionBase.h"
 #include "GxHitDetectionStructs.h"
-#include "GxHitDetectionTrace.generated.h"
+#include "GxHitDetectionQuery.generated.h"
 
+
+UENUM( BlueprintType )
+enum class EGxHitDetectionQueryMode : uint8
+{
+	Trace = 0,
+	Sweep,
+};
 
 UENUM( BlueprintType )
 enum class EGxHitDetectionQueryType : uint8
@@ -19,9 +26,12 @@ enum class EGxHitDetectionQueryType : uint8
 
 
 USTRUCT( BlueprintType )
-struct FGxHitDetectionQuery
+struct FGxHitDetectionQueryMethod
 {
 	GENERATED_BODY()
+
+	UPROPERTY( EditAnywhere , BlueprintReadOnly , meta = ( DisplayName = "Mode of query to evaluate the hit collision" ) )
+	EGxHitDetectionQueryMode QueryMode;
 
 	UPROPERTY( EditAnywhere , BlueprintReadOnly , meta = ( DisplayName = "Type of query to evaluate the hit collision" ) )
 	EGxHitDetectionQueryType QueryType;
@@ -41,7 +51,7 @@ struct FGxHitDetectionQuery
  * 
  */
 UCLASS( EditInlineNew )
-class GXCOMBAT_API UGxHitDetectionTrace : public UGxHitDetectionBase
+class GXCOMBAT_API UGxHitDetectionQuery : public UGxHitDetectionBase
 {
 	GENERATED_BODY()
 
@@ -52,7 +62,7 @@ public:
 	FGxHitDetectionShape Shape;
 
 	UPROPERTY( EditAnywhere , BlueprintReadOnly )
-	FGxHitDetectionQuery Query;
+	FGxHitDetectionQueryMethod QueryMethod;
 
 	UPROPERTY( EditAnywhere , BlueprintReadOnly )
 	FGxHitDetectionAnchor Anchor;
@@ -89,6 +99,6 @@ private:
 	void GenerateSocketInstances();
 
 	UPROPERTY()
-	TArray< FGxHitDetectionSocketInstance> Sockets;
+	TArray<FGxHitDetectionQueryInstance> Sockets;
 
 };

@@ -13,29 +13,21 @@
 
 UE_DECLARE_GAMEPLAY_TAG_EXTERN( TAG_Event_Combat_Hit )
 
-
+class UGxHitComponent;
 
 USTRUCT( BlueprintType )
-struct FGxCombatCollision
+struct FGxInitiatorCollisionComponent
 {
 	GENERATED_BODY()
 
-	EGxCombatCollisionType CollisionType;
-	EGxCombatCollisionSlot CollisionSlot;
-	UShapeComponent* ShapeComponent;
+	/*Used to identify witch component to use : Body, Weapons....*/
+	UPROPERTY(Transient)
+	EGxCollisionSource CollisionSource;
 
+	/*The hit component to use*/
+	UPROPERTY( Transient )
+	TObjectPtr<UGxHitComponent> HitComponent;
 
-	UPROPERTY( BlueprintReadOnly , Category = "Collision" , meta = ( DisplayName = "Scene Component To Sync for position and Transform" ) )
-	TObjectPtr<USceneComponent>	SyncComponent;
-
-	UPROPERTY( BlueprintReadOnly , Category = "Collision" , meta = ( DisplayName = "Offset from the Scene Component, absolute position if no Sync component" ) )
-	FTransform Offset  = FTransform::Identity;
-
-
-	UPROPERTY( BlueprintReadOnly , Category = "Shape" , meta = ( DisplayName = "The Shape to use for Collision" ) )
-	FGxHitDetectionShape Shape;
-
-	FTransform PreviousTransform;
 };
 
 USTRUCT( BlueprintType )
@@ -56,32 +48,33 @@ public:
 	// Sets default values for this component's properties
 	UGxCombatComponent();
 
+	UFUNCTION(BlueprintCallable)
+	void RegisterHitComponent( EGxCollisionSource InSource, UGxHitComponent* InComponent );
+
+	UFUNCTION( BlueprintCallable )
+	void UnRegisterHitComponent( EGxCollisionSource InSource );
+
+	UFUNCTION( BlueprintCallable )
+	void StartCollisionDetection( EGxCollisionSource InSource ,const FString& InFilter );
+	
+	UFUNCTION( BlueprintCallable )
+	void EndCollisionDetection( EGxCollisionSource InSource , const FString& InFilter );
+
 protected:
 	// Called when the game starts
 	virtual void BeginPlay() override;
-
-	UFUNCTION()
-	virtual void CollisionOverlap( UPrimitiveComponent* OverlappedComp , AActor* Other , UPrimitiveComponent* OtherComp , int32 OtherBodyIndex , bool bFromSweep , const FHitResult& SweepResult );
 
 public:	
 	// Called every frame
 	virtual void TickComponent(float DeltaTime, ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction) override;
 
-	UFUNCTION( BlueprintCallable )
-	void AddCollisionShapeComponent( UShapeComponent* Shape , EGxCombatCollisionSlot Slot , EGxCombatCollisionType Type );
-
-
-	UPROPERTY()
-	TArray<FGxCombatCollision> CollisionShapes;
 
 	bool bAttackWindowActive;
 
 
 private:
 
-	void EvaluateCollisions( FGxCombatCollision& CollisionShape );
-
-	void EvaluateCollisions( const FVector& Start , const FVector& End , const FGxHitDetectionShape& CollisionShape );
-
+	UPROPERTY( Transient )
+	TArray<FGxInitiatorCollisionComponent> HitComponents;
 
 };

@@ -3,7 +3,7 @@
 #include "GxCombatEditorModule.h"
 
 #include "AssetToolsModule.h"
-#include "GxCombat/Public/GxWeaponHitComponent.h"
+#include "GxCombat/Public/GxHitComponent.h"
 #include "GxHitComponentVisualizer.h"
 #include "UnrealEdGlobals.h"
 #include "Editor/UnrealEdEngine.h"
@@ -23,7 +23,7 @@ void FGxCombatEditorModule::StartupModule()
 	if( GUnrealEd )
 	{
 		TSharedPtr<FGxHitComponentVisualizer> Visualizer = MakeShareable( new FGxHitComponentVisualizer() );
-		GUnrealEd->RegisterComponentVisualizer( UGxWeaponHitComponent::StaticClass()->GetFName() , Visualizer );
+		GUnrealEd->RegisterComponentVisualizer( UGxHitComponent::StaticClass()->GetFName() , Visualizer );
 		Visualizer->OnRegister();
 	}
 }
@@ -52,7 +52,7 @@ void FGxCombatEditorModule::ShutdownModule()
 
 	if( GUnrealEd )
 	{
-		GUnrealEd->UnregisterComponentVisualizer( UGxWeaponHitComponent::StaticClass()->GetFName() );
+		GUnrealEd->UnregisterComponentVisualizer( UGxHitComponent::StaticClass()->GetFName() );
 	}
 
 }

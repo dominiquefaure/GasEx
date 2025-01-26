@@ -59,7 +59,7 @@ struct FGxHitDetectionAnchor
 };
 
 USTRUCT( )
-struct FGxHitDetectionSocketInstance
+struct FGxHitDetectionQueryInstance
 {
 	GENERATED_BODY()
 
@@ -69,7 +69,7 @@ struct FGxHitDetectionSocketInstance
 	UPROPERTY()
 	FName SocketName;
 
-	// position of the Socket relative to the Actor
+	// position Offset from the Socket, or from the Actor if no socket
 	UPROPERTY()
-	FVector Position;
+	FVector Offset;
 };

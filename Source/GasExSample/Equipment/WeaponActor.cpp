@@ -1,4 +1,4 @@
-// Copyright 2023-2024 Dominique Faure. All Rights Reserved.
+// Copyright 2023-2025 Dominique Faure. All Rights Reserved.
 
 
 #include "WeaponActor.h"
@@ -98,5 +98,13 @@ void AWeaponActor::SetDrawnState( bool InDrawn )
 bool AWeaponActor::GetDrawnState()
 {
 	return IsDrawn;
+}
+//-----------------------------------------------------------------------------------------
+
+
+//-----------------------------------------------------------------------------------------
+UGxHitComponent* AWeaponActor::GetHitComponent()
+{
+	return GetComponentByClass<UGxHitComponent>();
 }
 //-----------------------------------------------------------------------------------------

@@ -1,7 +1,7 @@
 // Copyright 2023-2025 Dominique Faure. All Rights Reserved.
 
 #include "GxHitComponentVisualizer.h"
-#include "GxCombat/Public/GxWeaponHitComponent.h"
+#include "GxCombat/Public/GxHitComponent.h"
 
 //---------------------------------------------------------------------------------------------
 FGxHitComponentVisualizer::FGxHitComponentVisualizer()
@@ -17,7 +17,7 @@ void FGxHitComponentVisualizer::DrawVisualization( const UActorComponent* Compon
 {
 	// Draw a visualization here using PDI (or Canvas if using DrawVisualizationHUD)
 
-	const UGxWeaponHitComponent* MyComponent = Cast<UGxWeaponHitComponent>( Component );
+	const UGxHitComponent* MyComponent = Cast<UGxHitComponent>( Component );
 	if( !MyComponent )
 	{
 		return;
