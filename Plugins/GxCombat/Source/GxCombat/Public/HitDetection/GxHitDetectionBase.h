@@ -10,7 +10,7 @@
 /**
  * 
  */
-UCLASS( )
+UCLASS( abstract)
 class GXCOMBAT_API UGxHitDetectionBase : public UObject
 {
 	GENERATED_BODY()
@@ -21,13 +21,12 @@ public:
 	AActor* OwnerActor;
 
 	virtual void Setup( AActor* InOwner );
-	virtual void PerformHitDetection( TArray<FHitResult>& OutHits , FGxHitDetectionKismetDebugDrawSettings& InDebugDrawSettings){}
+	
+	virtual bool PerformHitDetection( TArray<FHitResult>& OutHits , TArray<TObjectPtr<AActor>> IgnoredActors )
+	{
+		return false; 
+	}
 
 protected:
-
-	UPROPERTY(Transient)
-	TArray<AActor*> IgnoredActors;
-
-
 
 };

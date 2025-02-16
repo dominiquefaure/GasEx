@@ -12,8 +12,11 @@
 #include "DrawDebugHelpers.h"
 #include "Math/RotationMatrix.h"
 
-#include "HitDetection/GxHitDetectionDebugDraw.h"
+#include "GxAbilitySystemComponent.h"
+#include "Abilities/GxGameplayAbility.h"
+#include "Attacks/GxAttackMoveSet.h"
 #include "GxHitComponent.h"
+#include "HitDetection/GxHitDetectionDebugDraw.h"
 
 
 UE_DEFINE_GAMEPLAY_TAG( TAG_Event_Combat_Hit , "GxCombat.Event.CollisionHit" )
@@ -40,6 +43,10 @@ void UGxCombatComponent::BeginPlay()
 	Super::BeginPlay();
 
 	// ...
+
+	AbilitySystemComponent	=	GetOwner()->GetComponentByClass<UGxAbilitySystemComponent>();
+
+	RegisterMoves( "Default" , DefaultMoveset );
 }
 //-----------------------------------------------------------------------------------------
 
@@ -51,6 +58,12 @@ void UGxCombatComponent::TickComponent(float DeltaTime, ELevelTick TickType, FAc
 	Super::TickComponent(DeltaTime, TickType, ThisTickFunction);
 
 	// ...
+	TArray<FHitResult> Results;
+	for( FGxHitWindow& Element : HitWindows )
+	{
+		Element.PerformHitDetection( Results );
+	}
+
 }
 //-----------------------------------------------------------------------------------------
 
@@ -75,26 +88,85 @@ void UGxCombatComponent::UnRegisterHitComponent( EGxCollisionSource InSource )
 //-----------------------------------------------------------------------------------------
 void UGxCombatComponent::StartCollisionDetection( EGxCollisionSource InSource , const FString& InHitComponentFilter )
 {
+	FGxHitWindow HitWindow;
+
+	HitWindow.Source	=	InSource;
+
 	for( FGxInitiatorCollisionComponent& Element : HitComponents )
 	{
 		if( Element.CollisionSource == InSource )
 		{
-			Element.HitComponent->SetHitDetectionEnable( true );
+			for( UGxHitDetectionBase* HitCollisionElement : Element.HitComponent->HitCollisionElements )
+			{
+				HitWindow.HitElements.Add( HitCollisionElement );
+
+			}
+				//Element.HitComponent->SetHitDetectionEnable( true );
 		}
 	}
+	HitWindows.Add( HitWindow );
 }
 //-----------------------------------------------------------------------------------------
 
 //-----------------------------------------------------------------------------------------
 void UGxCombatComponent::EndCollisionDetection( EGxCollisionSource InSource , const FString& InHitComponentFilter )
 {
-	for( FGxInitiatorCollisionComponent& Element : HitComponents )
+	int Index	=	0;
+	while( Index < HitWindows.Num() )
 	{
-		if( Element.CollisionSource == InSource )
+		if( HitWindows[Index].Source == InSource )
 		{
-			Element.HitComponent->SetHitDetectionEnable( false );
+			HitWindows.RemoveAt( Index );
+		}
+		else
+		{
+			Index++;
 		}
 	}
 
+}
+//-----------------------------------------------------------------------------------------
+
+//-----------------------------------------------------------------------------------------
+void UGxCombatComponent::RegisterMoves( FString InName , UDataTable* InTable )
+{
+	UGxAttackMoveSet* NewMoveSet	=	NewObject< UGxAttackMoveSet>();
+
+	NewMoveSet->Register( InName , InTable , AbilitySystemComponent );
+
+	MoveSets.Add( NewMoveSet );
+}
+//-----------------------------------------------------------------------------------------
+
+
+//-----------------------------------------------------------------------------------------
+bool UGxCombatComponent::TryExecuteAttack( FGameplayTag InAttackTag )
+{
+	TObjectPtr<UGxAttackAction> Attack	=	GetCombatAttack( InAttackTag );
+
+	if( Attack != nullptr )
+	{
+		return AbilitySystemComponent->TryActivateAbility( Attack->AbilitySpec.Handle );
+	}
+
+	return false;
+}
+//-----------------------------------------------------------------------------------------
+
+
+//-----------------------------------------------------------------------------------------
+TObjectPtr<UGxAttackAction> UGxCombatComponent::GetCombatAttack( FGameplayTag InTag )
+{
+	UGxAttackAction* Attack;
+	for( UGxAttackMoveSet* MoveSet : MoveSets )
+	{
+		Attack	=	MoveSet->GetCombatAttack( InTag );
+
+		if( Attack != nullptr )
+		{
+			return Attack;
+		}
+	}
+	return nullptr;
 }
 //-----------------------------------------------------------------------------------------

@@ -9,7 +9,7 @@
 /**
  * 
  */
-UCLASS()
+UCLASS( ClassGroup=( Gx ) , meta=( BlueprintSpawnableComponent ) )
 class GXCORE_API UGxAbilitySystemComponent : public UAbilitySystemComponent
 {
 	GENERATED_BODY()

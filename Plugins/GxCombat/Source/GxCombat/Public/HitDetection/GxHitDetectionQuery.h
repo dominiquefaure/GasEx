@@ -76,24 +76,24 @@ public:
 	UPROPERTY( EditAnywhere , BlueprintReadWrite , Category = KismetTraceSettings , meta = ( Tooltip = "True means it will ignore self." ) )
 	bool bIgnoreSelf = true;
 
-	virtual void PerformHitDetection( TArray<FHitResult>& OutHits , FGxHitDetectionKismetDebugDrawSettings& InDebugDrawSettings )override;
+	virtual bool PerformHitDetection( TArray<FHitResult>& OutHits , TArray<TObjectPtr<AActor>> IgnoredActors )override;
 
 private: 
 
-	bool PerformAbsoluteHitDetection( const FVector& InActorLocation , TArray<FHitResult>& OutHits , FGxHitDetectionKismetDebugDrawSettings& InDebugDrawSettings );
-	bool PerformSocketsHitDetection( const FVector& InActorLocation , TArray<FHitResult>& OutHits , FGxHitDetectionKismetDebugDrawSettings& InDebugDrawSettings );
+	bool PerformAbsoluteHitDetection( const FVector& InActorLocation , TArray<FHitResult>& OutHits , TArray<TObjectPtr<AActor>> IgnoredActors );
+	bool PerformSocketsHitDetection( const FVector& InActorLocation , TArray<FHitResult>& OutHits , TArray<TObjectPtr<AActor>> IgnoredActors );
 
-	bool PerformHitDetection( const FVector& InLocation, TArray<FHitResult>& OutHits , FGxHitDetectionKismetDebugDrawSettings& InDebugDrawSettings );
-	bool PerformHitDetectionSingle( const FVector& InLocation , FHitResult& OutResult , FGxHitDetectionKismetDebugDrawSettings& InDebugDrawSettings );
-	bool PerformHitDetectionMulti( const FVector& InLocation , TArray<FHitResult>& OutResult , FGxHitDetectionKismetDebugDrawSettings& InDebugDrawSettings );
+	bool PerformHitDetection( const FVector& InLocation, TArray<FHitResult>& OutHits , TArray<TObjectPtr<AActor>> IgnoredActors );
+	bool PerformHitDetectionSingle( const FVector& InLocation , FHitResult& OutResult , TArray<TObjectPtr<AActor>> IgnoredActors );
+	bool PerformHitDetectionMulti( const FVector& InLocation , TArray<FHitResult>& OutResult , TArray<TObjectPtr<AActor>> IgnoredActors );
 
-	bool PerformTraceSingleByChannel( const FVector& InLocation , FHitResult& OutResult , FGxHitDetectionKismetDebugDrawSettings& InDebugDrawSettings );
-	bool PerformTraceSingleByProfile( const FVector& InLocation , FHitResult& OutResult , FGxHitDetectionKismetDebugDrawSettings& InDebugDrawSettings );
-	bool PerformTraceSingleForObjects( const FVector& InLocation , FHitResult& OutResult , FGxHitDetectionKismetDebugDrawSettings& InDebugDrawSettings );
+	bool PerformTraceSingleByChannel( const FVector& InLocation , FHitResult& OutResult , TArray<TObjectPtr<AActor>> IgnoredActors );
+	bool PerformTraceSingleByProfile( const FVector& InLocation , FHitResult& OutResult , TArray<TObjectPtr<AActor>> IgnoredActors );
+	bool PerformTraceSingleForObjects( const FVector& InLocation , FHitResult& OutResult , TArray<TObjectPtr<AActor>> IgnoredActors );
 
-	bool PerformTraceMultiByChannel( const FVector& InLocation , TArray<FHitResult>& OutResult , FGxHitDetectionKismetDebugDrawSettings& InDebugDrawSettings );
-	bool PerformTraceMultiByProfile( const FVector& InLocation , TArray<FHitResult>& OutResult, FGxHitDetectionKismetDebugDrawSettings& InDebugDrawSettings );
-	bool PerformTraceMultiForObjects( const FVector& InLocation , TArray<FHitResult>& OutResult , FGxHitDetectionKismetDebugDrawSettings& InDebugDrawSettings );
+	bool PerformTraceMultiByChannel( const FVector& InLocation , TArray<FHitResult>& OutResult , TArray<TObjectPtr<AActor>> IgnoredActors );
+	bool PerformTraceMultiByProfile( const FVector& InLocation , TArray<FHitResult>& OutResult , TArray<TObjectPtr<AActor>> IgnoredActors );
+	bool PerformTraceMultiForObjects( const FVector& InLocation , TArray<FHitResult>& OutResult , TArray<TObjectPtr<AActor>> IgnoredActors );
 
 
 	void GenerateSocketInstances();

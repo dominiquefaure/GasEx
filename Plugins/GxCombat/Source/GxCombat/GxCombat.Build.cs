@@ -31,6 +31,7 @@ public class GxCombat : ModuleRules
 				"GameplayTags",
 				"GameplayTasks",
 				"GameplayAbilities",
+				"GxCore"
 			}
 			);
 			

@@ -10,20 +10,12 @@ UGxHitComponent::UGxHitComponent()
 {
 	// Set this component to be initialized when the game starts, and to be ticked every frame.  You can turn these features
 	// off to improve performance if you don't need them.
-	PrimaryComponentTick.bCanEverTick = true;
+	PrimaryComponentTick.bCanEverTick = false;
 
 	// ...
 
 }
 //-----------------------------------------------------------------------------------------
-
-//-----------------------------------------------------------------------------------------
-void UGxHitComponent::SetHitDetectionEnable( bool InEnable )
-{
-	SetComponentTickEnabled( InEnable );
-}
-//-----------------------------------------------------------------------------------------
-
 
 //-----------------------------------------------------------------------------------------
 // Called when the game starts
@@ -36,29 +28,6 @@ void UGxHitComponent::BeginPlay()
 	for( UGxHitDetectionBase* Element : HitCollisionElements )
 	{
 		Element->Setup( Owner );
-	}
-
-	SetHitDetectionEnable( false );
-}
-//-----------------------------------------------------------------------------------------
-
-
-//-----------------------------------------------------------------------------------------
-// Called every frame
-void UGxHitComponent::TickComponent(float DeltaTime, ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction)
-{
-	Super::TickComponent(DeltaTime, TickType, ThisTickFunction);
-
-	// ...
-	TArray<FHitResult> HitResults;
-/*	for( TSubclassOf<UGxHitDetectionBase>& HitElement : HitCollisionElements )
-	{
-		HitElement->PerformHitDetection( HitResults );
-	}
-	*/
-	for( int i = 0; i < HitCollisionElements.Num(); i++ )
-	{
-		HitCollisionElements[i]->PerformHitDetection( HitResults , DebugSettings );
 	}
 }
 //-----------------------------------------------------------------------------------------

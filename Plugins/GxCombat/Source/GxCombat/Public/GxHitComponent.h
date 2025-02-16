@@ -21,21 +21,10 @@ public:
 	UPROPERTY( EditAnywhere , Instanced ,BlueprintReadWrite )
 	TArray<UGxHitDetectionBase*> HitCollisionElements;
 
-	UPROPERTY( EditAnywhere , BlueprintReadOnly )
-	FGxHitDetectionKismetDebugDrawSettings DebugSettings;
-
-
-public:
-
-	void SetHitDetectionEnable( bool InEnable );
-
 protected:
 	// Called when the game starts
 	virtual void BeginPlay() override;
 
-public:	
-	// Called every frame
-	virtual void TickComponent(float DeltaTime, ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction) override;
 
 
 private:

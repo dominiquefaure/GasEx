@@ -20,10 +20,10 @@ void FGxHitDetectionDebugDraw::DebugDrawBoxSweep( const UWorld* World , const FV
 
 		float LineThickness		=	DebugDrawConfig->CollisionShapeThickness;
 		float DebugDrawDuration	=	DebugDrawConfig->DefaultDebugDrawDuration;
-		FColor BoxColor			=	DebugDrawConfig->CollisionShapeDefaultColor;
+		FColor BoxColor			=	DebugDrawConfig->DefaultDrawColor;
 		if( Hit )
 		{
-			BoxColor			=	DebugDrawConfig->CollisionShapeHitColor;
+			BoxColor			=	DebugDrawConfig->HitDrawColor;
 			DebugDrawDuration	=	DebugDrawConfig->HitDebugDrawDuration;
 		}
 
