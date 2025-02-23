@@ -76,4 +76,4 @@ void FGxCombatEditorModule::RegisterAssetTypeAction( IAssetTools& AssetTools , T
 
 #undef LOCTEXT_NAMESPACE
 	
-IMPLEMENT_MODULE( FGxCombatEditorModule , GxCombatEditorModule )
+IMPLEMENT_MODULE( FGxCombatEditorModule , GxCombatEditor )

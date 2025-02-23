@@ -66,4 +66,4 @@ void FGasExEditorModule::RegisterAssetTypeAction( IAssetTools& AssetTools , TSha
 
 #undef LOCTEXT_NAMESPACE
 	
-IMPLEMENT_MODULE( FGasExEditorModule , GasExEditorModule )
+IMPLEMENT_MODULE( FGasExEditorModule , GasExEditor )

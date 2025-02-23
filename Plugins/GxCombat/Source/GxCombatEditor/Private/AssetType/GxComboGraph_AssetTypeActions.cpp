@@ -2,6 +2,8 @@
 
 #include "AssetType/GxComboGraph_AssetTypeActions.h"
 #include "Combos/GxComboGraph.h"
+#include "ComboGraph/GxEdComboGraphEditor.h"
+
 
 #define LOCTEXT_NAMESPACE "FGxComboGraph_AssetTypeActions"
 
@@ -40,27 +42,26 @@ uint32 FxGxComboGraph_AssetTypeActions::GetCategories()
 }
 //---------------------------------------------------------------------------------------------
 
-/*
+
 //---------------------------------------------------------------------------------------------
-void FxAttackMoveSet_AssetTypeActions::OpenAssetEditor(const TArray<UObject*>& InObjects, TSharedPtr<IToolkitHost> EditWithinLevelEditor)
+void FxGxComboGraph_AssetTypeActions::OpenAssetEditor(const TArray<UObject*>& InObjects, TSharedPtr<IToolkitHost> EditWithinLevelEditor)
 {
 
 	EToolkitMode::Type Mode = EditWithinLevelEditor.IsValid()? EToolkitMode::WorldCentric : EToolkitMode::Standalone;
 
 	for( auto ObjIt = InObjects.CreateConstIterator(); ObjIt; ++ObjIt )
 	{
-		UE_LOG( LogEGSGraphEditor , Verbose , TEXT( "Action Graph OpenAssetEditor ... %s" ) , *GetNameSafe( *ObjIt ) );
 
-		auto Graph = Cast<UEGSActionGraph>( *ObjIt );
+		auto Graph = Cast<UGxComboGraph>( *ObjIt );
 
 		if( Graph != nullptr )
 		{
-			TSharedRef<FEGSActionGraphAssetEditor> AssetEditor	=	MakeShareable( new FEGSActionGraphAssetEditor() );
-			AssetEditor->InitActionGraphEditor( Mode , EditWithinLevelEditor , Graph );
+			TSharedRef<FGxEdComboGraphEditor> AssetEditor	=	MakeShareable( new FGxEdComboGraphEditor() );
+			AssetEditor->InitGraphEditor( Mode , EditWithinLevelEditor , Graph );
 		}
 	}
 
 }
 //---------------------------------------------------------------------------------------------
-*/
+
 #undef LOCTEXT_NAMESPACE
