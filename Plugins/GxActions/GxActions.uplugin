@@ -2,7 +2,7 @@
 	"FileVersion": 3,
 	"Version": 1,
 	"VersionName": "1.0",
-	"FriendlyName": "GxCombat",
+	"FriendlyName": "GxActions",
 	"Description": "",
 	"Category": "Other",
 	"CreatedBy": "Dominique Faure",
@@ -12,16 +12,16 @@
 	"SupportURL": "",
 	"CanContainContent": true,
 	"IsBetaVersion": false,
-	"IsExperimentalVersion": false,
+	"IsExperimentalVersion": true,
 	"Installed": false,
 	"Modules": [
 		{
-			"Name": "GxCombat",
+			"Name": "GxActions",
 			"Type": "Runtime",
 			"LoadingPhase": "PreDefault"
 		},
 		{
-			"Name": "GxCombatEditor",
+			"Name": "GxActionsEditor",
 			"Type": "Editor",
 			"LoadingPhase": "PostEngineInit"
 		}
@@ -29,10 +29,6 @@
 	"Plugins": [
 		{
 			"Name": "GameplayAbilities",
-			"Enabled": true
-		},
-		{
-			"Name": "EnhancedInput",
 			"Enabled": true
 		},
 		{
