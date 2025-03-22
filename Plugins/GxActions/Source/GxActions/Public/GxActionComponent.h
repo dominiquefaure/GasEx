@@ -45,6 +45,17 @@ public:
 	// Called every frame
 	virtual void TickComponent(float DeltaTime, ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction) override;
 
+
+private:
+	
+	void OnAbilityEnded( const FAbilityEndedData& EndedData );
+
+	// process the different States of an Action , called from Tick function
+	void ProcessWaitingState( );
+	void ProcessInProgressState();
+	void ProcessFinishedState();
+
+
 private:
 
 	UPROPERTY( Transient )

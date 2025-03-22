@@ -12,16 +12,16 @@ bool FGxActionContext::ExecuteAction( FGameplayTag& InActionTag )
 		UE_LOG( LogTemp , Warning , TEXT( "GxAction : No Ability System Component set" ) );
 		return false;
 	}
-/*	if( CurrentActionTag != FGameplayTag::EmptyTag )
+	if( CurrentActionTag != FGameplayTag::EmptyTag )
 	{
-		if( InNewActionNode->AbilityTag == CurrentActionTag )
+		if( InActionTag == CurrentActionTag )
 		{
 			UE_LOG( LogTemp , Warning , TEXT( "GxAction : Error execute the same Action" ) );
 
 			return false;
 		}
 	}
-*/
+
 	FGameplayTagContainer Container;
 	Container.AddTag( InActionTag );
 

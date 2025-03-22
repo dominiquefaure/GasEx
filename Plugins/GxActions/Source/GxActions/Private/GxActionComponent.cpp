@@ -31,6 +31,8 @@ void UGxActionComponent::BeginPlay()
 	// ...
 	
 	AbilitySystemComponent					=	GetOwner()->GetComponentByClass<UGxAbilitySystemComponent>();
+	AbilitySystemComponent->OnAbilityEnded.AddUObject( this , &UGxActionComponent::OnAbilityEnded );
+	
 	ExecutionContext.AbilitySystemComponent =	AbilitySystemComponent;
 
 	UInputComponent* InputComponent			=	GetOwner()->GetComponentByClass<UInputComponent>();
@@ -41,7 +43,6 @@ void UGxActionComponent::BeginPlay()
 
 	GraphInstance = NewObject<UGxActionGraphInstance>();
 	GraphInstance->SetGraph( ActionGraph );
-	GraphInstance->SetAbilitySystem( AbilitySystemComponent );
 }
 //---------------------------------------------------------------------------------------------
 
@@ -53,7 +54,6 @@ void UGxActionComponent::OnUnregister()
 }
 //---------------------------------------------------------------------------------------------
 
-
 //---------------------------------------------------------------------------------------------
 // Called every frame
 void UGxActionComponent::TickComponent(float DeltaTime, ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction)
@@ -62,10 +62,22 @@ void UGxActionComponent::TickComponent(float DeltaTime, ELevelTick TickType, FAc
 
 	// ...
 
-	if( GraphInstance != nullptr )
+
+	switch( ExecutionContext.CurrentState )
 	{
-		GraphInstance->Tick( ExecutionContext );
+		case EGxActionState::NoAction:
+			ProcessWaitingState( );
+		break;
+
+		case EGxActionState::ActionInProgres:
+			ProcessInProgressState();
+		break;
+
+		case EGxActionState::ActionFinished:
+			ProcessFinishedState();
+		break;
 	}
+
 }
 //---------------------------------------------------------------------------------------------
 
@@ -97,5 +109,44 @@ void UGxActionComponent::OnCancelWindowEnd( FString WindowName )
 	{
 		GraphInstance->OnCancelWindowEnd( WindowName );
 	}
+}
+//---------------------------------------------------------------------------------------------
+
+//---------------------------------------------------------------------------------------------
+void UGxActionComponent::OnAbilityEnded( const FAbilityEndedData& EndedData )
+{
+	// if the Ability that just Ended is the Current one
+	if( EndedData.AbilityThatEnded->GetAssetTags().HasTag( ExecutionContext.CurrentActionTag ) )
+	{
+		ExecutionContext.CurrentActionTag	=	FGameplayTag::EmptyTag;
+		ExecutionContext.CurrentState		=	EGxActionState::NoAction;
+	}
+}
+//---------------------------------------------------------------------------------------------
+
+
+//---------------------------------------------------------------------------------------------
+void UGxActionComponent::ProcessWaitingState()
+{
+	if( GraphInstance != nullptr )
+	{
+		GraphInstance->TryStartAction( ExecutionContext );
+	}
+}
+//---------------------------------------------------------------------------------------------
+
+//---------------------------------------------------------------------------------------------
+void UGxActionComponent::ProcessInProgressState()
+{
+	if( GraphInstance != nullptr )
+	{
+//		GraphInstance->ProcessInProgressState();
+	}
+}
+//---------------------------------------------------------------------------------------------
+
+//---------------------------------------------------------------------------------------------
+void UGxActionComponent::ProcessFinishedState()
+{
 }
 //---------------------------------------------------------------------------------------------

@@ -14,14 +14,6 @@ UGxActionGraphInstance::UGxActionGraphInstance()
 //---------------------------------------------------------------------------------------------
 
 //---------------------------------------------------------------------------------------------
-void UGxActionGraphInstance::SetAbilitySystem(UGxAbilitySystemComponent* InAbilitySystem)
-{
-	AbilitySystemComponent = InAbilitySystem;
-
-}
-//---------------------------------------------------------------------------------------------
-
-//---------------------------------------------------------------------------------------------
 void UGxActionGraphInstance::SetGraph(UGxActionGraph* InGraph)
 {
 	Graph				=	InGraph;
@@ -29,34 +21,6 @@ void UGxActionGraphInstance::SetGraph(UGxActionGraph* InGraph)
 }
 //---------------------------------------------------------------------------------------------
 
-
-//---------------------------------------------------------------------------------------------
-void UGxActionGraphInstance::Tick( FGxActionContext& ExecutionContext )
-{
-	if( Graph == nullptr )
-	{
-		return;
-	}
-	ProcessWaitingState( ExecutionContext );
-
-/*
-	switch( ExecutionContext.CurrentState )
-	{
-		case EGxActionState::NoAction:
-			ProcessWaitingState( ExecutionContext );
-		break;
-
-		case EGxActionState::ActionInProgres:
-			ProcessInProgressState();
-		break;
-
-		case EGxActionState::ActionFinished:
-			ProcessFinishedState();
-		break;
-	}
-*/
-}
-//---------------------------------------------------------------------------------------------
 
 //---------------------------------------------------------------------------------------------
 void UGxActionGraphInstance::OnInputTriggered( FGameplayTag InputTag )
@@ -97,25 +61,6 @@ void UGxActionGraphInstance::OnCancelWindowEnd( FString WindowName )
 }
 //---------------------------------------------------------------------------------------------
 
-//---------------------------------------------------------------------------------------------
-void UGxActionGraphInstance::OnAbilityEnded( const FAbilityEndedData& EndedData )
-{
-	if( CurrentGraphNode != nullptr )
-	{
-		// if the Ability ended is the one associated to the current Action node
-/*		if( CurrentGraphNode->AbilityTag == AbilitySystemComponent->GetExAbilityTagFromHandle(EndedData.AbilitySpecHandle) )
-		{
-			CurrentState	=	EGasExActionGraphState::ActionFinished;
-
-		}
-		else
-		{
-			UE_LOG( LogTemp , Warning , TEXT( "Ability ened but not same Node !!!!!!" ) );
-		}
-*/
-	}
-}
-//---------------------------------------------------------------------------------------------
 
 
 //////
@@ -123,25 +68,19 @@ void UGxActionGraphInstance::OnAbilityEnded( const FAbilityEndedData& EndedData 
 /////
 
 //---------------------------------------------------------------------------------------------
-void UGxActionGraphInstance::ProcessWaitingState( FGxActionContext& ExecutionContext )
+void UGxActionGraphInstance::TryStartAction( FGxActionContext& ExecutionContext )
 {
+	if( Graph == nullptr )
+	{
+		return;
+	}
+
 	FGameplayTag InputTag;
 	if( InputQueue.Dequeue(InputTag) )
 	{
 		Graph->TryStartAction( ExecutionContext , InputTag );
+	}
 
-/*		TArray<UGxActionNode_StartAction*>	StartActions	=	Graph->GetAllStartActions();
-
-		for( UGxActionNode_StartAction* StartNode : StartActions )
-		{
-			if( canExecuteAction( StartNode , InputTag ) )
-			{
-				ExecuteAction( StartNode );
-			}
-		}
-*/	}
-
-	
 }
 //---------------------------------------------------------------------------------------------
 
@@ -161,31 +100,3 @@ void UGxActionGraphInstance::ProcessFinishedState()
 
 
 
-//---------------------------------------------------------------------------------------------
-bool UGxActionGraphInstance::TryExecuteAction( UGxActionNode_Base* InActionNode )
-{
-	//todo cancel current node
-/*
-	if( AbilitySystemComponent != nullptr )
-	{
-		if( CurrentGraphNode != nullptr )
-		{
-
-		}
-
-		// use default method as fallback
-		FGameplayTagContainer Container;
-		Container.AddTag( InActionNode->AbilityTag );
-
-		if( AbilitySystemComponent->TryActivateAbilitiesByTag( Container ) )
-		{
-			CurrentGraphNode		=	InActionNode;
-			CurrentState			=	EGxActionGraphState::ActionInProgres;
-
-			return true;
-		}
-	}
-*/
-	return false;
-}
-//---------------------------------------------------------------------------------------------

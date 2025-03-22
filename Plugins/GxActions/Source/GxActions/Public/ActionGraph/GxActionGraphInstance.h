@@ -26,34 +26,26 @@ public:
 	UGxActionGraphInstance();
 
 
-	void SetAbilitySystem(UGxAbilitySystemComponent* AbilitySystem);
 	void SetGraph(UGxActionGraph* Graph);
 
 
 	void OnInputTriggered( FGameplayTag InputTag );
 
-
-	virtual void Tick( FGxActionContext& ExecutionContext );
-
 	// function for activation of the Cancel window
 	void OnCancelWindowStart( FString WindowName );
 	void OnCancelWindowEnd( FString WindowName );
 
+
+	void TryStartAction( FGxActionContext& ExecutionContext );
+
 private:
 
-	// process the different States of the Graph , called from Tick function
-	void ProcessWaitingState( FGxActionContext& ExecutionContext );
 	void ProcessInProgressState();
 	void ProcessFinishedState();
 
-	void OnAbilityEnded( const FAbilityEndedData& EndedData );
 
-
-	bool TryExecuteAction( UGxActionNode_Base* InActionNode );
 
 private:
-
-	TObjectPtr<UGxAbilitySystemComponent>	AbilitySystemComponent;
 
 	TQueue<FGameplayTag>					InputQueue;
 
