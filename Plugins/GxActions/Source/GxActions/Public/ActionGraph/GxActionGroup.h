@@ -4,11 +4,13 @@
 
 #include "CoreMinimal.h"
 #include "UObject/NoExportTypes.h"
+#include "Abilities/GameplayAbility.h"
 
 #include "GxActionGroup.generated.h"
 
 class UGxActionNode_Base;
 class UGxActionNode_StartAction;
+struct FGxActionContext;
 
 /**
  * 
@@ -41,6 +43,16 @@ public:
 	TObjectPtr<class UEdGraph> EdGraph;
 
 #endif
+
+// Functions
+public:
+
+	/*
+	* Try to start an Action 
+	*/
+	bool TryStartAction( FGxActionContext& InContext , FGameplayTag InInputTag );
+
+
 
 #if WITH_EDITOR
 

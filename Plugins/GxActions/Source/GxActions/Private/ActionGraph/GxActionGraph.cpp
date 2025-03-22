@@ -2,6 +2,8 @@
 
 #include "ActionGraph/GxActionGraph.h"
 #include "ActionGraph/GxActionGroup.h"
+#include "GxActionContext.h"
+
 
 //---------------------------------------------------------------------------------------------
 void UGxActionGraph::CreateDefaultGroup()
@@ -10,5 +12,19 @@ void UGxActionGraph::CreateDefaultGroup()
 
 	Groups.Add( NewGroup );
 
+}
+//---------------------------------------------------------------------------------------------
+
+//---------------------------------------------------------------------------------------------
+bool UGxActionGraph::TryStartAction( FGxActionContext& InContext , FGameplayTag InInputTag )
+{
+	for( UGxActionGroup* Group : Groups )
+	{
+		if( Group->TryStartAction( InContext , InInputTag ) )
+		{
+			return true;
+		}
+	}
+	return false;
 }
 //---------------------------------------------------------------------------------------------

@@ -3,10 +3,11 @@
 #pragma once
 
 #include "CoreMinimal.h"
+#include "Abilities/GameplayAbility.h"
 
 #include "GxActionGraph.generated.h"
 
-
+struct FGxActionContext;
 class UGxActionGroup;
 
 /**
@@ -25,12 +26,22 @@ public:
 	TArray<TObjectPtr<UGxActionGroup>> Groups;
 
 
+
+
 #if WITH_EDITOR
 
 	/* called by the editor when creating this asset*/
 	void CreateDefaultGroup();
 
 #endif
+
+// Functions
+public:
+
+	/*
+	* Try to start an Action 
+	*/
+	bool TryStartAction( FGxActionContext& InContext , FGameplayTag InInputTag );
 
 
 };

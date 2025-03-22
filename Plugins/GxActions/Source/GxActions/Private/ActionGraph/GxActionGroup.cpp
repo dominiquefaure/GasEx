@@ -4,6 +4,25 @@
 #include "ActionGraph/GxActionNode_Base.h"
 #include "ActionGraph/GxActionNode_StartAction.h"
 
+
+//---------------------------------------------------------------------------------------------
+bool UGxActionGroup::TryStartAction( FGxActionContext& InContext , FGameplayTag InInputTag )
+{
+	for( UGxActionNode_Base* Node : AllNodes )
+	{
+		if( Node->IsA<UGxActionNode_StartAction>() )
+		{
+			if( Node->TryExecute( InContext , InInputTag ) )
+			{
+				return true;
+			}
+		}
+	}
+	return false;
+}
+//---------------------------------------------------------------------------------------------
+
+
 #if WITH_EDITOR
 
 //---------------------------------------------------------------------------------------------

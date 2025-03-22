@@ -7,6 +7,9 @@
 #include "Abilities/GameplayAbility.h"
 #include "GxActionNode_Base.generated.h"
 
+
+struct FGxActionContext;
+
 /**
  * 
  */
@@ -24,14 +27,17 @@ public:
 	FGameplayTag InputTag;
 
 	/*
-	* The Gameplay tag that identify The action
+	* The Gameplay tag that identify The ability to use
 	*/
 	UPROPERTY( EditAnywhere , BlueprintReadOnly )
-	FGameplayTag ActionTag;
+	FGameplayTag AbilityTag;
 
 	/*
 	* List of possible actions that can start from this one
 	*/
 	UPROPERTY( EditAnywhere , BlueprintReadOnly )
 	TArray<TObjectPtr<UGxActionNode_Base>> LinkedActions;
+
+
+	virtual bool TryExecute( FGxActionContext& InContext , FGameplayTag InInputTag );
 };
