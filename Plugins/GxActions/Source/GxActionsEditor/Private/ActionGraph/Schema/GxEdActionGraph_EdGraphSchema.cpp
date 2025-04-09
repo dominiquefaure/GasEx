@@ -4,9 +4,8 @@
 
 #include "ActionGraph/GxEdActionGraph_EdGraph.h"
 #include "ActionGraph/Schema/GxEdActionGraph_EdGraphSchemaAction_AddStartNode.h"
-#include "ActionGraph/Schema/GxEdActionGraph_EdGraphSchemaAction_AddChainNode.h"
+#include "ActionGraph/Schema/GxEdActionGraph_EdGraphSchemaAction_AddAbilityNode.h"
 #include "ActionGraph/Schema/GxEdActionGraph_EdGraphSchemaAction_AddCancelNode.h"
-#include "ActionGraph/Schema/GxEdActionGraph_EdGraphSchemaAction_AddNextNode.h"
 #include "ActionGraph/Nodes/GxEdActionGraph_EdNodeBase.h"
 
 #define LOCTEXT_NAMESPACE "UGasExEdActionGraph_EdGraphSchema"
@@ -34,14 +33,11 @@ void UGxEdActionGraph_EdGraphSchema::GetNewNodesActions(FGraphActionMenuBuilder&
 	TSharedPtr<FGxEdActionGraph_EdGraphSchemaAction_AddStartNode> AddStartAction(new FGxEdActionGraph_EdGraphSchemaAction_AddStartNode());
 	ActionMenuBuilder.AddAction(AddStartAction);
 
-	TSharedPtr<FGxEdActionGraph_EdGraphSchemaAction_AddChainNode> AddChainAction( new FGxEdActionGraph_EdGraphSchemaAction_AddChainNode() );
-	ActionMenuBuilder.AddAction( AddChainAction );
+	TSharedPtr<FGxEdActionGraph_EdGraphSchemaAction_AddAbilityNode> AddAbilityAction( new FGxEdActionGraph_EdGraphSchemaAction_AddAbilityNode() );
+	ActionMenuBuilder.AddAction( AddAbilityAction );
 
 	TSharedPtr<FGxEdActionGraph_EdGraphSchemaAction_AddCancelNode> AddCancelAction( new FGxEdActionGraph_EdGraphSchemaAction_AddCancelNode() );
 	ActionMenuBuilder.AddAction( AddCancelAction );
-
-	TSharedPtr<FGxEdActionGraph_EdGraphSchemaAction_AddNextNode> AddFollowAction( new FGxEdActionGraph_EdGraphSchemaAction_AddNextNode() );
-	ActionMenuBuilder.AddAction( AddFollowAction );
 }
 //---------------------------------------------------------------------------------------------
 

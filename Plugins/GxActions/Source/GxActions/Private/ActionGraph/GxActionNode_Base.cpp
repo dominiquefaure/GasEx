@@ -2,17 +2,41 @@
 
 #include "ActionGraph/GxActionNode_Base.h"
 #include "GxActionContext.h"
-
+#include "GameplayTagContainer.h"
 
 //---------------------------------------------------------------------------------------------
 bool UGxActionNode_Base::TryExecute( FGxActionContext& InContext , FGameplayTag InInputTag )
 {
-	if( InInputTag.MatchesTagExact( InputTag ) )
+	// evaluate if Tag matches
+	if( InputTag != FGameplayTag::EmptyTag )
 	{
-
-		return InContext.ExecuteAction( AbilityTag );
+		if( !InInputTag.MatchesTag( InputTag ) )
+		{
+			return false;
+		}
+	}
+	else
+	{
+		if( InInputTag != FGameplayTag::EmptyTag )
+		{
+			return false;
+		}
 	}
 
+	return InContext.ExecuteAction( AbilityTag );
+}
+//---------------------------------------------------------------------------------------------
+
+//---------------------------------------------------------------------------------------------
+bool UGxActionNode_Base::TryExecuteNextAction( FGxActionContext& InContext , FGameplayTag InInputTag )
+{
+	for( UGxActionNode_Base* Node : LinkedActions )
+	{
+		if( Node->TryExecute( InContext , InInputTag ) )
+		{
+			return true;
+		}
+	}
 	return false;
 }
 //---------------------------------------------------------------------------------------------

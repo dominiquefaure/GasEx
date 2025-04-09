@@ -6,14 +6,14 @@
 #include "UObject/ObjectMacros.h"
 #include "EdGraph/EdGraphNode.h"
 #include "ActionGraph/Nodes/GxEdActionGraph_EdNodeBase.h"
-#include "GxEdActionGraph_EdNodeNext.generated.h"
+#include "GxEdActionGraph_EdNodeAbility.generated.h"
 
 class UEdGraph;
 class UEdGraphPin;
 class UEdGraphSchema;
 
 UCLASS()
-class GXACTIONSEDITOR_API UGxEdActionGraph_EdNodeNext : public UGxEdActionGraph_EdNodeBase
+class GXACTIONSEDITOR_API UGxEdActionGraph_EdNodeAbility : public UGxEdActionGraph_EdNodeBase
 {
 	GENERATED_BODY()
 
@@ -23,7 +23,7 @@ public:
 	virtual void AllocateDefaultPins() override;
 
 	virtual FText GetNodeTitle( ENodeTitleType::Type ) const override {
-		return FText::FromString( "Next Action" );
+		return FText::FromString( "Ability Action" );
 	};
 	virtual bool CanUserDeleteNode() const override {
 		return false;

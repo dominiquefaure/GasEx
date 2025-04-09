@@ -29,25 +29,29 @@ public:
 	void SetGraph(UGxActionGraph* Graph);
 
 
-	void OnInputTriggered( FGameplayTag InputTag );
-
 	// function for activation of the Cancel window
 	void OnCancelWindowStart( FString WindowName );
 	void OnCancelWindowEnd( FString WindowName );
 
 
-	void TryStartAction( FGxActionContext& ExecutionContext );
+	bool TryStartAction( FGxActionContext& ExecutionContext , FGameplayTag InInputTag );
 
+	/*
+	* allow to launch additional action when the current one is finished
+	* only Next action can be launched
+	*/
+	bool OnActionFinished( FGxActionContext& ExecutionContext );
+
+
+	void OnReset();
 private:
 
 	void ProcessInProgressState();
-	void ProcessFinishedState();
 
 
 
 private:
 
-	TQueue<FGameplayTag>					InputQueue;
 
 
 	// the Graph instanciated

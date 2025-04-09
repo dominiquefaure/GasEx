@@ -50,7 +50,7 @@ public:
 	/*
 	* Try to start an Action 
 	*/
-	bool TryStartAction( FGxActionContext& InContext , FGameplayTag InInputTag );
+	bool TryStartAction( FGxActionContext& InContext , FGameplayTag InInputTag, TObjectPtr<UGxActionNode_Base>& OutActionNode );
 
 
 

@@ -5,9 +5,7 @@
 #include "ActionGraph/GxActionGroup.h"
 #include "ActionGraph/GxActionNode_Base.h"
 #include "ActionGraph/GxActionNode_StartAction.h"
-#include "ActionGraph/GxActionNode_ChainAction.h"
 #include "ActionGraph/GxActionNode_CancelAction.h"
-#include "ActionGraph/GxActionNode_NextAction.h"
 
 #include "ActionGraph/Nodes/GxEdActionGraph_EdNodeBase.h"
 

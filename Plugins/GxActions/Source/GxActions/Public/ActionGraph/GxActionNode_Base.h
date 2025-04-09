@@ -40,4 +40,6 @@ public:
 
 
 	virtual bool TryExecute( FGxActionContext& InContext , FGameplayTag InInputTag );
+
+	virtual bool TryExecuteNextAction( FGxActionContext& InContext , FGameplayTag InInputTag );
 };

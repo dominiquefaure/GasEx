@@ -55,15 +55,22 @@ private:
 	void ProcessInProgressState();
 	void ProcessFinishedState();
 
+	/*
+	* Stop the current action and reset the state to the waiting state
+	* 
+	*/
+	void ResetActions();
 
 private:
 
 	UPROPERTY( Transient )
-	TObjectPtr<UGxAbilitySystemComponent> AbilitySystemComponent;
+	TObjectPtr<UGxAbilitySystemComponent>	AbilitySystemComponent;
 
 	// execution Context
 	UPROPERTY( Transient )
-	FGxActionContext					ExecutionContext;
+	FGxActionContext						ExecutionContext;
+
+	TQueue<FGameplayTag>					InputQueue;
 
 
 	UPROPERTY()// declare uproperty to avoid the object beeing GC

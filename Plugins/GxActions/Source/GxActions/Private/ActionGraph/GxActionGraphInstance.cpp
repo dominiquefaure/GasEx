@@ -21,14 +21,12 @@ void UGxActionGraphInstance::SetGraph(UGxActionGraph* InGraph)
 }
 //---------------------------------------------------------------------------------------------
 
-
 //---------------------------------------------------------------------------------------------
-void UGxActionGraphInstance::OnInputTriggered( FGameplayTag InputTag )
+void UGxActionGraphInstance::OnReset()
 {
-	InputQueue.Enqueue( InputTag );
+	CurrentGraphNode = nullptr;
 }
 //---------------------------------------------------------------------------------------------
-
 
 //---------------------------------------------------------------------------------------------
 void UGxActionGraphInstance::OnCancelWindowStart( FString WindowName )
@@ -68,31 +66,32 @@ void UGxActionGraphInstance::OnCancelWindowEnd( FString WindowName )
 /////
 
 //---------------------------------------------------------------------------------------------
-void UGxActionGraphInstance::TryStartAction( FGxActionContext& ExecutionContext )
+bool UGxActionGraphInstance::TryStartAction( FGxActionContext& ExecutionContext , FGameplayTag InInputTag )
 {
 	if( Graph == nullptr )
 	{
-		return;
+		return false;
 	}
 
-	FGameplayTag InputTag;
-	if( InputQueue.Dequeue(InputTag) )
+	return Graph->TryStartAction( ExecutionContext , InInputTag, CurrentGraphNode );
+}
+//---------------------------------------------------------------------------------------------
+
+
+//---------------------------------------------------------------------------------------------
+bool UGxActionGraphInstance::OnActionFinished( FGxActionContext& ExecutionContext )
+{
+	if( CurrentGraphNode != nullptr )
 	{
-		Graph->TryStartAction( ExecutionContext , InputTag );
+		return CurrentGraphNode->TryExecuteNextAction( ExecutionContext , FGameplayTag() );
 	}
 
+	return false;
 }
 //---------------------------------------------------------------------------------------------
 
 //---------------------------------------------------------------------------------------------
 void UGxActionGraphInstance::ProcessInProgressState()
-{
-
-}
-//---------------------------------------------------------------------------------------------
-
-//---------------------------------------------------------------------------------------------
-void UGxActionGraphInstance::ProcessFinishedState()
 {
 
 }

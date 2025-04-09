@@ -16,11 +16,11 @@ void UGxActionGraph::CreateDefaultGroup()
 //---------------------------------------------------------------------------------------------
 
 //---------------------------------------------------------------------------------------------
-bool UGxActionGraph::TryStartAction( FGxActionContext& InContext , FGameplayTag InInputTag )
+bool UGxActionGraph::TryStartAction( FGxActionContext& InContext , FGameplayTag InInputTag , TObjectPtr<UGxActionNode_Base>& OutActionNode )
 {
 	for( UGxActionGroup* Group : Groups )
 	{
-		if( Group->TryStartAction( InContext , InInputTag ) )
+		if( Group->TryStartAction( InContext , InInputTag, OutActionNode ) )
 		{
 			return true;
 		}

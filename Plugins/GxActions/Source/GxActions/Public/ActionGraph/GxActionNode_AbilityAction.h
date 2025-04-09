@@ -6,7 +6,7 @@
 #include "UObject/NoExportTypes.h"
 #include "Abilities/GameplayAbility.h"
 #include "GxActionNode_Base.h"
-#include "GxActionNode_ChainAction.generated.h"
+#include "GxActionNode_AbilityAction.generated.h"
 
 
 
@@ -14,7 +14,7 @@
  *
  */
 UCLASS()
-class GXACTIONS_API UGxActionNode_ChainAction : public UGxActionNode_Base
+class GXACTIONS_API UGxActionNode_AbilityAction : public UGxActionNode_Base
 {
 	GENERATED_BODY()
 

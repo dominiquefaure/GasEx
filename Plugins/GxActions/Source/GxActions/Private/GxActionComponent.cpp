@@ -84,11 +84,7 @@ void UGxActionComponent::TickComponent(float DeltaTime, ELevelTick TickType, FAc
 //---------------------------------------------------------------------------------------------
 void UGxActionComponent::OnInputTriggered( FGameplayTag InputTag )
 {
-	if( GraphInstance != nullptr )
-	{
-		GraphInstance->OnInputTriggered( InputTag );
-	}
-
+	InputQueue.Enqueue( InputTag );
 }
 //---------------------------------------------------------------------------------------------
 
@@ -118,8 +114,7 @@ void UGxActionComponent::OnAbilityEnded( const FAbilityEndedData& EndedData )
 	// if the Ability that just Ended is the Current one
 	if( EndedData.AbilityThatEnded->GetAssetTags().HasTag( ExecutionContext.CurrentActionTag ) )
 	{
-		ExecutionContext.CurrentActionTag	=	FGameplayTag::EmptyTag;
-		ExecutionContext.CurrentState		=	EGxActionState::NoAction;
+		ExecutionContext.CurrentState		=	EGxActionState::ActionFinished;
 	}
 }
 //---------------------------------------------------------------------------------------------
@@ -128,10 +123,15 @@ void UGxActionComponent::OnAbilityEnded( const FAbilityEndedData& EndedData )
 //---------------------------------------------------------------------------------------------
 void UGxActionComponent::ProcessWaitingState()
 {
-	if( GraphInstance != nullptr )
+	FGameplayTag InputTag;
+	if( InputQueue.Dequeue(InputTag) )
 	{
-		GraphInstance->TryStartAction( ExecutionContext );
+		if( GraphInstance != nullptr )
+		{
+			GraphInstance->TryStartAction( ExecutionContext , InputTag );
+		}
 	}
+
 }
 //---------------------------------------------------------------------------------------------
 
@@ -148,5 +148,34 @@ void UGxActionComponent::ProcessInProgressState()
 //---------------------------------------------------------------------------------------------
 void UGxActionComponent::ProcessFinishedState()
 {
+	bool PerformReset	=	true;
+
+	if( GraphInstance != nullptr )
+	{
+		PerformReset						=	!GraphInstance->OnActionFinished( ExecutionContext );
+	}
+
+	if( PerformReset )
+	{
+		ResetActions();
+	}
+
+}
+//---------------------------------------------------------------------------------------------
+
+
+//---------------------------------------------------------------------------------------------
+void UGxActionComponent::ResetActions()
+{
+	// Clear the input queue
+	InputQueue.Empty();
+
+	ExecutionContext.CurrentActionTag	=	FGameplayTag::EmptyTag;
+	ExecutionContext.CurrentState		=	EGxActionState::NoAction;
+
+	if( GraphInstance != nullptr )
+	{
+		GraphInstance->OnReset( );
+	}
 }
 //---------------------------------------------------------------------------------------------

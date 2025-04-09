@@ -6,7 +6,7 @@
 
 
 //---------------------------------------------------------------------------------------------
-bool UGxActionGroup::TryStartAction( FGxActionContext& InContext , FGameplayTag InInputTag )
+bool UGxActionGroup::TryStartAction( FGxActionContext& InContext , FGameplayTag InInputTag, TObjectPtr<UGxActionNode_Base>& OutActionNode )
 {
 	for( UGxActionNode_Base* Node : AllNodes )
 	{
@@ -14,6 +14,7 @@ bool UGxActionGroup::TryStartAction( FGxActionContext& InContext , FGameplayTag 
 		{
 			if( Node->TryExecute( InContext , InInputTag ) )
 			{
+				OutActionNode = Node;
 				return true;
 			}
 		}
