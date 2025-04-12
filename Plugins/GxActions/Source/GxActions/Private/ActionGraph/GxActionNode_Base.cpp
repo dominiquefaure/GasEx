@@ -7,33 +7,19 @@
 //---------------------------------------------------------------------------------------------
 bool UGxActionNode_Base::TryExecute( FGxActionContext& InContext , FGameplayTag InInputTag )
 {
-	// evaluate if Tag matches
-	if( InputTag != FGameplayTag::EmptyTag )
-	{
-		if( !InInputTag.MatchesTag( InputTag ) )
-		{
-			return false;
-		}
-	}
-	else
-	{
-		if( InInputTag != FGameplayTag::EmptyTag )
-		{
-			return false;
-		}
-	}
-
-	return InContext.ExecuteAction( AbilityTag );
+	return false;
 }
 //---------------------------------------------------------------------------------------------
 
 //---------------------------------------------------------------------------------------------
-bool UGxActionNode_Base::TryExecuteNextAction( FGxActionContext& InContext , FGameplayTag InInputTag )
+bool UGxActionNode_Base::TryExecuteNextAction( FGxActionContext& InContext , FGameplayTag InInputTag , TObjectPtr<UGxActionNode_Base>& OutActionNode)
 {
 	for( UGxActionNode_Base* Node : LinkedActions )
 	{
 		if( Node->TryExecute( InContext , InInputTag ) )
 		{
+			// we found a node that can be executed
+			OutActionNode = Node;
 			return true;
 		}
 	}

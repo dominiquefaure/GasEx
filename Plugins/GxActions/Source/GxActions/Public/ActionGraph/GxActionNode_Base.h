@@ -20,17 +20,6 @@ class GXACTIONS_API UGxActionNode_Base : public UObject
 
 public:
 
-	/*
-	* The Gameplay tag that identify The required input
-	*/ 
-	UPROPERTY( EditAnywhere , BlueprintReadOnly )
-	FGameplayTag InputTag;
-
-	/*
-	* The Gameplay tag that identify The ability to use
-	*/
-	UPROPERTY( EditAnywhere , BlueprintReadOnly )
-	FGameplayTag AbilityTag;
 
 	/*
 	* List of possible actions that can start from this one
@@ -41,5 +30,5 @@ public:
 
 	virtual bool TryExecute( FGxActionContext& InContext , FGameplayTag InInputTag );
 
-	virtual bool TryExecuteNextAction( FGxActionContext& InContext , FGameplayTag InInputTag );
+	virtual bool TryExecuteNextAction( FGxActionContext& InContext , FGameplayTag InInputTag , TObjectPtr<UGxActionNode_Base>& OutActionNode );
 };

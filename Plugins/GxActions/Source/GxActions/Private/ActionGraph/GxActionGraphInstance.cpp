@@ -83,7 +83,7 @@ bool UGxActionGraphInstance::OnActionFinished( FGxActionContext& ExecutionContex
 {
 	if( CurrentGraphNode != nullptr )
 	{
-		return CurrentGraphNode->TryExecuteNextAction( ExecutionContext , FGameplayTag() );
+		return CurrentGraphNode->TryExecuteNextAction( ExecutionContext , FGameplayTag() , CurrentGraphNode );
 	}
 
 	return false;

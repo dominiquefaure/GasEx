@@ -12,9 +12,8 @@ bool UGxActionGroup::TryStartAction( FGxActionContext& InContext , FGameplayTag 
 	{
 		if( Node->IsA<UGxActionNode_StartAction>() )
 		{
-			if( Node->TryExecute( InContext , InInputTag ) )
+			if( Node->TryExecuteNextAction( InContext , InInputTag , OutActionNode ) )
 			{
-				OutActionNode = Node;
 				return true;
 			}
 		}
