@@ -45,3 +45,17 @@ bool FGxActionContext::ExecuteAction( FGameplayTag& InActionTag )
 	return false;
 }
 //---------------------------------------------------------------------------------------------
+
+//---------------------------------------------------------------------------------------------
+void FGxActionContext::OnInputTriggered( FGameplayTag InputTag )
+{
+	InputBuffer.OnKeyPressed( InputTag );
+}
+//---------------------------------------------------------------------------------------------
+
+//---------------------------------------------------------------------------------------------
+const FGameplayTag FGxActionContext::GetInputTag( bool InConsume )
+{
+	return InputBuffer.GetInputTag( InConsume );
+}
+//---------------------------------------------------------------------------------------------

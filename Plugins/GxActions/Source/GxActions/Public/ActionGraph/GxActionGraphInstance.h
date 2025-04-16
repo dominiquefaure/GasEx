@@ -44,9 +44,10 @@ public:
 
 
 	void OnReset();
-private:
 
-	void ProcessInProgressState();
+
+	void UpdateCurrentAction( FGxActionContext& ExecutionContext );
+
 
 
 

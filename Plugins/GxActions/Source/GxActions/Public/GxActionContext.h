@@ -5,6 +5,7 @@
 #include "CoreMinimal.h"
 #include "UObject/NoExportTypes.h"
 #include "Abilities/GameplayAbility.h"
+#include "GxActionInputBuffer.h"
 #include "GxActionContext.generated.h"
 
 class UGxAbilitySystemComponent;
@@ -35,6 +36,14 @@ public:
 
 	FGameplayTag							CurrentActionTag;
 
+	UPROPERTY()
+	FGxActionInputBuffer					InputBuffer;
+
+
 	bool ExecuteAction( FGameplayTag& InActionTag );
 
+	void OnInputTriggered( FGameplayTag InputTag );
+
+
+	const FGameplayTag GetInputTag( bool InConsume = true );
 };

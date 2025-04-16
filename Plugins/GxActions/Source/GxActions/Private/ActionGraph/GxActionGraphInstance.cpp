@@ -91,11 +91,24 @@ bool UGxActionGraphInstance::OnActionFinished( FGxActionContext& ExecutionContex
 //---------------------------------------------------------------------------------------------
 
 //---------------------------------------------------------------------------------------------
-void UGxActionGraphInstance::ProcessInProgressState()
+void UGxActionGraphInstance::UpdateCurrentAction( FGxActionContext& ExecutionContext )
 {
+	// peek the input tag
+	FGameplayTag InputTag	=	ExecutionContext.GetInputTag( false );
+	if( InputTag != FGameplayTag::EmptyTag )
+	{
+		if( CurrentGraphNode != nullptr )
+		{
+			// if success to trigger a next action.
+			if( CurrentGraphNode->TryExecuteNextAction( ExecutionContext , InputTag , CurrentGraphNode ) )
+			{
+				// consume the input
+				ExecutionContext.GetInputTag( true );
+			}
+		}
+	}
 
 }
 //---------------------------------------------------------------------------------------------
-
 
 

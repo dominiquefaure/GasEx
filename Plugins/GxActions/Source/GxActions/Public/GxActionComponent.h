@@ -70,7 +70,6 @@ private:
 	UPROPERTY( Transient )
 	FGxActionContext						ExecutionContext;
 
-	TQueue<FGameplayTag>					InputQueue;
 
 
 	UPROPERTY()// declare uproperty to avoid the object beeing GC

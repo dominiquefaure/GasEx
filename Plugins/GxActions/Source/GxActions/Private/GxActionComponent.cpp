@@ -84,7 +84,7 @@ void UGxActionComponent::TickComponent(float DeltaTime, ELevelTick TickType, FAc
 //---------------------------------------------------------------------------------------------
 void UGxActionComponent::OnInputTriggered( FGameplayTag InputTag )
 {
-	InputQueue.Enqueue( InputTag );
+	ExecutionContext.OnInputTriggered( InputTag );
 }
 //---------------------------------------------------------------------------------------------
 
@@ -123,8 +123,8 @@ void UGxActionComponent::OnAbilityEnded( const FAbilityEndedData& EndedData )
 //---------------------------------------------------------------------------------------------
 void UGxActionComponent::ProcessWaitingState()
 {
-	FGameplayTag InputTag;
-	if( InputQueue.Dequeue(InputTag) )
+	FGameplayTag InputTag	=	ExecutionContext.GetInputTag( true );
+	if( InputTag != FGameplayTag::EmptyTag )
 	{
 		if( GraphInstance != nullptr )
 		{
@@ -140,7 +140,7 @@ void UGxActionComponent::ProcessInProgressState()
 {
 	if( GraphInstance != nullptr )
 	{
-//		GraphInstance->ProcessInProgressState();
+		GraphInstance->UpdateCurrentAction( ExecutionContext );
 	}
 }
 //---------------------------------------------------------------------------------------------
@@ -168,7 +168,7 @@ void UGxActionComponent::ProcessFinishedState()
 void UGxActionComponent::ResetActions()
 {
 	// Clear the input queue
-	InputQueue.Empty();
+	ExecutionContext.InputBuffer.ClearInputs();
 
 	ExecutionContext.CurrentActionTag	=	FGameplayTag::EmptyTag;
 	ExecutionContext.CurrentState		=	EGxActionState::NoAction;
