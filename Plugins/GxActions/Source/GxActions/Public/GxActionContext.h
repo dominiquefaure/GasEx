@@ -30,6 +30,23 @@ struct GXACTIONS_API FGxActionContext
 
 public:
 
+	bool ExecuteAction( FGameplayTag& InActionTag );
+
+	void OnInputTriggered( FGameplayTag InputTag );
+
+	const FGameplayTag GetInputTag( bool InConsume = true );
+
+
+	///////////////////////
+	// Combo Windows
+	///////////////////////
+
+	void OnComboWindowStart( FString WindowName );
+	void OnComboWindowEnd( FString WindowName );
+	bool IsComboWindowActive( const FString& WindowName ) const;
+
+public:
+
 	TObjectPtr<UGxAbilitySystemComponent>	AbilitySystemComponent;
 
 	EGxActionState							CurrentState;
@@ -39,11 +56,7 @@ public:
 	UPROPERTY()
 	FGxActionInputBuffer					InputBuffer;
 
+	bool									IsCancelWindowsActive;
+	TArray<FString>							ComboWindows;
 
-	bool ExecuteAction( FGameplayTag& InActionTag );
-
-	void OnInputTriggered( FGameplayTag InputTag );
-
-
-	const FGameplayTag GetInputTag( bool InConsume = true );
 };

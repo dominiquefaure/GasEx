@@ -28,36 +28,6 @@ void UGxActionGraphInstance::OnReset()
 }
 //---------------------------------------------------------------------------------------------
 
-//---------------------------------------------------------------------------------------------
-void UGxActionGraphInstance::OnCancelWindowStart( FString WindowName )
-{
-	IsCancelWindowsActive	=	true;
-	CancelWindows.Add( WindowName );
-}
-//---------------------------------------------------------------------------------------------
-
-//---------------------------------------------------------------------------------------------
-void UGxActionGraphInstance::OnCancelWindowEnd( FString WindowName )
-{
-	int32 Index	=	-1;
-	for( int32 i = 0; i < CancelWindows.Num(); i++ )
-	{
-		if( CancelWindows[i] == WindowName )
-		{
-			Index	=	i;
-			break;
-		}
-	}
-
-	if( Index != -1 )
-	{
-		CancelWindows.RemoveAt( Index );
-
-		IsCancelWindowsActive	=	CancelWindows.Num() > 0;
-
-	}
-}
-//---------------------------------------------------------------------------------------------
 
 
 

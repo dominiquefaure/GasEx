@@ -38,6 +38,8 @@ bool FGxActionContext::ExecuteAction( FGameplayTag& InActionTag )
 		CurrentActionTag	=	InActionTag;
 		CurrentState		=	EGxActionState::ActionInProgres;
 
+		ComboWindows.Empty();
+
 		return true;
 	}
 
@@ -57,5 +59,53 @@ void FGxActionContext::OnInputTriggered( FGameplayTag InputTag )
 const FGameplayTag FGxActionContext::GetInputTag( bool InConsume )
 {
 	return InputBuffer.GetInputTag( InConsume );
+}
+//---------------------------------------------------------------------------------------------
+
+
+//---------------------------------------------------------------------------------------------
+void FGxActionContext::OnComboWindowStart( FString WindowName )
+{
+	IsCancelWindowsActive	=	true;
+	ComboWindows.Add( WindowName );
+}
+//---------------------------------------------------------------------------------------------
+
+//---------------------------------------------------------------------------------------------
+void FGxActionContext::OnComboWindowEnd( FString WindowName )
+{
+	int32 Index	=	-1;
+	for( int32 i = 0; i < ComboWindows.Num(); i++ )
+	{
+		if( ComboWindows[i] == WindowName )
+		{
+			Index	=	i;
+			break;
+		}
+	}
+
+	if( Index != -1 )
+	{
+		ComboWindows.RemoveAt( Index );
+
+		IsCancelWindowsActive	=	ComboWindows.Num() > 0;
+
+	}
+}
+//---------------------------------------------------------------------------------------------
+
+//---------------------------------------------------------------------------------------------
+bool FGxActionContext::IsComboWindowActive( const FString& WindowName ) const
+{
+	int32 Index	=	-1;
+	for( int32 i = 0; i < ComboWindows.Num(); i++ )
+	{
+		if( ComboWindows[i] == WindowName )
+		{
+			return true;
+		}
+	}
+
+	return false;
 }
 //---------------------------------------------------------------------------------------------

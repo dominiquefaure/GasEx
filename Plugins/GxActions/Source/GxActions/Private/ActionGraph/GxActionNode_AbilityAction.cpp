@@ -7,6 +7,11 @@
 //---------------------------------------------------------------------------------------------
 bool UGxActionNode_AbilityAction::TryExecute( FGxActionContext& InContext , FGameplayTag InInputTag )
 {
+	if( !EvaluateConditions( InContext ) )
+	{
+		return false;
+	}
+
 	// evaluate if Tag matches
 	if( InputTag != FGameplayTag::EmptyTag )
 	{

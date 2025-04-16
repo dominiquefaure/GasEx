@@ -89,21 +89,21 @@ void UGxActionComponent::OnInputTriggered( FGameplayTag InputTag )
 //---------------------------------------------------------------------------------------------
 
 //---------------------------------------------------------------------------------------------
-void UGxActionComponent::OnCancelWindowStart( FString WindowName )
+void UGxActionComponent::OnComboWindowStart( FString WindowName )
 {
 	if( GraphInstance != nullptr )
 	{
-		GraphInstance->OnCancelWindowStart( WindowName );
+		ExecutionContext.OnComboWindowStart( WindowName );
 	}
 }
 //---------------------------------------------------------------------------------------------
 
 //---------------------------------------------------------------------------------------------
-void UGxActionComponent::OnCancelWindowEnd( FString WindowName )
+void UGxActionComponent::OnComboWindowEnd( FString WindowName )
 {
 	if( GraphInstance != nullptr )
 	{
-		GraphInstance->OnCancelWindowEnd( WindowName );
+		ExecutionContext.OnComboWindowEnd( WindowName );
 	}
 }
 //---------------------------------------------------------------------------------------------

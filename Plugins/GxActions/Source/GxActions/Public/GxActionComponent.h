@@ -32,8 +32,8 @@ public:
 	void OnInputTriggered( FGameplayTag InputTag );
 
 	// function for activation of the Cancel window
-	void OnCancelWindowStart( FString WindowName );
-	void OnCancelWindowEnd( FString WindowName );
+	void OnComboWindowStart( FString WindowName );
+	void OnComboWindowEnd( FString WindowName );
 
 protected:
 	// Called when the game starts

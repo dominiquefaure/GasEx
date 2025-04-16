@@ -1,12 +1,12 @@
 // Copyright 2023-2025 Dominique Faure. All Rights Reserved.
 
 
-#include "AnimNotifies/GxAnimNotifyState_ChainAction.h"
+#include "AnimNotifies/GxAnimNotifyState_ComboWindow.h"
 #include "GameFramework/Character.h"
 #include "GxActionComponent.h"
 
 //-----------------------------------------------------------------------------------------
-UGxActionComponent* UGxAnimNotifyState_ChainAction::GetOwnerActionComponent( USkeletalMeshComponent* MeshComponent )
+UGxActionComponent* UGxAnimNotifyState_ComboWindow::GetOwnerActionComponent( USkeletalMeshComponent* MeshComponent )
 {
 	ACharacter* CharacterOwner = Cast<ACharacter>( MeshComponent->GetOwner() );
 
@@ -25,25 +25,25 @@ UGxActionComponent* UGxAnimNotifyState_ChainAction::GetOwnerActionComponent( USk
 //-----------------------------------------------------------------------------------------
 
 //-----------------------------------------------------------------------------------------
-void UGxAnimNotifyState_ChainAction::NotifyBegin( USkeletalMeshComponent* MeshComp , UAnimSequenceBase* Animation , float TotalDuration , const FAnimNotifyEventReference& EventReference )
+void UGxAnimNotifyState_ComboWindow::NotifyBegin( USkeletalMeshComponent* MeshComp , UAnimSequenceBase* Animation , float TotalDuration , const FAnimNotifyEventReference& EventReference )
 {
 	UGxActionComponent* Component	=	GetOwnerActionComponent( MeshComp );
 
 	if( Component != nullptr )
 	{
-		Component->OnCancelWindowStart( WindowName );
+		Component->OnComboWindowStart( WindowName );
 	}
 }
 //-----------------------------------------------------------------------------------------
 
 //-----------------------------------------------------------------------------------------
-void UGxAnimNotifyState_ChainAction::NotifyEnd( USkeletalMeshComponent* MeshComp , UAnimSequenceBase* Animation , const FAnimNotifyEventReference& EventReference )
+void UGxAnimNotifyState_ComboWindow::NotifyEnd( USkeletalMeshComponent* MeshComp , UAnimSequenceBase* Animation , const FAnimNotifyEventReference& EventReference )
 {
 	UGxActionComponent* Component	=	GetOwnerActionComponent( MeshComp );
 
 	if( Component != nullptr )
 	{
-		Component->OnCancelWindowEnd( WindowName );
+		Component->OnComboWindowEnd( WindowName );
 	}
 
 }

@@ -26,3 +26,18 @@ bool UGxActionNode_Base::TryExecuteNextAction( FGxActionContext& InContext , FGa
 	return false;
 }
 //---------------------------------------------------------------------------------------------
+
+
+//---------------------------------------------------------------------------------------------
+bool UGxActionNode_Base::EvaluateConditions( const FGxActionContext& InContext ) const
+{
+	for( UGxActionCondition_Base* Condition : Conditions )
+	{
+		if( !Condition->EvaluateCondition( InContext ) )
+		{
+			return false;
+		}
+	}
+	return true;
+}
+//---------------------------------------------------------------------------------------------

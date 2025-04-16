@@ -5,6 +5,7 @@
 #include "CoreMinimal.h"
 #include "UObject/NoExportTypes.h"
 #include "Abilities/GameplayAbility.h"
+#include "Conditions/GxActionCondition_Base.h"
 #include "GxActionNode_Base.generated.h"
 
 
@@ -20,6 +21,9 @@ class GXACTIONS_API UGxActionNode_Base : public UObject
 
 public:
 
+	UPROPERTY( EditAnywhere , Instanced ,BlueprintReadWrite )
+	TArray<UGxActionCondition_Base*> Conditions;
+
 
 	/*
 	* List of possible actions that can start from this one
@@ -31,4 +35,7 @@ public:
 	virtual bool TryExecute( FGxActionContext& InContext , FGameplayTag InInputTag );
 
 	virtual bool TryExecuteNextAction( FGxActionContext& InContext , FGameplayTag InInputTag , TObjectPtr<UGxActionNode_Base>& OutActionNode );
+
+	bool EvaluateConditions( const FGxActionContext& InContext ) const;
+
 };

@@ -29,10 +29,6 @@ public:
 	void SetGraph(UGxActionGraph* Graph);
 
 
-	// function for activation of the Cancel window
-	void OnCancelWindowStart( FString WindowName );
-	void OnCancelWindowEnd( FString WindowName );
-
 
 	bool TryStartAction( FGxActionContext& ExecutionContext , FGameplayTag InInputTag );
 
@@ -59,7 +55,5 @@ private:
 	TObjectPtr<UGxActionGraph>				Graph;
 	TObjectPtr<UGxActionNode_Base>			CurrentGraphNode;
 
-	bool									IsCancelWindowsActive;
-	TArray<FString>							CancelWindows;
 
 };

@@ -4,7 +4,7 @@
 
 #include "CoreMinimal.h"
 #include "Animation/AnimNotifies/AnimNotifyState.h"
-#include "GxAnimNotifyState_ChainAction.generated.h"
+#include "GxAnimNotifyState_ComboWindow.generated.h"
 
 class UGxActionComponent;
 
@@ -12,12 +12,12 @@ class UGxActionComponent;
  * 
  */
 UCLASS()
-class GXACTIONS_API UGxAnimNotifyState_ChainAction : public UAnimNotifyState
+class GXACTIONS_API UGxAnimNotifyState_ComboWindow : public UAnimNotifyState
 {
 	GENERATED_BODY()
 
 	UPROPERTY( EditAnywhere )
-	FString WindowName;
+	FString WindowName	=	"Default";
 
 	// Notify overrides
 	virtual void NotifyBegin( USkeletalMeshComponent* MeshComp , UAnimSequenceBase* Animation , float TotalDuration , const FAnimNotifyEventReference& EventReference ) override;
