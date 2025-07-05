@@ -8,7 +8,7 @@ public class GasExSampleEditorTarget : TargetRules
 	public GasExSampleEditorTarget(TargetInfo Target) : base(Target)
 	{
 		Type = TargetType.Editor;
-		DefaultBuildSettings = BuildSettingsVersion.V4;
+		DefaultBuildSettings = BuildSettingsVersion.V5;
 		ExtraModuleNames.Add( "GasExSample" );
 	}
 }

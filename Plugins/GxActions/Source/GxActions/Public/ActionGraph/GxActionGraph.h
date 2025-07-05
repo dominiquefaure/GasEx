@@ -9,6 +9,7 @@
 
 struct FGxActionContext;
 class UGxActionGroup;
+class UGxActionNode_Base;
 
 /**
  * 

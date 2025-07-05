@@ -4,6 +4,9 @@
 
 #include "CoreMinimal.h"
 #include "AttributeSet.h"
+#include "GxAttributeSetBase.h"
+#include "AbilitySystemComponent.h"
+
 #include "GxHealthAttributeSet.generated.h"
 
 

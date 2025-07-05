@@ -1,7 +1,7 @@
 // Copyright 2023-2024 Dominique Faure. All Rights Reserved.
 
-#include "GxCombatComponent.h"
 #include "AnimNotifies/AnimNotifyState_GxCombatHitDetection.h"
+#include "GxCombatComponent.h"
 #include "GameFramework/Character.h"
 
 //-----------------------------------------------------------------------------------------

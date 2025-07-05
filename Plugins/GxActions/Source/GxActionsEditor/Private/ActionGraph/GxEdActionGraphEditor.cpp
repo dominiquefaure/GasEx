@@ -6,6 +6,7 @@
 
 #include "ActionGraph/GxActionGraph.h"
 #include "ActionGraph/GxActionGroup.h"
+#include "ActionGraph/GxActionNode_Base.h"
 #include "ActionGraph/GxEdActionGraph_EdGraph.h"
 #include "ActionGraph/Nodes/GxEdActionGraph_EdNodeBase.h"
 #include "ActionGraph/Schema/GxEdActionGraph_EdGraphSchema.h"
