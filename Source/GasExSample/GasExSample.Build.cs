@@ -23,7 +23,9 @@ public class GasExSample : ModuleRules
 			new string[]
 			{
 				"GasEx",
-				"GxCombat"
+				"GxCombat",
+				"GxMovement",
+				"GxItems"
 			}
 		);
 
