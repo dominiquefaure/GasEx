@@ -14,7 +14,6 @@
 
 #include "GxAbilitySystemComponent.h"
 #include "Abilities/GxGameplayAbility.h"
-#include "Attacks/GxAttackMoveSet.h"
 #include "GxHitComponent.h"
 #include "HitDetection/GxHitDetectionDebugDraw.h"
 
@@ -45,8 +44,6 @@ void UGxCombatComponent::BeginPlay()
 	// ...
 
 	AbilitySystemComponent	=	GetOwner()->GetComponentByClass<UGxAbilitySystemComponent>();
-
-	RegisterMoves( "Default" , DefaultMoveset );
 }
 //-----------------------------------------------------------------------------------------
 
@@ -127,46 +124,3 @@ void UGxCombatComponent::EndCollisionDetection( EGxCollisionSource InSource , co
 }
 //-----------------------------------------------------------------------------------------
 
-//-----------------------------------------------------------------------------------------
-void UGxCombatComponent::RegisterMoves( FString InName , UDataTable* InTable )
-{
-	UGxAttackMoveSet* NewMoveSet	=	NewObject< UGxAttackMoveSet>();
-
-	NewMoveSet->Register( InName , InTable , AbilitySystemComponent );
-
-	MoveSets.Add( NewMoveSet );
-}
-//-----------------------------------------------------------------------------------------
-
-
-//-----------------------------------------------------------------------------------------
-bool UGxCombatComponent::TryExecuteAttack( FGameplayTag InAttackTag )
-{
-	TObjectPtr<UGxAttackAction> Attack	=	GetCombatAttack( InAttackTag );
-
-	if( Attack != nullptr )
-	{
-		return AbilitySystemComponent->TryActivateAbility( Attack->AbilitySpec.Handle );
-	}
-
-	return false;
-}
-//-----------------------------------------------------------------------------------------
-
-
-//-----------------------------------------------------------------------------------------
-TObjectPtr<UGxAttackAction> UGxCombatComponent::GetCombatAttack( FGameplayTag InTag )
-{
-	UGxAttackAction* Attack;
-	for( UGxAttackMoveSet* MoveSet : MoveSets )
-	{
-		Attack	=	MoveSet->GetCombatAttack( InTag );
-
-		if( Attack != nullptr )
-		{
-			return Attack;
-		}
-	}
-	return nullptr;
-}
-//-----------------------------------------------------------------------------------------

@@ -8,7 +8,6 @@
 #include "UnrealEdGlobals.h"
 #include "Editor/UnrealEdEngine.h"
 
-#include "AssetType/GxAttackMoveSet_AssetTypeActions.h"
 
 #define LOCTEXT_NAMESPACE "FGxCombatEditorModule"
 
@@ -20,8 +19,6 @@ void FGxCombatEditorModule::StartupModule()
 	// Register asset types
 	IAssetTools& AssetTools = FModuleManager::LoadModuleChecked<FAssetToolsModule>( "AssetTools" ).Get();
 	EAssetTypeCategories::Type AssetCategory = AssetTools.RegisterAdvancedAssetCategory( FName( TEXT( "Gx" ) ) , FText::FromName( TEXT( "Gx" ) ) );
-
-	RegisterAssetTypeAction( AssetTools , MakeShareable( new FxAttackMoveSet_AssetTypeActions( AssetCategory ) ) );
 
 
 	if( GUnrealEd )
