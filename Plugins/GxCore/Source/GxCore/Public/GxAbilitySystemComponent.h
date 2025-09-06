@@ -6,6 +6,9 @@
 #include "AbilitySystemComponent.h"
 #include "GxAbilitySystemComponent.generated.h"
 
+class UGxAbilitySet; 
+struct FGxAbilitySetHandle;
+
 /**
  * 
  */
@@ -14,4 +17,28 @@ class GXCORE_API UGxAbilitySystemComponent : public UAbilitySystemComponent
 {
 	GENERATED_BODY()
 	
+// Properties
+private:
+	UPROPERTY()
+	TArray<FGxAbilitySetHandle> RegisteredAbilitySets;
+
+
+
+public:
+
+	UFUNCTION(BlueprintCallable)
+	void RegisterAbilitySet( UGxAbilitySet* AbilitySet , FGxAbilitySetHandle& OutHandle );
+
+	UFUNCTION(BlueprintCallable)
+	void UnRegisterAbilitySet( UGxAbilitySet* AbilitySet );
+
+	UFUNCTION(BlueprintCallable)
+	void UnRegisterAbilitySetFromHandle( FGxAbilitySetHandle& Handle );
+
+
+private:
+
+	// Get the handle for a registered ability set
+	FGxAbilitySetHandle* GetAbilitySetHandle( UGxAbilitySet* AbilitySet );
+
 };
