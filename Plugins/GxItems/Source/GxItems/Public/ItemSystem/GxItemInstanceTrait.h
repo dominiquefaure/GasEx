@@ -2,8 +2,10 @@
 
 #pragma once
 #include "CoreMinimal.h"
-
+#include "StructUtils/InstancedStruct.h"
 #include "GxItemInstanceTrait.generated.h"
+
+struct FGxItemTrait;
 
 /*
 * Base class for all itemInstance Traits

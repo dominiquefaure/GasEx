@@ -2,6 +2,9 @@
 
 
 #include "GxAbilitySystemComponent.h"
+#include "GameplayAbilitySpec.h"
+#include "Abilities/GxAbilitySet.h"
+#include "Abilities/GxAbilitySetHandle.h"
 
 //-----------------------------------------------------------------------------------------
 void UGxAbilitySystemComponent::RegisterAbilitySet( UGxAbilitySet* AbilitySet , FGxAbilitySetHandle& OutHandle )

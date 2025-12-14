@@ -6,8 +6,7 @@
 #include "StructUtils/InstancedStruct.h"
 #include "GxItemInstance.generated.h"
 
-
-struct FGxItemDefinition;
+class UGxItem;
 struct FGxItemInstanceTrait;
 
 UCLASS( BlueprintType )
@@ -17,10 +16,8 @@ class GXITEMS_API UGxItemInstance : public UObject
 
 public:
 
-    /* Initialize the Instance of an Item */
-//	virtual void Initialize( const TInstancedStruct<FGxItemDefinition>& InItemDefinition );
-
-	virtual void Initialize( const FGxItemDefinition& InItemDefinition );
+	/* Initialize the Instance of an Item */
+	virtual void Initialize( UGxItem* InItemDefinition );
 
 	AActor* GetOwningActor() const;
 
@@ -38,13 +35,12 @@ public:
 
 protected:
 
-    /* The static data that describes this Item. */
-    UPROPERTY( EditAnywhere, BlueprintReadOnly, meta = (AllowPrivateAccess))
-    TInstancedStruct<FGxItemDefinition> ItemDefinition;
+	/* Reference to the data asset that describes this Item. */
+	UPROPERTY( EditAnywhere, BlueprintReadOnly, meta = (AllowPrivateAccess) )
+	UGxItem* ItemDefinition;
 
-    /* The Instanced version of the Different Traits of the Item*/
-    UPROPERTY( EditAnywhere, BlueprintReadOnly, meta = (AllowPrivateAccess))
-//	TArray<TInstancedStruct<FGxItemInstanceTrait>> ItemTraits;
+	/* The Instanced version of the Different Traits of the Item*/
+	UPROPERTY( EditAnywhere, BlueprintReadOnly, meta = (AllowPrivateAccess) )
 	TArray<FInstancedStruct> ItemTraits;
 
 };

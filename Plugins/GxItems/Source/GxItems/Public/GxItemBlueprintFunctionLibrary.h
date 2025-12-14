@@ -8,8 +8,7 @@
 
 class UDataTable;
 class UGxItemInstance;
-struct FGxItemDefinition;
-
+class UGxItem;
 
 /**
  * 
@@ -24,11 +23,9 @@ public:
 	UFUNCTION( BlueprintCallable , Category = "GxItems|ItemDefinition" )
 	static UGxItemInstance* CreateInstance( UObject* Outer , UDataTable* DataTable , FName ItemId );
 
-
-
 private:
 
-	static const FGxItemDefinition* GetItemDefinition( UDataTable* DataTable , FName ItemId );
-	static UGxItemInstance* CreateInstance( UObject* Outer , const FGxItemDefinition* Definition );
+	static UGxItem* GetItemDefinition( UDataTable* DataTable , FName ItemId );
+	static UGxItemInstance* CreateInstance( UObject* Outer , UGxItem* Definition );
 
 };

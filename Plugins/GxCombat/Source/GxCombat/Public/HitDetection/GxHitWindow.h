@@ -4,6 +4,7 @@
 
 #include "CoreMinimal.h"
 #include "UObject/NoExportTypes.h"
+#include "GxCombatEnums.h"
 #include "HitDetection/GxHitDetectionBase.h"
 #include "GxHitWindow.generated.h"
 

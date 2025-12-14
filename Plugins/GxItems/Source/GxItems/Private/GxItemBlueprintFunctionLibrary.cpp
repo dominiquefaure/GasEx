@@ -1,24 +1,21 @@
-// Copyright 2023-2024 Dominique Faure. All Rights Reserved.
-
+	// Copyright 2023-2024 Dominique Faure. All Rights Reserved.
 
 #include "GxItemBlueprintFunctionLibrary.h"
-
-#include "ItemSystem/GxItemDefinition.h"
-#include "ItemSystem/GxItemInstance.h"
-
 #include "StructUtils/InstancedStruct.h"
 
+#include "ItemSystem/GxItem.h"
+#include "ItemSystem/GxItemInstance.h"
+#include "ItemSystem/GxItemTableRow.h"
 
 //----------------------------------------------------------------------------------------------------------------
-const FGxItemDefinition* UGxItemBlueprintFunctionLibrary::GetItemDefinition( UDataTable* DataTable , FName ItemId )
+UGxItem* UGxItemBlueprintFunctionLibrary::GetItemDefinition( UDataTable* DataTable , FName ItemId )
 {
 	if( DataTable )
 	{
-		// Find the row in the data table with the specified ItemId
 		static const FString ContextString(TEXT("GxItemBlueprintFunctionLibrary::GetItemDefinition"));
-		if( const FGxItemDefinitionTableRow* Row = DataTable->FindRow<FGxItemDefinitionTableRow>( ItemId , ContextString ) )
+		if( const FGxItemTableRow* Row = DataTable->FindRow<FGxItemTableRow>( ItemId , ContextString ) )
 		{
-			return Row->ItemDefinition.GetPtr<FGxItemDefinition>();
+			return Row->Item;
 		}
 	}
 	return nullptr;
@@ -26,8 +23,7 @@ const FGxItemDefinition* UGxItemBlueprintFunctionLibrary::GetItemDefinition( UDa
 //----------------------------------------------------------------------------------------------------------------
 
 
-//----------------------------------------------------------------------------------------------------------------
-UGxItemInstance* UGxItemBlueprintFunctionLibrary::CreateInstance( UObject* Outer , const FGxItemDefinition* Definition )
+UGxItemInstance* UGxItemBlueprintFunctionLibrary::CreateInstance( UObject* Outer , UGxItem* Definition )
 {
 	if( !Definition  )
 	{
@@ -38,11 +34,10 @@ UGxItemInstance* UGxItemBlueprintFunctionLibrary::CreateInstance( UObject* Outer
 }
 //----------------------------------------------------------------------------------------------------------------
 
-
 //----------------------------------------------------------------------------------------------------------------
 UGxItemInstance* UGxItemBlueprintFunctionLibrary::CreateInstance( UObject* Outer , UDataTable* DataTable , FName ItemId )
 {
-	const FGxItemDefinition* Definition = GetItemDefinition( DataTable , ItemId );
+	UGxItem* Definition = GetItemDefinition( DataTable , ItemId );
 
 	if( Definition != nullptr )
 	{
