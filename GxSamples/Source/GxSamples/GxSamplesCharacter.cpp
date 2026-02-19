@@ -56,15 +56,15 @@ void AGxSamplesCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInput
 	if (UEnhancedInputComponent* EnhancedInputComponent = Cast<UEnhancedInputComponent>(PlayerInputComponent)) {
 		
 		// Jumping
-		EnhancedInputComponent->BindAction(JumpAction, ETriggerEvent::Started, this, &ACharacter::Jump);
-		EnhancedInputComponent->BindAction(JumpAction, ETriggerEvent::Completed, this, &ACharacter::StopJumping);
+//		EnhancedInputComponent->BindAction(JumpAction, ETriggerEvent::Started, this, &ACharacter::Jump);
+//		EnhancedInputComponent->BindAction(JumpAction, ETriggerEvent::Completed, this, &ACharacter::StopJumping);
 
 		// Moving
-		EnhancedInputComponent->BindAction(MoveAction, ETriggerEvent::Triggered, this, &AGxSamplesCharacter::Move);
-		EnhancedInputComponent->BindAction(MouseLookAction, ETriggerEvent::Triggered, this, &AGxSamplesCharacter::Look);
+//		EnhancedInputComponent->BindAction(MoveAction, ETriggerEvent::Triggered, this, &AGxSamplesCharacter::Move);
+//		EnhancedInputComponent->BindAction(MouseLookAction, ETriggerEvent::Triggered, this, &AGxSamplesCharacter::Look);
 
 		// Looking
-		EnhancedInputComponent->BindAction(LookAction, ETriggerEvent::Triggered, this, &AGxSamplesCharacter::Look);
+//		EnhancedInputComponent->BindAction(LookAction, ETriggerEvent::Triggered, this, &AGxSamplesCharacter::Look);
 	}
 	else
 	{
